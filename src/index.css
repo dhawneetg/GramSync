@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    background-color: #F6F5F2;
+    color: #141413;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  /* Monospace tabular numbers everywhere numbers appear */
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* Ruggedized Field Terminal Hairlines */
+.border-stonehairline {
+  border-color: #D6D3CD;
+}
+
+.hairline-grid {
+  background-size: 24px 24px;
+  background-image: 
+    linear-gradient(to right, rgba(214, 211, 205, 0.4) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(214, 211, 205, 0.4) 1px, transparent 1px);
+}
+
+/* Custom scrollbar for dense clinical terminal tables */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #F6F5F2;
+}
+::-webkit-scrollbar-thumb {
+  background: #D6D3CD;
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #9CA3AF;
+}

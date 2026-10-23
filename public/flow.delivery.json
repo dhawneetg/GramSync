@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "34ee77f2-8f9c-4997-817b-b6b0626576aa",
+  "status": "current",
+  "command": "deliver",
+  "type": "workflow",
+  "input": "D:\\Code things\\Hackathons\\JECRC HACKATHON\\.archify\\workflow-gramsync-flow\\candidate.json",
+  "output": "D:\\Code things\\Hackathons\\JECRC HACKATHON\\public\\flow.html",
+  "specification": {
+    "sha256": "cb95b27350d241874562327e800aa434b4eef5a1b943c2f7b2899fc9af347f8b",
+    "bytes": 6215
+  },
+  "artifact": {
+    "sha256": "fbf05b3d1b391e440a96b6edc672230b57634568eaad20302c815ad24c7564df",
+    "bytes": 837976
+  }
+}
