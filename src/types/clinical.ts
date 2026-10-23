@@ -26,8 +26,32 @@ export interface ConflictDetails {
   remoteTimestamp: string;
 }
 
+export interface LabInvestigation {
+  id: string;
+  testName: string;
+  testDate: string;
+  performedAt: string;
+  resultValue: string;
+  normalRange: string;
+  status: 'NORMAL' | 'ELEVATED' | 'CRITICAL';
+  doctorRemarks: string;
+}
+
+export interface StructuredPrescription {
+  id: string;
+  medicineName: string;
+  dosage: string;
+  frequency: string;
+  timing: 'BEFORE_FOOD' | 'AFTER_FOOD';
+  daysPrescribed: number;
+  issuedBy: string;
+  issuedDate: string;
+}
+
 export interface PatientRecord {
   patientId: string;             // e.g., "PT-8041"
+  abhaId?: string;               // Ayushman Bharat Health Account ID (e.g. 91-8041-3312-8801)
+  phone?: string;
   fullName: string;              // Fictional patient name
   age: number;
   gender: 'Female' | 'Male' | 'Other';
@@ -39,6 +63,8 @@ export interface PatientRecord {
   lastModifiedBy: 'ASHA_NODE_A' | 'CLINIC_NODE_B' | 'SYSTEM';
   lastModifiedAt: string;        // ISO-8601
   data: VitalSignPayload;
+  labReports?: LabInvestigation[];
+  prescriptions?: StructuredPrescription[];
   encryptedBlobPreview?: string; // Real WebCrypto AES-GCM base64 ciphertext
   conflictPayload?: ConflictDetails;
 }

@@ -22,6 +22,8 @@ const KEY_SYNC_PACKETS = `${STORAGE_PREFIX}sync_packets`;
 export const SEED_PATIENTS: PatientRecord[] = [
   {
     patientId: 'PT-8041',
+    abhaId: '91-8041-3312-8801',
+    phone: '+91 98291 44102',
     fullName: 'Sunita Devi',
     age: 26,
     gender: 'Female',
@@ -41,10 +43,76 @@ export const SEED_PATIENTS: PatientRecord[] = [
       hemoglobinGdl: 10.2,
       medicationsIssued: 'Labetalol 100mg BD, IFA Tablets (Iron & Folic Acid)',
       clinicalNotes: 'Gestational age 32 weeks. Pitting edema +1. Regular fetal heart sound 144 bpm. Strict salt restriction advised.'
-    }
+    },
+    labReports: [
+      {
+        id: 'LAB-901',
+        testName: 'Urine Albumin / Protein Rapid Strip',
+        testDate: '2026-10-22T09:30:00.000Z',
+        performedAt: 'Bassi Community Health Centre Lab',
+        resultValue: 'Trace (+1)',
+        normalRange: 'Negative (Nil)',
+        status: 'ELEVATED',
+        doctorRemarks: 'Mild proteinuria in pregnancy. Preeclampsia monitoring initiated.'
+      },
+      {
+        id: 'LAB-902',
+        testName: 'Obstetric Fetal Doppler Sonogram',
+        testDate: '2026-10-21T11:15:00.000Z',
+        performedAt: 'District Mother & Child Wing (MCH)',
+        resultValue: '144 BPM Regular',
+        normalRange: '120 - 160 BPM',
+        status: 'NORMAL',
+        doctorRemarks: 'Adequate fetal heart sounds, no deceleration noted.'
+      },
+      {
+        id: 'LAB-903',
+        testName: 'Complete Blood Count (CBC Hemoglobin)',
+        testDate: '2026-10-20T08:45:00.000Z',
+        performedAt: 'Bassi PHC Diagnostic Centre',
+        resultValue: '10.2 g/dL',
+        normalRange: '11.0 - 14.5 g/dL',
+        status: 'ELEVATED',
+        doctorRemarks: 'Mild gestational nutritional anemia. Continue IFA supplement.'
+      }
+    ],
+    prescriptions: [
+      {
+        id: 'RX-101',
+        medicineName: 'Labetalol 100mg Tablet',
+        dosage: '1 Tab',
+        frequency: 'Morning & Night (सुबह - रात)',
+        timing: 'AFTER_FOOD',
+        daysPrescribed: 14,
+        issuedBy: 'Dr. R. K. Sharma (Medical Officer)',
+        issuedDate: '2026-10-22'
+      },
+      {
+        id: 'RX-102',
+        medicineName: 'IFA Red Tablet (Iron & Folic Acid)',
+        dosage: '1 Tab',
+        frequency: 'Afternoon (दोपहर)',
+        timing: 'AFTER_FOOD',
+        daysPrescribed: 30,
+        issuedBy: 'Dr. R. K. Sharma (Medical Officer)',
+        issuedDate: '2026-10-22'
+      },
+      {
+        id: 'RX-103',
+        medicineName: 'Calcium Carbonate 500mg + Vit D3',
+        dosage: '1 Tab',
+        frequency: 'Morning (सुबह)',
+        timing: 'AFTER_FOOD',
+        daysPrescribed: 30,
+        issuedBy: 'Dr. R. K. Sharma (Medical Officer)',
+        issuedDate: '2026-10-22'
+      }
+    ]
   },
   {
     patientId: 'PT-8042',
+    abhaId: '91-8042-7721-9943',
+    phone: '+91 94140 88219',
     fullName: 'Rameshwar Meena',
     age: 58,
     gender: 'Male',
@@ -64,10 +132,56 @@ export const SEED_PATIENTS: PatientRecord[] = [
       hemoglobinGdl: 13.5,
       medicationsIssued: 'Metformin 500mg SR, Pregabalin 75mg HS',
       clinicalNotes: 'Fasting capillary glucose 168 mg/dL. Reduced foot sensation bilaterally. Monofilament test ordered. Foot care kit provided.'
-    }
+    },
+    labReports: [
+      {
+        id: 'LAB-904',
+        testName: 'Fasting Capillary Blood Glucose (Glucometer)',
+        testDate: '2026-10-23T06:30:00.000Z',
+        performedAt: 'Sanganer Subcentre Point-of-Care Lab',
+        resultValue: '168 mg/dL',
+        normalRange: '70 - 100 mg/dL',
+        status: 'CRITICAL',
+        doctorRemarks: 'Fasting hyperglycemia. Advised carb restriction and dosage titration.'
+      },
+      {
+        id: 'LAB-905',
+        testName: 'Glycated Hemoglobin (HbA1c)',
+        testDate: '2026-10-18T10:00:00.000Z',
+        performedAt: 'District Hospital Jaipur Central Lab',
+        resultValue: '8.4 %',
+        normalRange: '< 6.5 %',
+        status: 'CRITICAL',
+        doctorRemarks: 'Suboptimal 3-month glycemic control. Renal panel recommended.'
+      }
+    ],
+    prescriptions: [
+      {
+        id: 'RX-104',
+        medicineName: 'Metformin 500mg SR',
+        dosage: '1 Tab',
+        frequency: 'Morning & Night (सुबह - रात)',
+        timing: 'BEFORE_FOOD',
+        daysPrescribed: 30,
+        issuedBy: 'Dr. Ananya Sen (Physician)',
+        issuedDate: '2026-10-18'
+      },
+      {
+        id: 'RX-105',
+        medicineName: 'Pregabalin 75mg Capsule',
+        dosage: '1 Cap',
+        frequency: 'Night Bedtime (रात)',
+        timing: 'AFTER_FOOD',
+        daysPrescribed: 15,
+        issuedBy: 'Dr. Ananya Sen (Physician)',
+        issuedDate: '2026-10-18'
+      }
+    ]
   },
   {
     patientId: 'PT-8043',
+    abhaId: '91-8043-4419-2204',
+    phone: '+91 97852 11048',
     fullName: 'Geeta Bai',
     age: 34,
     gender: 'Female',
@@ -87,10 +201,56 @@ export const SEED_PATIENTS: PatientRecord[] = [
       hemoglobinGdl: 7.4,
       medicationsIssued: 'IV Ferric Carboxymaltose 500mg planned, Deworming Albendazole 400mg',
       clinicalNotes: 'Pallor +++ in palpebral conjunctiva. Easy fatiguability. PHC referral scheduled for parenteral iron infusion tomorrow morning.'
-    }
+    },
+    labReports: [
+      {
+        id: 'LAB-906',
+        testName: 'Hemocue Photometric Hemoglobin Test',
+        testDate: '2026-10-23T07:15:00.000Z',
+        performedAt: 'Chaksu ASHA Domiciliary Camp',
+        resultValue: '7.4 g/dL',
+        normalRange: '12.0 - 15.0 g/dL',
+        status: 'CRITICAL',
+        doctorRemarks: 'Severe microcytic anemia. High risk for cardiac deconditioning.'
+      },
+      {
+        id: 'LAB-907',
+        testName: 'Serum Ferritin Assay',
+        testDate: '2026-10-19T09:00:00.000Z',
+        performedAt: 'Jaipur Rural District Lab',
+        resultValue: '6.2 ng/mL',
+        normalRange: '15.0 - 150.0 ng/mL',
+        status: 'CRITICAL',
+        doctorRemarks: 'Exhausted iron marrow stores. Urgent parenteral iron required.'
+      }
+    ],
+    prescriptions: [
+      {
+        id: 'RX-106',
+        medicineName: 'IV Ferric Carboxymaltose 500mg in 100ml NS',
+        dosage: '1 Infusion',
+        frequency: 'Hospital Day Care (एक बार)',
+        timing: 'AFTER_FOOD',
+        daysPrescribed: 1,
+        issuedBy: 'Dr. R. K. Sharma (Medical Officer)',
+        issuedDate: '2026-10-23'
+      },
+      {
+        id: 'RX-107',
+        medicineName: 'Albendazole 400mg Chewable',
+        dosage: '1 Tab',
+        frequency: 'Stat Night (रात को एक बार)',
+        timing: 'AFTER_FOOD',
+        daysPrescribed: 1,
+        issuedBy: 'Dr. R. K. Sharma (Medical Officer)',
+        issuedDate: '2026-10-23'
+      }
+    ]
   },
   {
     patientId: 'PT-8044',
+    abhaId: '91-8044-1109-7756',
+    phone: '+91 99281 77312',
     fullName: 'Mohan Lal Sharma',
     age: 62,
     gender: 'Male',
@@ -110,10 +270,46 @@ export const SEED_PATIENTS: PatientRecord[] = [
       hemoglobinGdl: 14.8,
       medicationsIssued: 'Amlodipine 5mg OD, Salbutamol MDI 100mcg PRN',
       clinicalNotes: 'Bilateral expiratory wheeze. Cough with whitish expectoration. Advised wood-smoke avoidance and biomass stove replacement.'
-    }
+    },
+    labReports: [
+      {
+        id: 'LAB-908',
+        testName: 'Peak Expiratory Flow Rate (PEFR)',
+        testDate: '2026-10-21T10:30:00.000Z',
+        performedAt: 'Amer Health & Wellness Subcentre',
+        resultValue: '280 L/min',
+        normalRange: '450 - 600 L/min',
+        status: 'ELEVATED',
+        doctorRemarks: 'Moderate obstructive airway pattern. Inhaler technique demonstrated.'
+      }
+    ],
+    prescriptions: [
+      {
+        id: 'RX-108',
+        medicineName: 'Amlodipine 5mg Tablet',
+        dosage: '1 Tab',
+        frequency: 'Morning (सुबह)',
+        timing: 'AFTER_FOOD',
+        daysPrescribed: 30,
+        issuedBy: 'Dr. Vivek Mehra (Medical Officer)',
+        issuedDate: '2026-10-21'
+      },
+      {
+        id: 'RX-109',
+        medicineName: 'Salbutamol Inhaler 100mcg',
+        dosage: '2 Puffs',
+        frequency: 'As needed for breathlessness (जरूरत पड़ने पर)',
+        timing: 'AFTER_FOOD',
+        daysPrescribed: 30,
+        issuedBy: 'Dr. Vivek Mehra (Medical Officer)',
+        issuedDate: '2026-10-21'
+      }
+    ]
   },
   {
     patientId: 'PT-8045',
+    abhaId: '91-8045-8832-5509',
+    phone: '+91 96024 33811',
     fullName: 'Priyanka Gurjar',
     age: 21,
     gender: 'Female',
@@ -133,7 +329,41 @@ export const SEED_PATIENTS: PatientRecord[] = [
       hemoglobinGdl: 11.0,
       medicationsIssued: 'Calcium Carbonate 500mg, IFA Blue, Paracetamol 500mg SOS',
       clinicalNotes: 'Normal vaginal delivery Day 4. Lochia rubra moderate. Neonate active, breastfeeding established successfully.'
-    }
+    },
+    labReports: [
+      {
+        id: 'LAB-910',
+        testName: 'Postnatal Capillary Hemoglobin Check',
+        testDate: '2026-10-23T07:00:00.000Z',
+        performedAt: 'Jamwa Ramgarh Maternity Subcentre',
+        resultValue: '11.0 g/dL',
+        normalRange: '11.0 - 14.0 g/dL',
+        status: 'NORMAL',
+        doctorRemarks: 'Satisfactory postnatal recovery. Continue maternal nutrition.'
+      }
+    ],
+    prescriptions: [
+      {
+        id: 'RX-110',
+        medicineName: 'Calcium Carbonate 500mg + D3',
+        dosage: '1 Tab',
+        frequency: 'Morning & Night (सुबह - रात)',
+        timing: 'AFTER_FOOD',
+        daysPrescribed: 60,
+        issuedBy: 'Dr. Sunita Bansal (Gynaecologist)',
+        issuedDate: '2026-10-20'
+      },
+      {
+        id: 'RX-111',
+        medicineName: 'IFA Tablet (Maternal Support)',
+        dosage: '1 Tab',
+        frequency: 'Afternoon (दोपहर)',
+        timing: 'AFTER_FOOD',
+        daysPrescribed: 100,
+        issuedBy: 'Dr. Sunita Bansal (Gynaecologist)',
+        issuedDate: '2026-10-20'
+      }
+    ]
   }
 ];
 
