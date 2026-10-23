@@ -9,7 +9,9 @@ import {
   GitMerge, 
   AlertCircle, 
   CheckCircle, 
-  Edit3
+  Edit3,
+  FlaskConical,
+  Pill
 } from 'lucide-react';
 import { PatientRecord, NodeId, NetworkMode, UserRole } from '../types/clinical';
 import { storageEngine } from '../services/storageEngine';
@@ -234,6 +236,18 @@ export const DualNodeSyncLab: React.FC<Props> = ({ userRole }) => {
                     <span className="text-[10px] text-stone-400 block font-sans">SpO2</span>
                     <span className="font-bold text-emerald-700">{patient.data?.spO2 ?? 98}%</span>
                   </div>
+                </div>
+
+                {/* Lab & Prescription Micro-Tags */}
+                <div className="flex items-center gap-1.5 text-[11px] mb-2">
+                  <span className="flex items-center gap-1 bg-indigo-50 text-indigo-900 border border-indigo-200/80 px-2 py-0.5 rounded-md font-medium">
+                    <FlaskConical className="w-3 h-3 text-indigo-600" />
+                    <span>{patient.labReports?.length || 0} Labs</span>
+                  </span>
+                  <span className="flex items-center gap-1 bg-rose-50 text-rose-900 border border-rose-200/80 px-2 py-0.5 rounded-md font-medium">
+                    <Pill className="w-3 h-3 text-rose-600" />
+                    <span>{patient.prescriptions?.length || 0} Rx</span>
+                  </span>
                 </div>
 
                 {/* Actions */}
@@ -490,6 +504,18 @@ export const DualNodeSyncLab: React.FC<Props> = ({ userRole }) => {
                     <span className="text-[10px] text-stone-400 block font-sans">SpO2</span>
                     <span className="font-bold text-emerald-700">{patient.data?.spO2 ?? 98}%</span>
                   </div>
+                </div>
+
+                {/* Lab & Prescription Micro-Tags */}
+                <div className="flex items-center gap-1.5 text-[11px] mb-2">
+                  <span className="flex items-center gap-1 bg-indigo-50 text-indigo-900 border border-indigo-200/80 px-2 py-0.5 rounded-md font-medium">
+                    <FlaskConical className="w-3 h-3 text-indigo-600" />
+                    <span>{patient.labReports?.length || 0} Labs</span>
+                  </span>
+                  <span className="flex items-center gap-1 bg-rose-50 text-rose-900 border border-rose-200/80 px-2 py-0.5 rounded-md font-medium">
+                    <Pill className="w-3 h-3 text-rose-600" />
+                    <span>{patient.prescriptions?.length || 0} Rx</span>
+                  </span>
                 </div>
 
                 {/* Actions */}

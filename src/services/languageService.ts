@@ -60,6 +60,7 @@ export const DICTIONARY = {
     resolveConflict: 'Resolve Conflict',
 
     // Tabs
+    tabAll: 'All-in-One Dashboard',
     tabVitals: '1. Vitals & Screening',
     tabLabs: '2. PHC Lab Reports',
     tabPrescriptions: '3. Doctor Prescriptions',
@@ -151,6 +152,7 @@ export const DICTIONARY = {
     resolveConflict: 'मतभेद हल करें',
 
     // Tabs
+    tabAll: 'सम्पूर्ण डैशबोर्ड (All)',
     tabVitals: '1. शारीरिक जाँच (Vitals)',
     tabLabs: '2. PHC लैब रिपोर्ट',
     tabPrescriptions: '3. डॉक्टर की दवाइयाँ',

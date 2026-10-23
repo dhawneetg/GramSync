@@ -16,7 +16,8 @@ import {
   MapPin,
   Wifi,
   WifiOff,
-  QrCode
+  QrCode,
+  LayoutGrid
 } from 'lucide-react';
 import { PatientRecord, NodeId, UserRole, LabInvestigation, StructuredPrescription } from '../types/clinical';
 import { storageEngine } from '../services/storageEngine';
@@ -34,13 +35,13 @@ interface Props {
   userRole: UserRole;
 }
 
-type DetailTab = 'VITALS' | 'LABS' | 'PRESCRIPTIONS';
+type DetailTab = 'ALL' | 'VITALS' | 'LABS' | 'PRESCRIPTIONS';
 
 export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
   const [activeNode, setActiveNode] = useState<NodeId>('NODE_A');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedPatientId, setSelectedPatientId] = useState<string>('PT-8041');
-  const [activeDetailTab, setActiveDetailTab] = useState<DetailTab>('VITALS');
+  const [activeDetailTab, setActiveDetailTab] = useState<DetailTab>('ALL');
   const [, setTick] = useState<number>(0);
 
   // Modals
@@ -500,14 +501,24 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
 
                 {/* Primary Action Buttons */}
                 <div className="flex flex-wrap items-center gap-2">
-                  {/* Share Health Passport Button */}
+                  {/* Quick Add Lab Test Button */}
                   <button
-                    onClick={() => setShowPassportModal(true)}
-                    className="px-3.5 py-2 text-xs font-bold bg-white hover:bg-stone-50 text-emerald-800 border border-emerald-300/80 rounded-xl flex items-center gap-1.5 shadow-xs transition-all hover:scale-[1.02] active:scale-95 cursor-pointer"
-                    title="Generate and Share Unified Patient Health Record"
+                    onClick={() => setShowAddLabModal(true)}
+                    className="px-3.5 py-2 text-xs font-bold bg-indigo-700 hover:bg-indigo-800 text-white rounded-xl flex items-center gap-1.5 shadow-sm transition-all hover:scale-[1.02] active:scale-95 cursor-pointer"
+                    title="Add Diagnostic Lab Test Result"
                   >
-                    <Share2 className="w-3.5 h-3.5 text-emerald-600" />
-                    <span>{t('shareRecordBtn')}</span>
+                    <FlaskConical className="w-3.5 h-3.5 text-indigo-200" />
+                    <span>+ नया टेस्ट</span>
+                  </button>
+
+                  {/* Quick Add Prescription Button */}
+                  <button
+                    onClick={() => setShowAddRxModal(true)}
+                    className="px-3.5 py-2 text-xs font-bold bg-rose-700 hover:bg-rose-800 text-white rounded-xl flex items-center gap-1.5 shadow-sm transition-all hover:scale-[1.02] active:scale-95 cursor-pointer"
+                    title="Add Doctor Medicine Prescription"
+                  >
+                    <Pill className="w-3.5 h-3.5 text-rose-200" />
+                    <span>+ नई दवा</span>
                   </button>
 
                   {/* Quick Medicine QR Button */}
@@ -518,6 +529,16 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
                   >
                     <QrCode className="w-3.5 h-3.5 text-emerald-700" />
                     <span>{t('qrShareBtn')}</span>
+                  </button>
+
+                  {/* Share Health Passport Button */}
+                  <button
+                    onClick={() => setShowPassportModal(true)}
+                    className="px-3.5 py-2 text-xs font-bold bg-white hover:bg-stone-50 text-emerald-800 border border-emerald-300/80 rounded-xl flex items-center gap-1.5 shadow-xs transition-all hover:scale-[1.02] active:scale-95 cursor-pointer"
+                    title="Generate and Share Unified Patient Health Record"
+                  >
+                    <Share2 className="w-3.5 h-3.5 text-emerald-600" />
+                    <span>{t('shareRecordBtn')}</span>
                   </button>
 
                   {/* Record Visit / Resolve Conflict Button */}
@@ -544,10 +565,22 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
               {/* Patient Dashboard Tab Navigation */}
               <div className="px-4 sm:px-5 pt-3 bg-white border-b border-stone-200 flex items-center gap-2 overflow-x-auto no-scrollbar">
                 <button
+                  onClick={() => setActiveDetailTab('ALL')}
+                  className={`flex items-center gap-2 px-3.5 py-2 text-xs font-bold border-b-2 transition-all whitespace-nowrap cursor-pointer ${
+                    activeDetailTab === 'ALL'
+                      ? 'border-emerald-700 text-emerald-800 bg-emerald-50/50 rounded-t-lg'
+                      : 'border-transparent text-stone-500 hover:text-stone-800'
+                  }`}
+                >
+                  <LayoutGrid className="w-4 h-4 text-emerald-600" />
+                  <span>{t('tabAll')}</span>
+                </button>
+
+                <button
                   onClick={() => setActiveDetailTab('VITALS')}
                   className={`flex items-center gap-2 px-3.5 py-2 text-xs font-bold border-b-2 transition-all whitespace-nowrap cursor-pointer ${
                     activeDetailTab === 'VITALS'
-                      ? 'border-emerald-700 text-emerald-800'
+                      ? 'border-emerald-700 text-emerald-800 bg-emerald-50/50 rounded-t-lg'
                       : 'border-transparent text-stone-500 hover:text-stone-800'
                   }`}
                 >
@@ -559,7 +592,7 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
                   onClick={() => setActiveDetailTab('LABS')}
                   className={`flex items-center gap-2 px-3.5 py-2 text-xs font-bold border-b-2 transition-all whitespace-nowrap cursor-pointer ${
                     activeDetailTab === 'LABS'
-                      ? 'border-indigo-700 text-indigo-800'
+                      ? 'border-indigo-700 text-indigo-800 bg-indigo-50/50 rounded-t-lg'
                       : 'border-transparent text-stone-500 hover:text-stone-800'
                   }`}
                 >
@@ -571,7 +604,7 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
                   onClick={() => setActiveDetailTab('PRESCRIPTIONS')}
                   className={`flex items-center gap-2 px-3.5 py-2 text-xs font-bold border-b-2 transition-all whitespace-nowrap cursor-pointer ${
                     activeDetailTab === 'PRESCRIPTIONS'
-                      ? 'border-rose-700 text-rose-800'
+                      ? 'border-rose-700 text-rose-800 bg-rose-50/50 rounded-t-lg'
                       : 'border-transparent text-stone-500 hover:text-stone-800'
                   }`}
                 >
@@ -581,7 +614,7 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
               </div>
 
               {/* Tab 1: Vitals & Field Triage View */}
-              {activeDetailTab === 'VITALS' && (
+              {(activeDetailTab === 'ALL' || activeDetailTab === 'VITALS') && (
                 <div className="p-4 sm:p-5 space-y-4 animate-in fade-in duration-150">
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                     {/* BP */}
@@ -673,7 +706,7 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
               )}
 
               {/* Tab 2: PHC Diagnostic Lab Reports */}
-              {activeDetailTab === 'LABS' && (
+              {(activeDetailTab === 'ALL' || activeDetailTab === 'LABS') && (
                 <div className="p-4 sm:p-5 space-y-3 animate-in fade-in duration-150">
                   <div className="flex flex-wrap items-center justify-between gap-2 mb-1">
                     <div>
@@ -742,7 +775,7 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
               )}
 
               {/* Tab 3: Structured Prescriptions */}
-              {activeDetailTab === 'PRESCRIPTIONS' && (
+              {(activeDetailTab === 'ALL' || activeDetailTab === 'PRESCRIPTIONS') && (
                 <div className="p-4 sm:p-5 space-y-3 animate-in fade-in duration-150">
                   <div className="flex flex-wrap items-center justify-between gap-2 mb-1">
                     <div>
