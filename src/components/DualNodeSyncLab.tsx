@@ -64,29 +64,29 @@ export const DualNodeSyncLab: React.FC<Props> = ({ userRole }) => {
   };
 
   return (
-    <div className="flex-1 flex flex-col p-2 sm:p-3 gap-2 sm:gap-3 overflow-y-auto lg:overflow-hidden">
+    <div className="flex-1 flex flex-col p-2 sm:p-3 gap-2 sm:gap-3 overflow-y-auto lg:overflow-hidden bg-stone-50/50">
       {/* Simulation Lab Ribbon */}
-      <div className="bg-paper border border-stonehairline p-2 sm:p-2.5 rounded-sm flex flex-wrap items-center justify-between gap-2 text-xs">
+      <div className="bg-white border border-stone-200/90 p-2 sm:p-3 rounded-xl shadow-xs flex flex-wrap items-center justify-between gap-2 text-xs">
         <div className="flex items-center gap-2">
-          <span className="font-mono font-bold text-charcoal flex items-center gap-1.5 text-xs">
-            <span className="w-2.5 h-2.5 bg-slateteal rounded-xs inline-block"></span>
-            MULTI-NODE CLINICAL SYNC SIMULATOR
+          <span className="font-sans font-bold text-stone-900 flex items-center gap-2 text-xs">
+            <span className="w-2.5 h-2.5 bg-emerald-600 rounded-full inline-block animate-pulse"></span>
+            मल्टी-नोड सिंक सिमुलेटर (Multi-Node Clinical Sync Simulator)
           </span>
-          <span className="text-mutedink font-mono text-[11px] hidden md:inline">
+          <span className="text-stone-500 text-[11px] hidden md:inline">
             | Two isolated offline endpoints synchronizing with central Primary Health Centre cloud revision coordinator
           </span>
         </div>
-        <div className="flex items-center gap-3 text-[10px] sm:text-[11px] font-mono text-mutedink">
-          <span>Role: <strong className="text-charcoal font-semibold">{userRole}</strong></span>
-          <span>IndexedDB: <strong className="text-emerald-700">ONLINE</strong></span>
+        <div className="flex items-center gap-3 text-[11px] font-mono text-stone-500">
+          <span>Role: <strong className="text-stone-900 font-semibold">{userRole}</strong></span>
+          <span>Storage: <strong className="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200 font-bold">IndexedDB ENCRYPTED</strong></span>
         </div>
       </div>
 
       {/* Mobile Node Switcher Tab Bar */}
-      <div className="flex lg:hidden items-center bg-canvas p-1 border border-stonehairline rounded-sm text-xs font-mono">
+      <div className="flex lg:hidden items-center bg-white p-1 border border-stone-200 rounded-xl text-xs font-medium shadow-xs">
         <button
           onClick={() => setMobileActiveNode('NODE_A')}
-          className={`flex-1 py-1 px-1.5 rounded-xs text-center font-bold transition-colors ${
+          className={`flex-1 py-1.5 px-2 rounded-lg text-center font-bold transition-all duration-200 ${
             mobileActiveNode === 'NODE_A' ? 'bg-amber-100 text-amber-900 border border-amber-300 shadow-xs' : 'text-stone-500'
           }`}
         >
@@ -94,7 +94,7 @@ export const DualNodeSyncLab: React.FC<Props> = ({ userRole }) => {
         </button>
         <button
           onClick={() => setMobileActiveNode('SERVER')}
-          className={`flex-1 py-1 px-1.5 rounded-xs text-center font-bold transition-colors ${
+          className={`flex-1 py-1.5 px-2 rounded-lg text-center font-bold transition-all duration-200 ${
             mobileActiveNode === 'SERVER' ? 'bg-emerald-100 text-emerald-900 border border-emerald-300 shadow-xs' : 'text-stone-500'
           }`}
         >
@@ -102,7 +102,7 @@ export const DualNodeSyncLab: React.FC<Props> = ({ userRole }) => {
         </button>
         <button
           onClick={() => setMobileActiveNode('NODE_B')}
-          className={`flex-1 py-1 px-1.5 rounded-xs text-center font-bold transition-colors ${
+          className={`flex-1 py-1.5 px-2 rounded-lg text-center font-bold transition-all duration-200 ${
             mobileActiveNode === 'NODE_B' ? 'bg-blue-100 text-blue-900 border border-blue-300 shadow-xs' : 'text-stone-500'
           }`}
         >
@@ -116,36 +116,36 @@ export const DualNodeSyncLab: React.FC<Props> = ({ userRole }) => {
         {/* ========================================================= */}
         {/* COLUMN 1: NODE A (ASHA FIELD TABLET)                     */}
         {/* ========================================================= */}
-        <div className={`lg:col-span-4 flex-col bg-paper border border-stonehairline rounded-sm min-h-[460px] lg:min-h-0 overflow-hidden shadow-xs ${mobileActiveNode === 'NODE_A' ? 'flex' : 'hidden lg:flex'}`}>
+        <div className={`lg:col-span-4 flex-col bg-white border border-stone-200/90 rounded-2xl min-h-[460px] lg:min-h-0 overflow-hidden shadow-xs ${mobileActiveNode === 'NODE_A' ? 'flex' : 'hidden lg:flex'}`}>
           {/* Node Header */}
-          <div className="p-3 bg-canvas border-b border-stonehairline flex flex-col gap-2">
+          <div className="p-3 bg-stone-50/80 border-b border-stone-200/80 flex flex-col gap-2">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Tablet className="w-4 h-4 text-slateteal" />
-                <span className="font-mono font-bold text-xs text-charcoal">
+                <Tablet className="w-4 h-4 text-emerald-700" />
+                <span className="font-bold text-xs text-stone-900">
                   NODE A: ASHA FIELD TABLET
                 </span>
               </div>
-              <span className="text-[10px] font-mono px-1.5 py-0.5 bg-amber-100 text-amber-900 border border-amber-300 rounded-sm font-semibold">
+              <span className="text-[10px] px-2 py-0.5 bg-amber-100 text-amber-900 border border-amber-300 rounded-full font-semibold">
                 ASHA_WORKER
               </span>
             </div>
 
             {/* Network Adapter Switcher & Outbox Status */}
             <div className="flex items-center justify-between gap-2 pt-1">
-              <div className="flex items-center gap-1 bg-paper p-0.5 border border-stonehairline rounded-sm">
+              <div className="flex items-center gap-1 bg-white p-0.5 border border-stone-200 rounded-lg shadow-xs">
                 {(['ONLINE', 'OFFLINE', 'FLAKY'] as NetworkMode[]).map(mode => (
                   <button
                     key={mode}
                     onClick={() => handleNetworkToggle('NODE_A', mode)}
-                    className={`px-2 py-0.5 text-[10px] font-mono font-bold rounded-xs transition-colors ${
+                    className={`px-2 py-1 text-[10px] font-bold rounded-md transition-all duration-150 cursor-pointer ${
                       nodeANetwork === mode
                         ? mode === 'ONLINE'
-                          ? 'bg-emerald-600 text-white'
+                          ? 'bg-emerald-600 text-white shadow-xs'
                           : mode === 'OFFLINE'
-                          ? 'bg-red-600 text-white'
-                          : 'bg-amber-600 text-white'
-                        : 'text-stone-500 hover:text-charcoal'
+                          ? 'bg-red-600 text-white shadow-xs'
+                          : 'bg-amber-600 text-white shadow-xs'
+                        : 'text-stone-500 hover:text-stone-900 hover:bg-stone-100'
                     }`}
                   >
                     {mode === 'ONLINE' && <Wifi className="w-2.5 h-2.5 inline mr-1" />}
@@ -159,13 +159,13 @@ export const DualNodeSyncLab: React.FC<Props> = ({ userRole }) => {
               <button
                 onClick={() => handleDrain('NODE_A')}
                 disabled={nodeANetwork === 'OFFLINE' || nodeASyncing}
-                className="flex items-center gap-1 px-2 py-0.5 text-[11px] font-mono bg-paper hover:bg-canvas border border-stonehairline rounded-sm disabled:opacity-40 text-charcoal transition-colors cursor-pointer"
+                className="flex items-center gap-1.5 px-3 py-1 text-xs font-semibold bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 rounded-lg disabled:opacity-40 transition-all duration-150 cursor-pointer shadow-xs"
                 title="Sync Outbox queue with Central Server"
               >
-                <RefreshCw className={`w-3 h-3 text-slateteal ${nodeASyncing ? 'animate-spin' : ''}`} />
+                <RefreshCw className={`w-3.5 h-3.5 text-emerald-700 ${nodeASyncing ? 'animate-spin' : ''}`} />
                 <span>SYNC</span>
                 {nodeAOutbox.length > 0 && (
-                  <span className="bg-amber-500 text-white font-mono text-[9px] px-1 rounded-full font-bold ml-0.5">
+                  <span className="bg-amber-500 text-white font-mono text-[9px] px-1.5 py-0.2 rounded-full font-bold ml-0.5">
                     {nodeAOutbox.length}
                   </span>
                 )}
@@ -174,24 +174,24 @@ export const DualNodeSyncLab: React.FC<Props> = ({ userRole }) => {
           </div>
 
           {/* Patient Records List for Node A */}
-          <div className="flex-1 overflow-y-auto p-2 space-y-2">
+          <div className="flex-1 overflow-y-auto p-3 space-y-3">
             {nodeAPatients.map(patient => (
               <div
                 key={patient.patientId}
-                className={`p-2.5 border rounded-sm transition-all ${
+                className={`p-3 border rounded-xl transition-all duration-200 hover:shadow-md ${
                   patient.syncStatus === 'CONFLICT'
-                    ? 'border-red-400 bg-red-50/40 shadow-xs'
+                    ? 'border-red-300 bg-red-50/40 shadow-xs'
                     : patient.syncStatus === 'PENDING'
                     ? 'border-amber-300 bg-amber-50/30'
-                    : 'border-stonehairline bg-paper hover:bg-stone-50/50'
+                    : 'border-stone-200/90 bg-white hover:border-emerald-300'
                 }`}
               >
                 <div className="flex items-center justify-between mb-1.5">
                   <div>
-                    <span className="font-mono font-bold text-xs text-charcoal">
+                    <span className="font-bold text-sm text-stone-900">
                       {patient.fullName}
                     </span>
-                    <span className="font-mono text-[10px] text-mutedink ml-1.5">
+                    <span className="text-[11px] text-stone-400 font-mono ml-1.5">
                       ({patient.patientId})
                     </span>
                   </div>
@@ -206,56 +206,56 @@ export const DualNodeSyncLab: React.FC<Props> = ({ userRole }) => {
                   />
                 </div>
 
-                <div className="text-[11px] font-mono text-mutedink mb-1 flex items-center justify-between">
-                  <span>{patient.conditionTag}</span>
-                  <span className="tabular-nums">BASE: v{patient.baseRevision}</span>
+                <div className="text-xs text-stone-600 mb-2 flex items-center justify-between">
+                  <span className="font-medium text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200/60 text-[11px]">
+                    {patient.conditionTag}
+                  </span>
+                  <span className="text-stone-400 font-mono text-[10px]">BASE: v{patient.baseRevision}</span>
                 </div>
 
                 {/* Indian Rural Healthcare NHM Triage Badges */}
                 <NhmTriageBadge patient={patient} compact />
 
                 {/* Vitals Snapshot */}
-                <div className="grid grid-cols-4 gap-1 p-1.5 bg-canvas/60 border border-stonehairline rounded-sm font-mono text-[11px] text-charcoal tabular-nums mb-2">
-                  <div>
-                    <span className="text-[9px] text-mutedink block">BP</span>
-                    <span className="font-bold">{patient.data?.systolicBP ?? 120}/{patient.data?.diastolicBP ?? 80}</span>
+                <div className="grid grid-cols-4 gap-1 p-2 bg-stone-50 border border-stone-200/80 rounded-lg text-xs text-stone-800 tabular-nums my-2">
+                  <div className="text-center">
+                    <span className="text-[10px] text-stone-400 block font-sans">BP</span>
+                    <span className="font-bold text-stone-900">{patient.data?.systolicBP ?? 120}/{patient.data?.diastolicBP ?? 80}</span>
                   </div>
-                  <div>
-                    <span className="text-[9px] text-mutedink block">HR</span>
-                    <span className="font-bold">{patient.data?.heartRate ?? 72} bpm</span>
+                  <div className="text-center">
+                    <span className="text-[10px] text-stone-400 block font-sans">HR</span>
+                    <span className="font-bold text-stone-900">{patient.data?.heartRate ?? 72}</span>
                   </div>
-                  <div>
-                    <span className="text-[9px] text-mutedink block">Hb</span>
-                    <span className="font-bold">{patient.data?.hemoglobinGdl ?? 12.0} g/dL</span>
+                  <div className="text-center">
+                    <span className="text-[10px] text-stone-400 block font-sans">Hb</span>
+                    <span className="font-bold text-stone-900">{patient.data?.hemoglobinGdl ?? 12.0}</span>
                   </div>
-                  <div>
-                    <span className="text-[9px] text-mutedink block">SpO2</span>
-                    <span className="font-bold">{patient.data?.spO2 ?? 98}%</span>
+                  <div className="text-center">
+                    <span className="text-[10px] text-stone-400 block font-sans">SpO2</span>
+                    <span className="font-bold text-emerald-700">{patient.data?.spO2 ?? 98}%</span>
                   </div>
                 </div>
 
                 {/* Actions */}
-                <div className="flex flex-wrap items-center justify-between pt-1 border-t border-stonehairline/60 gap-1">
-                  <span className="text-[9px] font-mono text-mutedink">
+                <div className="flex flex-wrap items-center justify-between pt-2 border-t border-stone-100 gap-1">
+                  <span className="text-[10px] text-stone-400">
                     Mod: {patient.lastModifiedBy}
                   </span>
                   <div className="flex items-center gap-1">
-
-
                     {patient.syncStatus === 'CONFLICT' ? (
                       <button
                         onClick={() => setResolvingPatient({ patient, nodeId: 'NODE_A' })}
-                        className="px-2 py-0.5 text-[10px] font-mono font-bold bg-red-700 hover:bg-red-800 text-white rounded-sm flex items-center gap-1 animate-pulse"
+                        className="px-2.5 py-1 text-xs font-bold bg-red-600 hover:bg-red-700 text-white rounded-lg flex items-center gap-1 shadow-xs animate-pulse cursor-pointer"
                       >
-                        <GitMerge className="w-3 h-3" />
+                        <GitMerge className="w-3.5 h-3.5" />
                         <span>RESOLVE</span>
                       </button>
                     ) : (
                       <button
                         onClick={() => setEditingPatient({ patient, nodeId: 'NODE_A' })}
-                        className="px-2 py-0.5 text-[10px] font-mono font-semibold bg-canvas hover:bg-stone-200 text-charcoal border border-stonehairline rounded-sm flex items-center gap-1 transition-colors"
+                        className="px-2.5 py-1 text-xs font-medium bg-stone-100 hover:bg-emerald-50 hover:text-emerald-800 hover:border-emerald-200 text-stone-700 border border-stone-200 rounded-lg flex items-center gap-1 transition-all duration-150 cursor-pointer"
                       >
-                        <Edit3 className="w-2.5 h-2.5 text-slateteal" />
+                        <Edit3 className="w-3 h-3 text-emerald-600" />
                         <span>VISIT</span>
                       </button>
                     )}
@@ -269,45 +269,45 @@ export const DualNodeSyncLab: React.FC<Props> = ({ userRole }) => {
         {/* ========================================================= */}
         {/* COLUMN 2: CENTRAL PHC CLOUD REGISTRY & TELEMETRY STREAM   */}
         {/* ========================================================= */}
-        <div className={`lg:col-span-4 flex-col bg-paper border border-stonehairline rounded-sm min-h-[460px] lg:min-h-0 overflow-hidden shadow-xs ${mobileActiveNode === 'SERVER' ? 'flex' : 'hidden lg:flex'}`}>
+        <div className={`lg:col-span-4 flex-col bg-white border border-stone-200/90 rounded-2xl min-h-[460px] lg:min-h-0 overflow-hidden shadow-xs ${mobileActiveNode === 'SERVER' ? 'flex' : 'hidden lg:flex'}`}>
           {/* Center Spine Header */}
-          <div className="p-3 bg-canvas border-b border-stonehairline flex flex-col gap-1.5">
+          <div className="p-3 bg-stone-50/80 border-b border-stone-200/80 flex flex-col gap-1.5">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Server className="w-4 h-4 text-emerald-700" />
-                <span className="font-mono font-bold text-xs text-charcoal">
+                <span className="font-bold text-xs text-stone-900">
                   CENTRAL PHC CLOUD REGISTRY
                 </span>
               </div>
-              <span className="text-[10px] font-mono px-1.5 py-0.5 bg-emerald-100 text-emerald-900 border border-emerald-300 rounded-sm font-semibold">
+              <span className="text-[10px] px-2 py-0.5 bg-emerald-100 text-emerald-900 border border-emerald-300 rounded-full font-semibold">
                 CANONICAL STATE
               </span>
             </div>
-            <div className="flex items-center justify-between text-[11px] font-mono text-mutedink">
-              <span>Authority: <strong className="text-charcoal">District Health Server</strong></span>
-              <span>Revisions: <strong className="text-emerald-800">Deterministic</strong></span>
+            <div className="flex items-center justify-between text-[11px] text-stone-500">
+              <span>Authority: <strong className="text-stone-800">District Health Server</strong></span>
+              <span>Revisions: <strong className="text-emerald-700 font-mono">Deterministic</strong></span>
             </div>
           </div>
 
           {/* Canonical Patients Snapshot */}
-          <div className="p-2 border-b border-stonehairline bg-stone-50/50 max-h-48 overflow-y-auto">
-            <div className="text-[10px] font-mono font-bold uppercase tracking-wider text-mutedink mb-1.5 flex items-center justify-between">
+          <div className="p-3 border-b border-stone-200/80 bg-stone-50/40 max-h-48 overflow-y-auto">
+            <div className="text-[10px] font-bold uppercase tracking-wider text-stone-400 mb-2 flex items-center justify-between">
               <span>CANONICAL REGISTRY SNAPSHOT</span>
-              <span>TOTAL: {serverPatients.length}</span>
+              <span className="font-mono text-emerald-800 bg-emerald-50 px-1.5 py-0.2 rounded border border-emerald-200">TOTAL: {serverPatients.length}</span>
             </div>
-            <div className="space-y-1">
+            <div className="space-y-1.5">
               {serverPatients.map(sp => (
                 <div
                   key={sp.patientId}
-                  className="p-1.5 bg-paper border border-stonehairline rounded-sm flex items-center justify-between text-[11px] font-mono"
+                  className="p-2 bg-white border border-stone-200 rounded-lg flex items-center justify-between text-xs transition-all duration-150 hover:border-emerald-200"
                 >
                   <div className="flex items-center gap-1.5">
-                    <span className="font-bold text-charcoal">{sp.fullName}</span>
-                    <span className="text-stone-400">({sp.patientId})</span>
+                    <span className="font-bold text-stone-900">{sp.fullName}</span>
+                    <span className="text-stone-400 font-mono text-[10px]">({sp.patientId})</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-stone-500 text-[10px]">{sp.lastModifiedBy}</span>
-                    <span className="px-1.5 py-0.2 bg-emerald-50 text-emerald-800 border border-emerald-200 font-bold rounded-xs tabular-nums text-[10px]">
+                    <span className="text-stone-400 text-[10px]">{sp.lastModifiedBy}</span>
+                    <span className="px-2 py-0.5 bg-emerald-50 text-emerald-800 border border-emerald-200 font-bold rounded-md font-mono text-[10px]">
                       REV #{sp.revision}
                     </span>
                   </div>
@@ -317,9 +317,9 @@ export const DualNodeSyncLab: React.FC<Props> = ({ userRole }) => {
           </div>
 
           {/* Live Sync Packet Telemetry Log */}
-          <div className="flex-1 flex flex-col overflow-hidden p-2">
-            <div className="flex items-center justify-between mb-1.5">
-              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-mutedink flex items-center gap-1">
+          <div className="flex-1 flex flex-col overflow-hidden p-3">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-stone-500 flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                 <span>SYNC HANDSHAKE PACKET LOG</span>
               </span>
@@ -328,34 +328,34 @@ export const DualNodeSyncLab: React.FC<Props> = ({ userRole }) => {
               </span>
             </div>
 
-            <div className="flex-1 overflow-y-auto space-y-1.5 font-mono text-[10px] bg-canvas p-2 border border-stonehairline rounded-sm">
+            <div className="flex-1 overflow-y-auto space-y-2 font-mono text-[10px] bg-stone-50 p-2.5 border border-stone-200 rounded-xl">
               {syncPackets.length === 0 ? (
-                <div className="text-stone-400 italic text-center py-6">
+                <div className="text-stone-400 italic text-center py-6 font-sans text-xs">
                   No network sync packets dispatched yet. Switch node to Online to trigger Outbox drain.
                 </div>
               ) : (
                 syncPackets.map(pkt => (
                   <div
                     key={pkt.packetId}
-                    className={`p-1.5 border rounded-xs ${
+                    className={`p-2 border rounded-lg transition-all ${
                       pkt.status === 'ACCEPTED_200'
-                        ? 'bg-emerald-50/70 border-emerald-200 text-emerald-950'
+                        ? 'bg-emerald-50/80 border-emerald-200 text-emerald-950'
                         : pkt.status === 'CONFLICT_409'
-                        ? 'bg-red-50/80 border-red-300 text-red-950'
-                        : 'bg-paper border-stonehairline text-charcoal'
+                        ? 'bg-red-50/90 border-red-300 text-red-950'
+                        : 'bg-white border-stone-200 text-stone-900'
                     }`}
                   >
-                    <div className="flex items-center justify-between font-bold mb-0.5">
-                      <div className="flex items-center gap-1">
+                    <div className="flex items-center justify-between font-bold mb-1">
+                      <div className="flex items-center gap-1.5">
                         {pkt.status === 'ACCEPTED_200' && (
-                          <CheckCircle className="w-3 h-3 text-emerald-600 inline" />
+                          <CheckCircle className="w-3.5 h-3.5 text-emerald-600 inline" />
                         )}
                         {pkt.status === 'CONFLICT_409' && (
-                          <AlertCircle className="w-3 h-3 text-red-600 inline" />
+                          <AlertCircle className="w-3.5 h-3.5 text-red-600 inline" />
                         )}
                         <span>{pkt.sourceNode} → SERVER</span>
                       </div>
-                      <span className="tabular-nums text-[9px] text-stone-500">
+                      <span className="tabular-nums text-[9px] text-stone-500 font-sans">
                         {new Date(pkt.timestamp).toLocaleTimeString()} ({pkt.latencyMs}ms)
                       </span>
                     </div>
@@ -370,36 +370,38 @@ export const DualNodeSyncLab: React.FC<Props> = ({ userRole }) => {
         </div>
 
         {/* ========================================================= */}
-        <div className={`lg:col-span-4 flex-col bg-paper border border-stonehairline rounded-sm min-h-[460px] lg:min-h-0 overflow-hidden shadow-xs ${mobileActiveNode === 'NODE_B' ? 'flex' : 'hidden lg:flex'}`}>
+        {/* COLUMN 3: NODE B (PHC CLINIC DESK)                       */}
+        {/* ========================================================= */}
+        <div className={`lg:col-span-4 flex-col bg-white border border-stone-200/90 rounded-2xl min-h-[460px] lg:min-h-0 overflow-hidden shadow-xs ${mobileActiveNode === 'NODE_B' ? 'flex' : 'hidden lg:flex'}`}>
           {/* Node Header */}
-          <div className="p-3 bg-canvas border-b border-stonehairline flex flex-col gap-2">
+          <div className="p-3 bg-stone-50/80 border-b border-stone-200/80 flex flex-col gap-2">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Monitor className="w-4 h-4 text-slateteal" />
-                <span className="font-mono font-bold text-xs text-charcoal">
+                <Monitor className="w-4 h-4 text-blue-700" />
+                <span className="font-bold text-xs text-stone-900">
                   NODE B: PHC CLINIC DESK
                 </span>
               </div>
-              <span className="text-[10px] font-mono px-1.5 py-0.5 bg-blue-100 text-blue-900 border border-blue-300 rounded-sm font-semibold">
+              <span className="text-[10px] px-2 py-0.5 bg-blue-100 text-blue-900 border border-blue-300 rounded-full font-semibold">
                 MEDICAL_OFFICER
               </span>
             </div>
 
             {/* Network Adapter Switcher & Outbox Status */}
             <div className="flex items-center justify-between gap-2 pt-1">
-              <div className="flex items-center gap-1 bg-paper p-0.5 border border-stonehairline rounded-sm">
+              <div className="flex items-center gap-1 bg-white p-0.5 border border-stone-200 rounded-lg shadow-xs">
                 {(['ONLINE', 'OFFLINE', 'FLAKY'] as NetworkMode[]).map(mode => (
                   <button
                     key={mode}
                     onClick={() => handleNetworkToggle('NODE_B', mode)}
-                    className={`px-2 py-0.5 text-[10px] font-mono font-bold rounded-xs transition-colors ${
+                    className={`px-2 py-1 text-[10px] font-bold rounded-md transition-all duration-150 cursor-pointer ${
                       nodeBNetwork === mode
                         ? mode === 'ONLINE'
-                          ? 'bg-emerald-600 text-white'
+                          ? 'bg-emerald-600 text-white shadow-xs'
                           : mode === 'OFFLINE'
-                          ? 'bg-red-600 text-white'
-                          : 'bg-amber-600 text-white'
-                        : 'text-stone-500 hover:text-charcoal'
+                          ? 'bg-red-600 text-white shadow-xs'
+                          : 'bg-amber-600 text-white shadow-xs'
+                        : 'text-stone-500 hover:text-stone-900 hover:bg-stone-100'
                     }`}
                   >
                     {mode === 'ONLINE' && <Wifi className="w-2.5 h-2.5 inline mr-1" />}
@@ -413,13 +415,13 @@ export const DualNodeSyncLab: React.FC<Props> = ({ userRole }) => {
               <button
                 onClick={() => handleDrain('NODE_B')}
                 disabled={nodeBNetwork === 'OFFLINE' || nodeBSyncing}
-                className="flex items-center gap-1 px-2 py-0.5 text-[11px] font-mono bg-paper hover:bg-canvas border border-stonehairline rounded-sm disabled:opacity-40 text-charcoal transition-colors cursor-pointer"
+                className="flex items-center gap-1.5 px-3 py-1 text-xs font-semibold bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 rounded-lg disabled:opacity-40 transition-all duration-150 cursor-pointer shadow-xs"
                 title="Sync Outbox queue with Central Server"
               >
-                <RefreshCw className={`w-3 h-3 text-slateteal ${nodeBSyncing ? 'animate-spin' : ''}`} />
+                <RefreshCw className={`w-3.5 h-3.5 text-emerald-700 ${nodeBSyncing ? 'animate-spin' : ''}`} />
                 <span>SYNC</span>
                 {nodeBOutbox.length > 0 && (
-                  <span className="bg-amber-500 text-white font-mono text-[9px] px-1 rounded-full font-bold ml-0.5">
+                  <span className="bg-amber-500 text-white font-mono text-[9px] px-1.5 py-0.2 rounded-full font-bold ml-0.5">
                     {nodeBOutbox.length}
                   </span>
                 )}
@@ -428,24 +430,24 @@ export const DualNodeSyncLab: React.FC<Props> = ({ userRole }) => {
           </div>
 
           {/* Patient Records List for Node B */}
-          <div className="flex-1 overflow-y-auto p-2 space-y-2">
+          <div className="flex-1 overflow-y-auto p-3 space-y-3">
             {nodeBPatients.map(patient => (
               <div
                 key={patient.patientId}
-                className={`p-2.5 border rounded-sm transition-all ${
+                className={`p-3 border rounded-xl transition-all duration-200 hover:shadow-md ${
                   patient.syncStatus === 'CONFLICT'
-                    ? 'border-red-400 bg-red-50/40 shadow-xs'
+                    ? 'border-red-300 bg-red-50/40 shadow-xs'
                     : patient.syncStatus === 'PENDING'
                     ? 'border-amber-300 bg-amber-50/30'
-                    : 'border-stonehairline bg-paper hover:bg-stone-50/50'
+                    : 'border-stone-200/90 bg-white hover:border-emerald-300'
                 }`}
               >
                 <div className="flex items-center justify-between mb-1.5">
                   <div>
-                    <span className="font-mono font-bold text-xs text-charcoal">
+                    <span className="font-bold text-sm text-stone-900">
                       {patient.fullName}
                     </span>
-                    <span className="font-mono text-[10px] text-mutedink ml-1.5">
+                    <span className="text-[11px] text-stone-400 font-mono ml-1.5">
                       ({patient.patientId})
                     </span>
                   </div>
@@ -460,56 +462,56 @@ export const DualNodeSyncLab: React.FC<Props> = ({ userRole }) => {
                   />
                 </div>
 
-                <div className="text-[11px] font-mono text-mutedink mb-1 flex items-center justify-between">
-                  <span>{patient.conditionTag}</span>
-                  <span className="tabular-nums">BASE: v{patient.baseRevision}</span>
+                <div className="text-xs text-stone-600 mb-2 flex items-center justify-between">
+                  <span className="font-medium text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200/60 text-[11px]">
+                    {patient.conditionTag}
+                  </span>
+                  <span className="text-stone-400 font-mono text-[10px]">BASE: v{patient.baseRevision}</span>
                 </div>
 
                 {/* Indian Rural Healthcare NHM Triage Badges */}
                 <NhmTriageBadge patient={patient} compact />
 
                 {/* Vitals Snapshot */}
-                <div className="grid grid-cols-4 gap-1 p-1.5 bg-canvas/60 border border-stonehairline rounded-sm font-mono text-[11px] text-charcoal tabular-nums mb-2">
-                  <div>
-                    <span className="text-[9px] text-mutedink block">BP</span>
-                    <span className="font-bold">{patient.data?.systolicBP ?? 120}/{patient.data?.diastolicBP ?? 80}</span>
+                <div className="grid grid-cols-4 gap-1 p-2 bg-stone-50 border border-stone-200/80 rounded-lg text-xs text-stone-800 tabular-nums my-2">
+                  <div className="text-center">
+                    <span className="text-[10px] text-stone-400 block font-sans">BP</span>
+                    <span className="font-bold text-stone-900">{patient.data?.systolicBP ?? 120}/{patient.data?.diastolicBP ?? 80}</span>
                   </div>
-                  <div>
-                    <span className="text-[9px] text-mutedink block">HR</span>
-                    <span className="font-bold">{patient.data?.heartRate ?? 72} bpm</span>
+                  <div className="text-center">
+                    <span className="text-[10px] text-stone-400 block font-sans">HR</span>
+                    <span className="font-bold text-stone-900">{patient.data?.heartRate ?? 72}</span>
                   </div>
-                  <div>
-                    <span className="text-[9px] text-mutedink block">Hb</span>
-                    <span className="font-bold">{patient.data?.hemoglobinGdl ?? 12.0} g/dL</span>
+                  <div className="text-center">
+                    <span className="text-[10px] text-stone-400 block font-sans">Hb</span>
+                    <span className="font-bold text-stone-900">{patient.data?.hemoglobinGdl ?? 12.0}</span>
                   </div>
-                  <div>
-                    <span className="text-[9px] text-mutedink block">SpO2</span>
-                    <span className="font-bold">{patient.data?.spO2 ?? 98}%</span>
+                  <div className="text-center">
+                    <span className="text-[10px] text-stone-400 block font-sans">SpO2</span>
+                    <span className="font-bold text-emerald-700">{patient.data?.spO2 ?? 98}%</span>
                   </div>
                 </div>
 
                 {/* Actions */}
-                <div className="flex flex-wrap items-center justify-between pt-1 border-t border-stonehairline/60 gap-1">
-                  <span className="text-[9px] font-mono text-mutedink">
+                <div className="flex flex-wrap items-center justify-between pt-2 border-t border-stone-100 gap-1">
+                  <span className="text-[10px] text-stone-400">
                     Mod: {patient.lastModifiedBy}
                   </span>
                   <div className="flex items-center gap-1">
-
-
                     {patient.syncStatus === 'CONFLICT' ? (
                       <button
                         onClick={() => setResolvingPatient({ patient, nodeId: 'NODE_B' })}
-                        className="px-2 py-0.5 text-[10px] font-mono font-bold bg-red-700 hover:bg-red-800 text-white rounded-sm flex items-center gap-1 animate-pulse"
+                        className="px-2.5 py-1 text-xs font-bold bg-red-600 hover:bg-red-700 text-white rounded-lg flex items-center gap-1 shadow-xs animate-pulse cursor-pointer"
                       >
-                        <GitMerge className="w-3 h-3" />
+                        <GitMerge className="w-3.5 h-3.5" />
                         <span>RESOLVE</span>
                       </button>
                     ) : (
                       <button
                         onClick={() => setEditingPatient({ patient, nodeId: 'NODE_B' })}
-                        className="px-2 py-0.5 text-[10px] font-mono font-semibold bg-canvas hover:bg-stone-200 text-charcoal border border-stonehairline rounded-sm flex items-center gap-1 transition-colors"
+                        className="px-2.5 py-1 text-xs font-medium bg-stone-100 hover:bg-emerald-50 hover:text-emerald-800 hover:border-emerald-200 text-stone-700 border border-stone-200 rounded-lg flex items-center gap-1 transition-all duration-150 cursor-pointer"
                       >
-                        <Edit3 className="w-2.5 h-2.5 text-slateteal" />
+                        <Edit3 className="w-3 h-3 text-emerald-600" />
                         <span>PRESCRIBE / EDIT</span>
                       </button>
                     )}

@@ -75,7 +75,7 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
 }
 
 export const AppContent: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<ActiveTab>('LAB');
+  const [activeTab, setActiveTab] = useState<ActiveTab>('SINGLE_FIELD');
   const [currentRole, setCurrentRole] = useState<UserRole>('ASHA_WORKER');
   const [pinTargetRole, setPinTargetRole] = useState<UserRole | null>(null);
   const [isReady, setIsReady] = useState(false);

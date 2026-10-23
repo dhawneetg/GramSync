@@ -103,27 +103,27 @@ export const TopTelemetryBar: React.FC<Props> = ({
       <div className="flex items-center justify-between gap-2 overflow-x-auto no-scrollbar pb-0.5 md:pb-0">
         <nav className="flex items-center bg-canvas p-0.5 border border-stonehairline rounded-sm shrink-0">
           <button
+            onClick={() => setActiveTab('SINGLE_FIELD')}
+            className={`flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-sm transition-all duration-200 whitespace-nowrap cursor-pointer ${
+              activeTab === 'SINGLE_FIELD'
+                ? 'bg-emerald-600 text-white font-semibold shadow-xs ring-1 ring-emerald-500/20'
+                : 'text-stone-600 hover:text-stone-900 hover:bg-stone-200/50'
+            }`}
+          >
+            <UserCheck className={`w-3.5 h-3.5 shrink-0 ${activeTab === 'SINGLE_FIELD' ? 'text-white' : 'text-emerald-700'}`} />
+            <span>{t('tabField')}</span>
+          </button>
+
+          <button
             onClick={() => setActiveTab('LAB')}
-            className={`flex items-center gap-1 px-2 md:px-2.5 py-1 text-xs font-medium rounded-sm transition-colors whitespace-nowrap ${
+            className={`flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-sm transition-all duration-200 whitespace-nowrap cursor-pointer ${
               activeTab === 'LAB'
                 ? 'bg-paper text-charcoal font-semibold shadow-xs border border-stonehairline'
-                : 'text-mutedink hover:text-charcoal'
+                : 'text-mutedink hover:text-charcoal hover:bg-stone-200/50'
             }`}
           >
             <Split className="w-3.5 h-3.5 text-slateteal shrink-0" />
             <span>{t('tabLab')}</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab('SINGLE_FIELD')}
-            className={`flex items-center gap-1 px-2 md:px-2.5 py-1 text-xs font-medium rounded-sm transition-colors whitespace-nowrap ${
-              activeTab === 'SINGLE_FIELD'
-                ? 'bg-paper text-charcoal font-semibold shadow-xs border border-stonehairline'
-                : 'text-mutedink hover:text-charcoal'
-            }`}
-          >
-            <UserCheck className="w-3.5 h-3.5 text-slateteal shrink-0" />
-            <span>{t('tabField')}</span>
           </button>
 
           <button
