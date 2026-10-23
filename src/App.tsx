@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { UserRole } from './types/clinical';
 import { storageEngine } from './services/storageEngine';
+import { subscribeLanguage } from './services/languageService';
 import { TopTelemetryBar, ActiveTab } from './components/TopTelemetryBar';
 import { DualNodeSyncLab } from './components/DualNodeSyncLab';
 import { SingleFieldClinicianView } from './components/SingleFieldClinicianView';
@@ -79,12 +80,21 @@ export const AppContent: React.FC = () => {
   const [currentRole, setCurrentRole] = useState<UserRole>('ASHA_WORKER');
   const [pinTargetRole, setPinTargetRole] = useState<UserRole | null>(null);
   const [isReady, setIsReady] = useState(false);
+  const [, setLangTick] = useState<number>(0);
 
   useEffect(() => {
     // Ensure storage is initialized with pre-encrypted seeds
     storageEngine.ensureInitialized().then(() => {
       setIsReady(true);
     });
+
+    const unsubLang = subscribeLanguage(() => {
+      setLangTick((t: number) => t + 1);
+    });
+
+    return () => {
+      unsubLang();
+    };
   }, []);
 
   if (!isReady) {

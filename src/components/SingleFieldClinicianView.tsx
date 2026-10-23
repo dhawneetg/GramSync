@@ -25,6 +25,7 @@ import { PatientEditorModal } from './PatientEditorModal';
 import { ConflictResolutionModal } from './ConflictResolutionModal';
 import { NhmTriageBadge } from './NhmTriageBadge';
 import { ShareHealthPassportModal } from './ShareHealthPassportModal';
+import { t, subscribeLanguage } from '../services/languageService';
 
 interface Props {
   userRole: UserRole;
@@ -56,9 +57,11 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
   useEffect(() => {
     const unsub1 = storageEngine.subscribe(() => setTick((t: number) => t + 1));
     const unsub2 = syncCoordinator.subscribe(() => setTick((t: number) => t + 1));
+    const unsubLang = subscribeLanguage(() => setTick((t: number) => t + 1));
     return () => {
       unsub1();
       unsub2();
+      unsubLang();
     };
   }, []);
 
@@ -169,7 +172,7 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
       {/* Top Rural Health Banner */}
       <div className="bg-white border border-stone-200/80 p-3 sm:p-4 rounded-2xl shadow-xs flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-linear-to-tr from-emerald-600 to-teal-500 text-white flex items-center justify-center shadow-sm shrink-0">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-700 text-white flex items-center justify-center shadow-sm shrink-0">
             <Stethoscope className="w-5 h-5" />
           </div>
           <div>
@@ -274,7 +277,7 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
               <Search className="w-4 h-4 text-stone-400 absolute left-3 top-2.5" />
               <input
                 type="text"
-                placeholder="नाम, ABHA ID या गाँव से खोजें..."
+                placeholder={t('searchPlaceholder')}
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
                 className="w-full bg-white border border-stone-200 pl-9 pr-3 py-1.5 text-xs text-stone-800 rounded-xl focus:outline-emerald-600 placeholder:text-stone-400 font-sans"
@@ -283,10 +286,10 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
             <button
               onClick={() => setIsCreatingNew(true)}
               className="px-3 py-1.5 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold rounded-xl flex items-center gap-1 shadow-xs transition-colors cursor-pointer shrink-0"
-              title="नया मरीज पंजीकृत करें"
+              title="Add New Patient"
             >
               <Plus className="w-3.5 h-3.5" />
-              <span>नया मरीज</span>
+              <span>{t('newPatientBtn')}</span>
             </button>
           </div>
 
@@ -351,24 +354,29 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
           {selectedPatient ? (
             <div className="flex-1 flex flex-col overflow-y-auto">
               {/* Patient Profile Header Card */}
-              <div className="p-4 sm:p-5 bg-linear-to-r from-stone-50 to-emerald-50/30 border-b border-stone-200 flex flex-wrap items-center justify-between gap-3">
+              <div className="p-4 sm:p-5 bg-gradient-to-r from-stone-50 to-emerald-50/30 border-b border-stone-200 flex flex-wrap items-center justify-between gap-3">
                 <div className="flex items-start gap-3.5">
-                  <div className="w-12 sm:w-14 h-12 sm:h-14 rounded-2xl bg-linear-to-tr from-emerald-700 to-teal-600 text-white flex items-center justify-center text-xl font-bold shadow-md shrink-0">
-                    {selectedPatient.fullName.charAt(0)}
+                  <div className="w-12 sm:w-14 h-12 sm:h-14 rounded-2xl bg-gradient-to-br from-emerald-600 via-teal-700 to-emerald-800 text-white flex flex-col items-center justify-center shadow-md shrink-0 border-2 border-emerald-400/30 ring-2 ring-emerald-100 relative">
+                    <span className="text-sm sm:text-base font-bold font-mono">
+                      {selectedPatient.fullName.split(' ').map(n => n[0]).join('').slice(0, 2)}
+                    </span>
+                    <span className="text-[8px] uppercase tracking-wider text-emerald-100 font-medium">
+                      {selectedPatient.gender === 'Female' ? t('female') : t('male')}
+                    </span>
                   </div>
                   <div>
                     <button
                       onClick={() => setMobileView('DIRECTORY')}
                       className="md:hidden mb-1.5 px-2 py-0.5 text-[11px] font-bold bg-white border border-stone-200 rounded-lg text-stone-700 flex items-center gap-1 cursor-pointer"
                     >
-                      ← मरीज सूची
+                      ← {t('patientDirectory')}
                     </button>
                     <div className="flex flex-wrap items-center gap-2">
                       <h2 className="text-base sm:text-lg font-bold text-stone-900">
                         {selectedPatient.fullName}
                       </h2>
                       <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-white border border-stone-200 text-stone-700 shadow-2xs">
-                        {selectedPatient.gender === 'Female' ? 'महिला' : 'पुरुष'}, {selectedPatient.age} वर्ष
+                        {selectedPatient.gender === 'Female' ? t('female') : t('male')}, {selectedPatient.age} {t('years')}
                       </span>
                       <SyncStatusBadge
                         status={selectedPatient.syncStatus}
@@ -408,7 +416,7 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
                     title="Generate and Share Unified Patient Health Record"
                   >
                     <Share2 className="w-3.5 h-3.5 text-emerald-600" />
-                    <span>स्वास्थ्य पर्ची (Share Passport)</span>
+                    <span>{t('shareRecordBtn')}</span>
                   </button>
 
                   {/* Record Visit / Resolve Conflict Button */}
@@ -418,7 +426,7 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
                       className="px-4 py-2 text-xs font-bold bg-rose-700 hover:bg-rose-800 text-white rounded-xl flex items-center gap-1.5 shadow-sm transition-all animate-pulse cursor-pointer"
                     >
                       <AlertTriangle className="w-3.5 h-3.5" />
-                      <span>मतभेद हल करें (Resolve Conflict)</span>
+                      <span>{t('resolveConflict')}</span>
                     </button>
                   ) : (
                     <button
@@ -426,7 +434,7 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
                       className="px-4 py-2 text-xs font-bold bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl flex items-center gap-1.5 shadow-sm transition-all hover:scale-[1.02] active:scale-95 cursor-pointer"
                     >
                       <Stethoscope className="w-3.5 h-3.5" />
-                      <span>शारीरिक जाँच दर्ज करें (Record Visit)</span>
+                      <span>{t('newVisitBtn')}</span>
                     </button>
                   )}
                 </div>
@@ -443,7 +451,7 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
                   }`}
                 >
                   <Activity className="w-4 h-4 text-emerald-600" />
-                  <span>1. शारीरिक जाँच (Vitals)</span>
+                  <span>{t('tabVitals')}</span>
                 </button>
 
                 <button
@@ -455,7 +463,7 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
                   }`}
                 >
                   <FlaskConical className="w-4 h-4 text-indigo-600" />
-                  <span>2. PHC लैब रिपोर्ट ({selectedPatient.labReports?.length || 0})</span>
+                  <span>{t('tabLabs')} ({selectedPatient.labReports?.length || 0})</span>
                 </button>
 
                 <button
@@ -467,7 +475,7 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
                   }`}
                 >
                   <Pill className="w-4 h-4 text-rose-600" />
-                  <span>3. डॉक्टर की दवाइयाँ ({selectedPatient.prescriptions?.length || 0})</span>
+                  <span>{t('tabPrescriptions')} ({selectedPatient.prescriptions?.length || 0})</span>
                 </button>
               </div>
 

@@ -61,53 +61,44 @@ export const TopTelemetryBar: React.FC<Props> = ({
   };
 
   return (
-    <header className="bg-paper border-b border-stonehairline px-3 py-1.5 md:py-0 md:h-12 flex flex-col md:flex-row md:items-center md:justify-between select-none sticky top-0 z-40 text-xs gap-2 md:gap-0">
-      {/* Top Row on Mobile / Left on Desktop: App Brand & Track Identifier */}
-      <div className="flex items-center justify-between md:justify-start gap-3">
-        <div className="flex items-center gap-2 pr-2 md:pr-3 md:border-r border-stonehairline">
-          <div className="w-5 h-5 bg-slateteal flex items-center justify-center rounded-sm text-white shrink-0">
-            <Activity className="w-3.5 h-3.5" />
-          </div>
-          <span className="font-mono font-bold tracking-tight text-charcoal text-[13px]">
-            GRAMSYNC
-          </span>
-          <span className="font-mono text-[10px] text-mutedink px-1.5 py-0.5 bg-canvas border border-stonehairline rounded-sm">
-            v2.4
-          </span>
+    <header className="bg-white border-b border-stone-200/90 px-3 md:px-5 py-2 min-h-[56px] flex flex-wrap md:flex-nowrap items-center justify-between select-none sticky top-0 z-40 text-xs gap-2.5 shadow-2xs">
+      {/* Brand */}
+      <div className="flex items-center gap-2.5 shrink-0">
+        <div className="w-7 h-7 bg-emerald-600 flex items-center justify-center rounded-lg text-white shadow-xs shrink-0">
+          <Activity className="w-4 h-4" />
         </div>
-        <div className="hidden lg:flex items-center gap-1.5 text-[11px] font-mono text-mutedink">
-          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping opacity-75"></span>
-          <span>{t('trackTitle')}</span>
-        </div>
+        <span className="font-bold tracking-tight text-stone-900 text-sm font-sans">
+          GRAMSYNC
+        </span>
 
-        {/* Mobile-only compact quick actions (Lang + Role + Reset) */}
-        <div className="flex md:hidden items-center gap-1.5">
+        {/* Mobile-only compact quick actions */}
+        <div className="flex md:hidden items-center gap-1.5 ml-auto">
           <button
             onClick={() => setLanguage(lang === 'en' ? 'hi' : 'en')}
-            className="px-2 py-0.5 text-[11px] font-mono font-bold bg-canvas border border-stonehairline rounded-sm text-slateteal"
-            title="Language"
+            className="px-2.5 py-1 text-xs font-semibold bg-stone-100 hover:bg-stone-200 border border-stone-200 rounded-lg text-emerald-800 transition-colors"
+            title="Switch Language"
           >
             {lang === 'en' ? 'हिंदी' : 'EN'}
           </button>
           <button
             onClick={() => onOpenPinModal(currentRole === 'ASHA_WORKER' ? 'MEDICAL_OFFICER' : 'ASHA_WORKER')}
-            className="px-2 py-0.5 font-mono text-[10px] font-bold rounded-sm border border-stonehairline bg-canvas text-charcoal flex items-center gap-1"
+            className="px-2 py-1 text-[11px] font-semibold rounded-lg border border-stone-200 bg-stone-50 text-stone-700 flex items-center gap-1"
           >
-            {currentRole === 'MEDICAL_OFFICER' ? <Unlock className="w-3 h-3 text-emerald-600" /> : <Lock className="w-3 h-3 text-slateteal" />}
+            {currentRole === 'MEDICAL_OFFICER' ? <Unlock className="w-3 h-3 text-emerald-600" /> : <Lock className="w-3 h-3 text-emerald-700" />}
             <span>{currentRole === 'MEDICAL_OFFICER' ? 'MO' : 'ASHA'}</span>
           </button>
         </div>
       </div>
 
-      {/* Center on Desktop / Second Row on Mobile: Horizontally Scrollable Mode Tabs */}
-      <div className="flex items-center justify-between gap-2 overflow-x-auto no-scrollbar pb-0.5 md:pb-0">
-        <nav className="flex items-center bg-canvas p-0.5 border border-stonehairline rounded-sm shrink-0">
+      {/* Center Tabs: Horizontally Scrollable Mode Tabs */}
+      <div className="flex items-center overflow-x-auto no-scrollbar py-0.5">
+        <nav className="flex items-center bg-stone-100 p-1 border border-stone-200/70 rounded-xl gap-1 shrink-0">
           <button
             onClick={() => setActiveTab('SINGLE_FIELD')}
-            className={`flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-sm transition-all duration-200 whitespace-nowrap cursor-pointer ${
+            className={`flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-medium rounded-lg transition-all duration-150 whitespace-nowrap cursor-pointer ${
               activeTab === 'SINGLE_FIELD'
-                ? 'bg-emerald-600 text-white font-semibold shadow-xs ring-1 ring-emerald-500/20'
-                : 'text-stone-600 hover:text-stone-900 hover:bg-stone-200/50'
+                ? 'bg-emerald-600 text-white font-semibold shadow-xs'
+                : 'text-stone-600 hover:text-stone-900 hover:bg-white/70'
             }`}
           >
             <UserCheck className={`w-3.5 h-3.5 shrink-0 ${activeTab === 'SINGLE_FIELD' ? 'text-white' : 'text-emerald-700'}`} />
@@ -116,62 +107,52 @@ export const TopTelemetryBar: React.FC<Props> = ({
 
           <button
             onClick={() => setActiveTab('LAB')}
-            className={`flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-sm transition-all duration-200 whitespace-nowrap cursor-pointer ${
+            className={`flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-medium rounded-lg transition-all duration-150 whitespace-nowrap cursor-pointer ${
               activeTab === 'LAB'
-                ? 'bg-paper text-charcoal font-semibold shadow-xs border border-stonehairline'
-                : 'text-mutedink hover:text-charcoal hover:bg-stone-200/50'
+                ? 'bg-white text-stone-900 font-semibold shadow-xs border border-stone-200/80'
+                : 'text-stone-600 hover:text-stone-900 hover:bg-white/70'
             }`}
           >
-            <Split className="w-3.5 h-3.5 text-slateteal shrink-0" />
+            <Split className="w-3.5 h-3.5 text-emerald-700 shrink-0" />
             <span>{t('tabLab')}</span>
           </button>
 
           <button
             onClick={() => setActiveTab('SECURITY')}
-            className={`flex items-center gap-1 px-2 md:px-2.5 py-1 text-xs font-medium rounded-sm transition-colors whitespace-nowrap ${
+            className={`flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-medium rounded-lg transition-all duration-150 whitespace-nowrap cursor-pointer ${
               activeTab === 'SECURITY'
-                ? 'bg-paper text-charcoal font-semibold shadow-xs border border-stonehairline'
-                : 'text-mutedink hover:text-charcoal'
+                ? 'bg-white text-stone-900 font-semibold shadow-xs border border-stone-200/80'
+                : 'text-stone-600 hover:text-stone-900 hover:bg-white/70'
             }`}
           >
-            <ShieldCheck className="w-3.5 h-3.5 text-slateteal shrink-0" />
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-700 shrink-0" />
             <span>{t('tabSecurity')}</span>
           </button>
 
           <button
             onClick={() => setActiveTab('FLOW')}
-            className={`flex items-center gap-1 px-2 md:px-2.5 py-1 text-xs font-medium rounded-sm transition-colors whitespace-nowrap ${
+            className={`flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-medium rounded-lg transition-all duration-150 whitespace-nowrap cursor-pointer ${
               activeTab === 'FLOW'
-                ? 'bg-paper text-charcoal font-semibold shadow-xs border border-stonehairline'
-                : 'text-mutedink hover:text-charcoal'
+                ? 'bg-white text-stone-900 font-semibold shadow-xs border border-stone-200/80'
+                : 'text-stone-600 hover:text-stone-900 hover:bg-white/70'
             }`}
           >
-            <GitBranch className="w-3.5 h-3.5 text-slateteal shrink-0" />
+            <GitBranch className="w-3.5 h-3.5 text-emerald-700 shrink-0" />
             <span>{t('tabFlow')}</span>
           </button>
         </nav>
-
-        {/* Mobile Stage Conflict Macro button in tab row */}
-        <button
-          onClick={handleStageConflict}
-          disabled={isStaging}
-          className="md:hidden flex items-center gap-1 px-2 py-1 text-[11px] font-mono font-bold bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 rounded-sm shrink-0 whitespace-nowrap"
-        >
-          <Zap className={`w-3 h-3 text-amber-600 ${isStaging ? 'animate-spin' : ''}`} />
-          <span>{isStaging ? '...' : '⚡ STAGE'}</span>
-        </button>
       </div>
 
       {/* Right on Desktop: Demo Macros, Language Toggle & RBAC Indicator */}
-      <div className="hidden md:flex items-center gap-2">
+      <div className="hidden md:flex items-center gap-2 shrink-0">
         {/* Language Switcher (EN | हिंदी) */}
         <button
           onClick={() => setLanguage(lang === 'en' ? 'hi' : 'en')}
-          className="flex items-center gap-1 px-2 py-1 text-xs font-mono font-bold bg-canvas hover:bg-stone-200 border border-stonehairline rounded-sm text-slateteal transition-colors cursor-pointer"
+          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold bg-stone-100 hover:bg-emerald-50 hover:text-emerald-800 hover:border-emerald-200 border border-stone-200 rounded-lg text-stone-700 transition-all cursor-pointer shadow-2xs"
           title="Switch Language: English / हिंदी"
         >
-          <Languages className="w-3.5 h-3.5 text-slateteal" />
-          <span>{lang === 'en' ? 'हिंदी' : 'EN'}</span>
+          <Languages className="w-3.5 h-3.5 text-emerald-700" />
+          <span>{lang === 'en' ? 'हिंदी' : 'English'}</span>
         </button>
 
         {/* 1-Click Judge Macro */}
@@ -179,10 +160,10 @@ export const TopTelemetryBar: React.FC<Props> = ({
           onClick={handleStageConflict}
           disabled={isStaging}
           title="Macro: Disconnects Node A, makes concurrent clinical edits on both nodes, reconnects Node A to trigger HTTP 409 Conflict"
-          className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-mono font-semibold bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 rounded-sm transition-all disabled:opacity-50 cursor-pointer shadow-xs"
+          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300/80 rounded-lg transition-all disabled:opacity-50 cursor-pointer shadow-2xs whitespace-nowrap"
         >
           <Zap className={`w-3.5 h-3.5 text-amber-600 ${isStaging ? 'animate-spin' : ''}`} />
-          <span>{isStaging ? 'STAGING...' : t('stageConflict')}</span>
+          <span>{isStaging ? '...' : t('stageConflict')}</span>
         </button>
 
         {/* Reset Store */}
@@ -190,28 +171,28 @@ export const TopTelemetryBar: React.FC<Props> = ({
           onClick={handleReset}
           disabled={isResetting}
           title="Reset all IndexedDB/Local stores back to clean baseline"
-          className="flex items-center gap-1 px-2 py-1 text-xs font-mono text-mutedink hover:text-charcoal bg-canvas hover:bg-white border border-stonehairline rounded-sm transition-colors cursor-pointer"
+          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-stone-600 hover:text-stone-900 bg-stone-50 hover:bg-stone-100 border border-stone-200 rounded-lg transition-all cursor-pointer shadow-2xs whitespace-nowrap"
         >
-          <RotateCcw className={`w-3 h-3 ${isResetting ? 'animate-spin' : ''}`} />
-          <span className="hidden sm:inline">{t('reset')}</span>
+          <RotateCcw className={`w-3.5 h-3.5 ${isResetting ? 'animate-spin' : ''}`} />
+          <span>{t('reset')}</span>
         </button>
 
         {/* Role Switcher with PIN Lock */}
-        <div className="pl-2 border-l border-stonehairline flex items-center gap-1.5">
+        <div className="pl-2 border-l border-stone-200 flex items-center">
           <button
             onClick={() => onOpenPinModal(currentRole === 'ASHA_WORKER' ? 'MEDICAL_OFFICER' : 'ASHA_WORKER')}
-            className="flex items-center gap-1.5 px-2 py-1 font-mono text-[11px] rounded-sm border border-stonehairline bg-canvas hover:bg-paper text-charcoal transition-colors cursor-pointer"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg border border-stone-200 bg-stone-50 hover:bg-white text-stone-800 transition-all cursor-pointer shadow-2xs whitespace-nowrap"
             title="Click to switch role via PIN authentication"
           >
             {currentRole === 'MEDICAL_OFFICER' ? (
               <>
-                <Unlock className="w-3 h-3 text-emerald-600" />
-                <span className="font-semibold text-emerald-800">DR. / MO (PIN 9999)</span>
+                <Unlock className="w-3.5 h-3.5 text-emerald-600" />
+                <span className="text-emerald-800">DR. / MO (PIN 9999)</span>
               </>
             ) : (
               <>
-                <Lock className="w-3 h-3 text-slateteal" />
-                <span className="font-semibold text-slateteal">ASHA WORKER (PIN 1234)</span>
+                <Lock className="w-3.5 h-3.5 text-emerald-700" />
+                <span className="text-stone-800">ASHA WORKER (PIN 1234)</span>
               </>
             )}
           </button>

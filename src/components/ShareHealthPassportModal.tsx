@@ -11,7 +11,8 @@ import {
   ShieldCheck, 
   Phone, 
   MapPin, 
-  Calendar 
+  Calendar,
+  User
 } from 'lucide-react';
 import { PatientRecord } from '../types/clinical';
 
@@ -70,14 +71,14 @@ ${patient.data.clinicalNotes}
     <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center z-50 p-2 sm:p-4 animate-in fade-in duration-200">
       <div className="bg-white border border-stone-200 w-full max-w-3xl rounded-2xl shadow-2xl flex flex-col max-h-[94vh] overflow-hidden">
         {/* Modal Header */}
-        <div className="px-5 py-4 bg-linear-to-r from-emerald-800 to-teal-900 text-white flex items-center justify-between">
+        <div className="px-5 py-4 bg-gradient-to-r from-emerald-800 to-teal-900 text-white flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center backdrop-blur-xs">
               <Share2 className="w-5 h-5 text-emerald-300" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-[10px] font-bold uppercase tracking-wider bg-emerald-500/30 text-emerald-200 px-2 py-0.5 rounded-full border border-emerald-400/30">
+                <span className="text-[10px] font-bold uppercase tracking-wider bg-emerald-500/30 text-emerald-200 px-2.5 py-0.5 rounded-full border border-emerald-400/30">
                   Ayushman Bharat Digital Health Passport
                 </span>
               </div>
@@ -103,8 +104,17 @@ ${patient.data.clinicalNotes}
             </div>
 
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-              <div className="w-16 h-16 rounded-2xl bg-linear-to-tr from-emerald-600 to-teal-500 text-white flex items-center justify-center text-2xl font-bold shadow-md shrink-0">
-                {patient.fullName.charAt(0)}
+              {/* Dignified Patient Photo / ID Avatar */}
+              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-emerald-600 via-teal-700 to-emerald-900 text-white flex flex-col items-center justify-center shadow-md shrink-0 border-2 border-emerald-400/40 ring-4 ring-emerald-500/10 relative">
+                <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center mb-0.5">
+                  <User className="w-4 h-4 text-white" />
+                </div>
+                <span className="text-xs font-bold tracking-tight text-white font-mono">
+                  {patient.fullName.split(' ').map(n => n[0]).join('').slice(0, 2)}
+                </span>
+                <span className="text-[9px] uppercase tracking-wider text-emerald-100 font-medium">
+                  {patient.gender === 'Female' ? 'महिला' : 'पुरुष'}
+                </span>
               </div>
               <div className="flex-1 space-y-1">
                 <div className="flex flex-wrap items-center gap-2">
