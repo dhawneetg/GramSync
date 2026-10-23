@@ -128,13 +128,13 @@ export const AppContent: React.FC = () => {
                 <span className="text-mutedink hidden md:inline">| Deterministic Offline-First Clinical Synchronization Pipeline</span>
               </div>
               <a
-                href="http://localhost:8080/flow"
+                href="/flow.html"
                 target="_blank"
                 rel="noreferrer"
                 className="px-2.5 py-0.5 bg-canvas hover:bg-stone-200 border border-stonehairline text-slateteal font-bold rounded-xs flex items-center gap-1 transition-colors"
-                title="Open standalone page at localhost:8080/flow"
+                title="Open standalone flowchart in new tab"
               >
-                <span>OPEN STANDALONE (localhost:8080/flow)</span>
+                <span>OPEN STANDALONE</span>
                 <span className="text-xs">↗</span>
               </a>
             </div>

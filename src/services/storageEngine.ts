@@ -139,9 +139,30 @@ export const SEED_PATIENTS: PatientRecord[] = [
 
 class StorageEngine {
   private listeners: Set<() => void> = new Set();
+  private broadcastChannel: BroadcastChannel | null = null;
 
   constructor() {
     this.ensureInitialized();
+
+    // Enable cross-tab & cross-window live synchronization with ZERO internet
+    if (typeof window !== 'undefined' && 'BroadcastChannel' in window) {
+      try {
+        this.broadcastChannel = new BroadcastChannel('gramsync_sync_channel');
+        this.broadcastChannel.onmessage = () => {
+          this.notify(false);
+        };
+      } catch (err) {
+        console.warn('BroadcastChannel not available, falling back to storage events');
+      }
+    }
+
+    if (typeof window !== 'undefined') {
+      window.addEventListener('storage', (e) => {
+        if (e.key && e.key.startsWith(STORAGE_PREFIX)) {
+          this.notify(false);
+        }
+      });
+    }
   }
 
   public subscribe(listener: () => void): () => void {
@@ -149,8 +170,15 @@ class StorageEngine {
     return () => this.listeners.delete(listener);
   }
 
-  private notify() {
+  private notify(broadcast = true) {
     this.listeners.forEach(fn => fn());
+    if (broadcast && this.broadcastChannel) {
+      try {
+        this.broadcastChannel.postMessage({ timestamp: Date.now() });
+      } catch (e) {
+        // Ignore channel post errors
+      }
+    }
   }
 
   public async ensureInitialized(forceReset = false): Promise<void> {

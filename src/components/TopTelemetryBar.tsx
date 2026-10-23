@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Activity, 
   Split, 
@@ -8,11 +8,13 @@ import {
   RotateCcw, 
   Lock, 
   Unlock,
-  GitBranch
+  GitBranch,
+  Languages
 } from 'lucide-react';
 import { UserRole } from '../types/clinical';
 import { syncCoordinator } from '../services/syncCoordinator';
 import { storageEngine } from '../services/storageEngine';
+import { getLanguage, setLanguage, subscribeLanguage, t, SupportedLang } from '../services/languageService';
 
 export type ActiveTab = 'LAB' | 'SINGLE_FIELD' | 'SECURITY' | 'FLOW';
 
@@ -32,6 +34,11 @@ export const TopTelemetryBar: React.FC<Props> = ({
 }) => {
   const [isStaging, setIsStaging] = useState(false);
   const [isResetting, setIsResetting] = useState(false);
+  const [lang, setLang] = useState<SupportedLang>(getLanguage());
+
+  useEffect(() => {
+    return subscribeLanguage(newLang => setLang(newLang));
+  }, []);
 
   const handleStageConflict = async () => {
     setIsStaging(true);
@@ -70,7 +77,7 @@ export const TopTelemetryBar: React.FC<Props> = ({
         </div>
         <div className="hidden lg:flex items-center gap-1.5 text-[11px] font-mono text-mutedink">
           <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping opacity-75"></span>
-          <span>HT-03 // ZERO-INTERNET CLINICAL ENGINE</span>
+          <span>{t('trackTitle')}</span>
         </div>
       </div>
 
@@ -85,7 +92,7 @@ export const TopTelemetryBar: React.FC<Props> = ({
           }`}
         >
           <Split className="w-3.5 h-3.5 text-slateteal" />
-          <span>[1] Sync Lab</span>
+          <span>{t('tabLab')}</span>
         </button>
 
         <button
@@ -97,7 +104,7 @@ export const TopTelemetryBar: React.FC<Props> = ({
           }`}
         >
           <UserCheck className="w-3.5 h-3.5 text-slateteal" />
-          <span>[2] Field View</span>
+          <span>{t('tabField')}</span>
         </button>
 
         <button
@@ -109,7 +116,7 @@ export const TopTelemetryBar: React.FC<Props> = ({
           }`}
         >
           <ShieldCheck className="w-3.5 h-3.5 text-slateteal" />
-          <span>[3] Security Vault</span>
+          <span>{t('tabSecurity')}</span>
         </button>
 
         <button
@@ -121,12 +128,22 @@ export const TopTelemetryBar: React.FC<Props> = ({
           }`}
         >
           <GitBranch className="w-3.5 h-3.5 text-slateteal" />
-          <span>[4] Flowchart Telemetry</span>
+          <span>{t('tabFlow')}</span>
         </button>
       </nav>
 
-      {/* Right: Demo Macros & RBAC Indicator */}
+      {/* Right: Demo Macros, Language Toggle & RBAC Indicator */}
       <div className="flex items-center gap-2">
+        {/* Language Switcher (EN | हिंदी) */}
+        <button
+          onClick={() => setLanguage(lang === 'en' ? 'hi' : 'en')}
+          className="flex items-center gap-1 px-2 py-1 text-xs font-mono font-bold bg-canvas hover:bg-stone-200 border border-stonehairline rounded-sm text-slateteal transition-colors cursor-pointer"
+          title="Switch Language: English / हिंदी"
+        >
+          <Languages className="w-3.5 h-3.5 text-slateteal" />
+          <span>{lang === 'en' ? 'हिंदी' : 'EN'}</span>
+        </button>
+
         {/* 1-Click Judge Macro */}
         <button
           onClick={handleStageConflict}
@@ -135,7 +152,7 @@ export const TopTelemetryBar: React.FC<Props> = ({
           className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-mono font-semibold bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 rounded-sm transition-all disabled:opacity-50 cursor-pointer shadow-xs"
         >
           <Zap className={`w-3.5 h-3.5 text-amber-600 ${isStaging ? 'animate-spin' : ''}`} />
-          <span>{isStaging ? 'STAGING...' : '⚡ STAGE CONFLICT'}</span>
+          <span>{isStaging ? 'STAGING...' : t('stageConflict')}</span>
         </button>
 
         {/* Reset Store */}
@@ -143,17 +160,17 @@ export const TopTelemetryBar: React.FC<Props> = ({
           onClick={handleReset}
           disabled={isResetting}
           title="Reset all IndexedDB/Local stores back to clean baseline"
-          className="flex items-center gap-1 px-2 py-1 text-xs font-mono text-mutedink hover:text-charcoal bg-canvas hover:bg-white border border-stonehairline rounded-sm transition-colors"
+          className="flex items-center gap-1 px-2 py-1 text-xs font-mono text-mutedink hover:text-charcoal bg-canvas hover:bg-white border border-stonehairline rounded-sm transition-colors cursor-pointer"
         >
           <RotateCcw className={`w-3 h-3 ${isResetting ? 'animate-spin' : ''}`} />
-          <span className="hidden sm:inline">RESET</span>
+          <span className="hidden sm:inline">{t('reset')}</span>
         </button>
 
         {/* Role Switcher with PIN Lock */}
         <div className="pl-2 border-l border-stonehairline flex items-center gap-1.5">
           <button
             onClick={() => onOpenPinModal(currentRole === 'ASHA_WORKER' ? 'MEDICAL_OFFICER' : 'ASHA_WORKER')}
-            className="flex items-center gap-1.5 px-2 py-1 font-mono text-[11px] rounded-sm border border-stonehairline bg-canvas hover:bg-paper text-charcoal transition-colors"
+            className="flex items-center gap-1.5 px-2 py-1 font-mono text-[11px] rounded-sm border border-stonehairline bg-canvas hover:bg-paper text-charcoal transition-colors cursor-pointer"
             title="Click to switch role via PIN authentication"
           >
             {currentRole === 'MEDICAL_OFFICER' ? (

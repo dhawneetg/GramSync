@@ -12,9 +12,7 @@ import {
   Wind, 
   FileText, 
   Pill, 
-  Clock,
-  QrCode,
-  Printer
+  Clock
 } from 'lucide-react';
 import { PatientRecord, NodeId, NetworkMode, UserRole } from '../types/clinical';
 import { storageEngine } from '../services/storageEngine';
@@ -23,8 +21,6 @@ import { SyncStatusBadge } from './SyncStatusBadge';
 import { PatientEditorModal } from './PatientEditorModal';
 import { ConflictResolutionModal } from './ConflictResolutionModal';
 import { NhmTriageBadge } from './NhmTriageBadge';
-import { OfflineQrModal } from './OfflineQrModal';
-import { ReferralSlipModal } from './ReferralSlipModal';
 import { encryptClinicalPayload, formatCiphertextDisplay } from '../services/cryptoVault';
 
 interface Props {
@@ -41,8 +37,6 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [isResolving, setIsResolving] = useState(false);
   const [isCreatingNew, setIsCreatingNew] = useState(false);
-  const [showQrModal, setShowQrModal] = useState(false);
-  const [showReferralModal, setShowReferralModal] = useState(false);
 
   // New patient state
   const [newPatientName, setNewPatientName] = useState('');
@@ -311,25 +305,7 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
                 </div>
 
                 <div className="flex flex-wrap items-center gap-2">
-                  {/* Offline P2P QR Referral Button */}
-                  <button
-                    onClick={() => setShowQrModal(true)}
-                    className="px-2.5 py-1.5 text-xs font-mono font-semibold bg-paper hover:bg-stone-200 text-slateteal border border-stonehairline rounded-sm flex items-center gap-1.5 shadow-xs transition-colors cursor-pointer"
-                    title="Generate Offline P2P QR Referral Slip"
-                  >
-                    <QrCode className="w-3.5 h-3.5" />
-                    <span>OFFLINE QR SLIP</span>
-                  </button>
 
-                  {/* Printable Clinical Referral Slip Button */}
-                  <button
-                    onClick={() => setShowReferralModal(true)}
-                    className="px-2.5 py-1.5 text-xs font-mono font-semibold bg-paper hover:bg-stone-200 text-stone-700 border border-stonehairline rounded-sm flex items-center gap-1.5 shadow-xs transition-colors cursor-pointer"
-                    title="Official NHM Printable Referral Slip"
-                  >
-                    <Printer className="w-3.5 h-3.5 text-stone-500" />
-                    <span>REFERRAL SLIP</span>
-                  </button>
 
                   {selectedPatient.syncStatus === 'CONFLICT' ? (
                     <button
@@ -591,26 +567,6 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
         </div>
       )}
 
-      {/* Offline P2P QR Referral Modal */}
-      {showQrModal && selectedPatient && (
-        <OfflineQrModal
-          patient={selectedPatient}
-          sourceNodeId={activeNode}
-          userRole={userRole}
-          onClose={() => setShowQrModal(false)}
-          onOpenReferralSlip={() => setShowReferralModal(true)}
-          onSimulateHandoffToNodeB={() => setTick(t => t + 1)}
-        />
-      )}
-
-      {/* Official Printable Referral Slip Modal */}
-      {showReferralModal && selectedPatient && (
-        <ReferralSlipModal
-          patient={selectedPatient}
-          userRole={userRole}
-          onClose={() => setShowReferralModal(false)}
-        />
-      )}
     </div>
   );
 };

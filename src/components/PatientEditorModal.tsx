@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { X, Save, AlertTriangle, ShieldCheck, Stethoscope } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { X, Save, AlertTriangle, ShieldCheck, Stethoscope, Mic, MicOff } from 'lucide-react';
 import { PatientRecord, NodeId, UserRole, VitalSignPayload } from '../types/clinical';
 import { storageEngine } from '../services/storageEngine';
 import { syncCoordinator } from '../services/syncCoordinator';
@@ -21,6 +21,72 @@ export const PatientEditorModal: React.FC<Props> = ({
 }) => {
   const [formData, setFormData] = useState<VitalSignPayload>({ ...patient.data });
   const [isSaving, setIsSaving] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+  const [voiceLang, setVoiceLang] = useState<'en-IN' | 'hi-IN'>('en-IN');
+  const recognitionRef = useRef<any>(null);
+
+  useEffect(() => {
+    return () => {
+      if (recognitionRef.current) {
+        recognitionRef.current.stop();
+      }
+    };
+  }, []);
+
+  const toggleVoiceDictation = () => {
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert('Speech Recognition is supported in Chrome, Edge, and Android Chrome.');
+      return;
+    }
+
+    if (isListening) {
+      if (recognitionRef.current) {
+        recognitionRef.current.stop();
+      }
+      setIsListening(false);
+      return;
+    }
+
+    try {
+      const recognition = new SpeechRecognition();
+      recognition.lang = voiceLang;
+      recognition.continuous = true;
+      recognition.interimResults = false;
+
+      recognition.onstart = () => {
+        setIsListening(true);
+      };
+
+      recognition.onresult = (event: any) => {
+        const lastResultIndex = event.results.length - 1;
+        const transcript = event.results[lastResultIndex][0].transcript;
+        if (transcript) {
+          setFormData(prev => ({
+            ...prev,
+            clinicalNotes: prev.clinicalNotes
+              ? `${prev.clinicalNotes} ${transcript.trim()}`
+              : transcript.trim()
+          }));
+        }
+      };
+
+      recognition.onerror = (e: any) => {
+        console.warn('Voice dictation error:', e);
+        setIsListening(false);
+      };
+
+      recognition.onend = () => {
+        setIsListening(false);
+      };
+
+      recognitionRef.current = recognition;
+      recognition.start();
+    } catch (err) {
+      console.error('Speech recognition failed to start:', err);
+      setIsListening(false);
+    }
+  };
 
   const nodeName = nodeId === 'NODE_A' ? 'Node A (ASHA Field Tablet)' : 'Node B (PHC Doctor Desk)';
   const networkMode = syncCoordinator.getNetworkMode(nodeId);
@@ -242,17 +308,66 @@ export const PatientEditorModal: React.FC<Props> = ({
             />
           </div>
 
-          {/* Clinical Field Notes */}
+          {/* Clinical Field Notes with Voice-to-Text */}
           <div>
-            <label className="block text-[11px] font-mono font-bold uppercase tracking-wider text-mutedink mb-1">
-              3. CLINICAL TRIAGE NOTES & OBSERVATIONS
-            </label>
+            <div className="flex items-center justify-between mb-1">
+              <label className="text-[11px] font-mono font-bold uppercase tracking-wider text-mutedink flex items-center gap-1.5">
+                <span>3. CLINICAL TRIAGE NOTES & OBSERVATIONS</span>
+              </label>
+
+              {/* Speech-to-Text Voice Dictation Trigger */}
+              <div className="flex items-center gap-1.5">
+                <select
+                  value={voiceLang}
+                  onChange={e => setVoiceLang(e.target.value as any)}
+                  className="bg-paper border border-stonehairline text-[10px] font-mono py-0.5 px-1 rounded-sm text-charcoal focus:outline-none cursor-pointer"
+                  title="Dictation Language"
+                >
+                  <option value="en-IN">EN (Indian)</option>
+                  <option value="hi-IN">HI (हिंदी)</option>
+                </select>
+
+                <button
+                  type="button"
+                  onClick={toggleVoiceDictation}
+                  className={`flex items-center gap-1 px-2 py-0.5 text-[10px] font-mono font-semibold rounded-sm border transition-all cursor-pointer ${
+                    isListening
+                      ? 'bg-red-600 text-white border-red-700 animate-pulse'
+                      : 'bg-paper hover:bg-stone-200 text-stone-700 border-stonehairline'
+                  }`}
+                  title="Click to dictate clinical notes via voice"
+                >
+                  {isListening ? (
+                    <>
+                      <MicOff className="w-3 h-3 text-white" />
+                      <span>STOP RECORDING</span>
+                    </>
+                  ) : (
+                    <>
+                      <Mic className="w-3 h-3 text-slateteal" />
+                      <span>VOICE DICTATE</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+
+            {isListening && (
+              <div className="mb-1.5 px-2 py-1 bg-red-50 border border-red-200 text-[10px] font-mono text-red-700 flex items-center justify-between rounded-sm animate-pulse">
+                <span className="flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-red-600 animate-ping"></span>
+                  Listening in {voiceLang === 'hi-IN' ? 'Hindi (हिंदी)' : 'Indian English'}... Speak clearly.
+                </span>
+                <span className="text-[9px] text-red-500">Auto-appends to notes</span>
+              </div>
+            )}
+
             <textarea
               rows={3}
               required
               value={formData.clinicalNotes}
               onChange={e => handleChange('clinicalNotes', e.target.value)}
-              placeholder="Record symptoms, fetal heart sounds, edema, maternal follow-up date..."
+              placeholder="Record symptoms, fetal heart sounds, edema, maternal follow-up date... (or click VOICE DICTATE)"
               className="w-full bg-paper border border-stonehairline p-2 font-mono text-xs text-charcoal rounded-sm focus:outline-slateteal"
             />
           </div>
