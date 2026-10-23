@@ -20,3 +20,4 @@
 - [x] Architecture Flowchart: Compiled native Archify v3.2 workflow diagram into [`public/flow.html`](file:///d:/Code%20things/Hackathons/JECRC%20HACKATHON/public/flow.html) with 4-lane pipeline and interactive motion/pan/zoom.
 - [x] Standalone Server: Created [`flowServer.cjs`](file:///d:/Code%20things/Hackathons/JECRC%20HACKATHON/flowServer.cjs) serving `http://localhost:8080/flow` and embedded in tab `[4] Flowchart Telemetry` at `http://localhost:5173/`.
 - [x] Verification: TypeScript compilation clean (`0 errors`), Vite production bundle built (`254 kB`), both servers running, and full browser subagent automated scenario test completed with video recording.
+- [x] Remote Deployment: Repository initialized and pushed to [`https://github.com/dhawneetg/GramSync.git`](https://github.com/dhawneetg/GramSync.git) (`main` branch clean).
