@@ -41,6 +41,17 @@ Frontline healthcare workers (ASHA workers and Primary Health Centre clinicians 
    - Tamper-evident immutable local audit trail.
 6. **Archify v3.2 Native Architecture Flowchart:**
    - Full interactive system pipeline visualization hosted at `http://localhost:8080/flow` and embedded within the app.
+7. **Peer-to-Peer "Offline QR Referral Slip" (Device-to-Device Without Network):**
+   - Packages latest acute vitals and clinical notes into a dense, high-contrast QR token (`GRAMSYNC_P2P_V1`).
+   - Doctor's node or 108 Ambulance can optically scan or ingest the payload directly into their device in dead-zones with zero cellular or Wi-Fi network.
+8. **Indian Public Health Clinical Triage Badges (NHM / Ayushman Guidelines):**
+   - Implements real National Health Mission & Ayushman Bharat triage rules:
+     - BP ≥ 140/90 in pregnancy $\rightarrow$ `HIGH-RISK PREGNANCY (HRP) // PRE-ECLAMPSIA WATCH`
+     - Hb < 8.0 g/dL $\rightarrow$ `SEVERE NUTRITIONAL ANEMIA (IV INFUSION REQ)`
+     - Glucose / DM markers $\rightarrow$ `UNCONTROLLED DM-2 // GLUCOSE WATCH`
+     - SpO2 < 94% $\rightarrow$ `ACUTE HYPOXEMIA (O2 THERAPY REQUIRED)`
+9. **One-Click "Offline Referral Slip" Print / Text Export:**
+   - Official FRU emergency referral slip formatted in Swiss Utility monochrome instrument styling with bedside vitals, ASHA signature line, emergency dispatch codes (108 Ambulance / 104 Helpline), browser print integration, and `.txt` / `.json` download.
 
 ---
 

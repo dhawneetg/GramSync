@@ -12,7 +12,9 @@ import {
   Wind, 
   FileText, 
   Pill, 
-  Clock 
+  Clock,
+  QrCode,
+  Printer
 } from 'lucide-react';
 import { PatientRecord, NodeId, NetworkMode, UserRole } from '../types/clinical';
 import { storageEngine } from '../services/storageEngine';
@@ -20,6 +22,9 @@ import { syncCoordinator } from '../services/syncCoordinator';
 import { SyncStatusBadge } from './SyncStatusBadge';
 import { PatientEditorModal } from './PatientEditorModal';
 import { ConflictResolutionModal } from './ConflictResolutionModal';
+import { NhmTriageBadge } from './NhmTriageBadge';
+import { OfflineQrModal } from './OfflineQrModal';
+import { ReferralSlipModal } from './ReferralSlipModal';
 import { encryptClinicalPayload, formatCiphertextDisplay } from '../services/cryptoVault';
 
 interface Props {
@@ -36,6 +41,8 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [isResolving, setIsResolving] = useState(false);
   const [isCreatingNew, setIsCreatingNew] = useState(false);
+  const [showQrModal, setShowQrModal] = useState(false);
+  const [showReferralModal, setShowReferralModal] = useState(false);
 
   // New patient state
   const [newPatientName, setNewPatientName] = useState('');
@@ -259,6 +266,8 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
                   <div className="text-[11px] font-mono font-semibold text-stone-700 mt-1">
                     {p.conditionTag}
                   </div>
+                  {/* Indian Rural Healthcare NHM Triage Badges */}
+                  <NhmTriageBadge patient={p} compact />
                 </div>
               );
             })}
@@ -294,9 +303,34 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
                     <span>•</span>
                     <span>Monotonic Rev: <strong className="text-charcoal tabular-nums">v{selectedPatient.revision}</strong></span>
                   </div>
+
+                  {/* NHM Rural Clinical Triage Badges */}
+                  <div className="mt-1">
+                    <NhmTriageBadge patient={selectedPatient} />
+                  </div>
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
+                  {/* Offline P2P QR Referral Button */}
+                  <button
+                    onClick={() => setShowQrModal(true)}
+                    className="px-2.5 py-1.5 text-xs font-mono font-semibold bg-paper hover:bg-stone-200 text-slateteal border border-stonehairline rounded-sm flex items-center gap-1.5 shadow-xs transition-colors cursor-pointer"
+                    title="Generate Offline P2P QR Referral Slip"
+                  >
+                    <QrCode className="w-3.5 h-3.5" />
+                    <span>OFFLINE QR SLIP</span>
+                  </button>
+
+                  {/* Printable Clinical Referral Slip Button */}
+                  <button
+                    onClick={() => setShowReferralModal(true)}
+                    className="px-2.5 py-1.5 text-xs font-mono font-semibold bg-paper hover:bg-stone-200 text-stone-700 border border-stonehairline rounded-sm flex items-center gap-1.5 shadow-xs transition-colors cursor-pointer"
+                    title="Official NHM Printable Referral Slip"
+                  >
+                    <Printer className="w-3.5 h-3.5 text-stone-500" />
+                    <span>REFERRAL SLIP</span>
+                  </button>
+
                   {selectedPatient.syncStatus === 'CONFLICT' ? (
                     <button
                       onClick={() => setIsResolving(true)}
@@ -331,11 +365,11 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
                         <Activity className="w-3.5 h-3.5 text-slateteal" />
                       </div>
                       <div className="font-mono text-xl font-bold tabular-nums text-charcoal">
-                        {selectedPatient.data.systolicBP}/{selectedPatient.data.diastolicBP}
+                        {selectedPatient.data?.systolicBP ?? 120}/{selectedPatient.data?.diastolicBP ?? 80}
                         <span className="text-xs text-mutedink font-normal ml-1">mmHg</span>
                       </div>
                       <div className="text-[10px] font-mono text-stone-500 mt-0.5">
-                        {selectedPatient.data.systolicBP > 140 ? '⚠️ High Stage-1' : 'Normal Range'}
+                        {(selectedPatient.data?.systolicBP ?? 120) > 140 ? '⚠️ High Stage-1' : 'Normal Range'}
                       </div>
                     </div>
 
@@ -346,7 +380,7 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
                         <Heart className="w-3.5 h-3.5 text-red-600" />
                       </div>
                       <div className="font-mono text-xl font-bold tabular-nums text-charcoal">
-                        {selectedPatient.data.heartRate}
+                        {selectedPatient.data?.heartRate ?? 72}
                         <span className="text-xs text-mutedink font-normal ml-1">BPM</span>
                       </div>
                       <div className="text-[10px] font-mono text-stone-500 mt-0.5">
@@ -361,11 +395,11 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
                         <Wind className="w-3.5 h-3.5 text-blue-600" />
                       </div>
                       <div className="font-mono text-xl font-bold tabular-nums text-charcoal">
-                        {selectedPatient.data.spO2}
+                        {selectedPatient.data?.spO2 ?? 98}
                         <span className="text-xs text-mutedink font-normal ml-1">%</span>
                       </div>
                       <div className="text-[10px] font-mono text-stone-500 mt-0.5">
-                        {selectedPatient.data.spO2 < 95 ? '⚠️ Hypoxemia Warning' : 'Optimal Oxygenation'}
+                        {(selectedPatient.data?.spO2 ?? 98) < 95 ? '⚠️ Hypoxemia Warning' : 'Optimal Oxygenation'}
                       </div>
                     </div>
 
@@ -376,11 +410,11 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
                         <Activity className="w-3.5 h-3.5 text-amber-700" />
                       </div>
                       <div className="font-mono text-xl font-bold tabular-nums text-charcoal">
-                        {selectedPatient.data.hemoglobinGdl}
+                        {selectedPatient.data?.hemoglobinGdl ?? 12.0}
                         <span className="text-xs text-mutedink font-normal ml-1">g/dL</span>
                       </div>
                       <div className="text-[10px] font-mono text-stone-500 mt-0.5">
-                        {selectedPatient.data.hemoglobinGdl < 11 ? '⚠️ Nutritional Anemia' : 'Within Target'}
+                        {(selectedPatient.data?.hemoglobinGdl ?? 12.0) < 11 ? '⚠️ Nutritional Anemia' : 'Within Target'}
                       </div>
                     </div>
 
@@ -391,7 +425,7 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
                         <Thermometer className="w-3.5 h-3.5 text-orange-600" />
                       </div>
                       <div className="font-mono text-xl font-bold tabular-nums text-charcoal">
-                        {selectedPatient.data.temperatureC}
+                        {selectedPatient.data?.temperatureC ?? 36.8}
                         <span className="text-xs text-mutedink font-normal ml-1">°C</span>
                       </div>
                       <div className="text-[10px] font-mono text-stone-500 mt-0.5">
@@ -555,6 +589,27 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
             </form>
           </div>
         </div>
+      )}
+
+      {/* Offline P2P QR Referral Modal */}
+      {showQrModal && selectedPatient && (
+        <OfflineQrModal
+          patient={selectedPatient}
+          sourceNodeId={activeNode}
+          userRole={userRole}
+          onClose={() => setShowQrModal(false)}
+          onOpenReferralSlip={() => setShowReferralModal(true)}
+          onSimulateHandoffToNodeB={() => setTick(t => t + 1)}
+        />
+      )}
+
+      {/* Official Printable Referral Slip Modal */}
+      {showReferralModal && selectedPatient && (
+        <ReferralSlipModal
+          patient={selectedPatient}
+          userRole={userRole}
+          onClose={() => setShowReferralModal(false)}
+        />
       )}
     </div>
   );

@@ -9,7 +9,10 @@ import {
   GitMerge, 
   AlertCircle, 
   CheckCircle, 
-  Edit3 
+  Edit3,
+  QrCode,
+  FileText,
+  Download
 } from 'lucide-react';
 import { PatientRecord, NodeId, NetworkMode, UserRole } from '../types/clinical';
 import { storageEngine } from '../services/storageEngine';
@@ -17,6 +20,10 @@ import { syncCoordinator } from '../services/syncCoordinator';
 import { SyncStatusBadge } from './SyncStatusBadge';
 import { PatientEditorModal } from './PatientEditorModal';
 import { ConflictResolutionModal } from './ConflictResolutionModal';
+import { NhmTriageBadge } from './NhmTriageBadge';
+import { OfflineQrModal } from './OfflineQrModal';
+import { QrIngestModal } from './QrIngestModal';
+import { ReferralSlipModal } from './ReferralSlipModal';
 
 interface Props {
   userRole: UserRole;
@@ -28,6 +35,9 @@ export const DualNodeSyncLab: React.FC<Props> = ({ userRole }) => {
   // Modal states
   const [editingPatient, setEditingPatient] = useState<{ patient: PatientRecord; nodeId: NodeId } | null>(null);
   const [resolvingPatient, setResolvingPatient] = useState<{ patient: PatientRecord; nodeId: NodeId } | null>(null);
+  const [qrPatient, setQrPatient] = useState<{ patient: PatientRecord; sourceNodeId: NodeId } | null>(null);
+  const [referralPatient, setReferralPatient] = useState<PatientRecord | null>(null);
+  const [isIngestingQr, setIsIngestingQr] = useState(false);
 
   useEffect(() => {
     // Re-render when storage or coordinator state changes
@@ -176,52 +186,75 @@ export const DualNodeSyncLab: React.FC<Props> = ({ userRole }) => {
                   />
                 </div>
 
-                <div className="text-[11px] font-mono text-mutedink mb-1.5 flex items-center justify-between">
+                <div className="text-[11px] font-mono text-mutedink mb-1 flex items-center justify-between">
                   <span>{patient.conditionTag}</span>
                   <span className="tabular-nums">BASE: v{patient.baseRevision}</span>
                 </div>
+
+                {/* Indian Rural Healthcare NHM Triage Badges */}
+                <NhmTriageBadge patient={patient} compact />
 
                 {/* Vitals Snapshot */}
                 <div className="grid grid-cols-4 gap-1 p-1.5 bg-canvas/60 border border-stonehairline rounded-sm font-mono text-[11px] text-charcoal tabular-nums mb-2">
                   <div>
                     <span className="text-[9px] text-mutedink block">BP</span>
-                    <span className="font-bold">{patient.data.systolicBP}/{patient.data.diastolicBP}</span>
+                    <span className="font-bold">{patient.data?.systolicBP ?? 120}/{patient.data?.diastolicBP ?? 80}</span>
                   </div>
                   <div>
                     <span className="text-[9px] text-mutedink block">HR</span>
-                    <span className="font-bold">{patient.data.heartRate} bpm</span>
+                    <span className="font-bold">{patient.data?.heartRate ?? 72} bpm</span>
                   </div>
                   <div>
                     <span className="text-[9px] text-mutedink block">Hb</span>
-                    <span className="font-bold">{patient.data.hemoglobinGdl} g/dL</span>
+                    <span className="font-bold">{patient.data?.hemoglobinGdl ?? 12.0} g/dL</span>
                   </div>
                   <div>
                     <span className="text-[9px] text-mutedink block">SpO2</span>
-                    <span className="font-bold">{patient.data.spO2}%</span>
+                    <span className="font-bold">{patient.data?.spO2 ?? 98}%</span>
                   </div>
                 </div>
 
                 {/* Actions */}
-                <div className="flex items-center justify-between pt-1 border-t border-stonehairline/60">
+                <div className="flex flex-wrap items-center justify-between pt-1 border-t border-stonehairline/60 gap-1">
                   <span className="text-[9px] font-mono text-mutedink">
                     Mod: {patient.lastModifiedBy}
                   </span>
-                  <div className="flex items-center gap-1.5">
+                  <div className="flex items-center gap-1">
+                    {/* Offline QR Slip Button */}
+                    <button
+                      onClick={() => setQrPatient({ patient, sourceNodeId: 'NODE_A' })}
+                      className="px-1.5 py-0.5 text-[10px] font-mono font-semibold bg-paper hover:bg-stone-200 text-slateteal border border-stonehairline rounded-sm flex items-center gap-1 transition-colors"
+                      title="Generate Offline P2P QR Referral Token"
+                    >
+                      <QrCode className="w-2.5 h-2.5" />
+                      <span>QR</span>
+                    </button>
+
+                    {/* Official Referral Slip Button */}
+                    <button
+                      onClick={() => setReferralPatient(patient)}
+                      className="px-1.5 py-0.5 text-[10px] font-mono text-stone-600 hover:text-charcoal bg-paper hover:bg-stone-200 border border-stonehairline rounded-sm flex items-center gap-1 transition-colors"
+                      title="Print or Download Clinical Referral Slip"
+                    >
+                      <FileText className="w-2.5 h-2.5" />
+                      <span>SLIP</span>
+                    </button>
+
                     {patient.syncStatus === 'CONFLICT' ? (
                       <button
                         onClick={() => setResolvingPatient({ patient, nodeId: 'NODE_A' })}
                         className="px-2 py-0.5 text-[10px] font-mono font-bold bg-red-700 hover:bg-red-800 text-white rounded-sm flex items-center gap-1 animate-pulse"
                       >
                         <GitMerge className="w-3 h-3" />
-                        <span>RESOLVE CONFLICT</span>
+                        <span>RESOLVE</span>
                       </button>
                     ) : (
                       <button
                         onClick={() => setEditingPatient({ patient, nodeId: 'NODE_A' })}
                         className="px-2 py-0.5 text-[10px] font-mono font-semibold bg-canvas hover:bg-stone-200 text-charcoal border border-stonehairline rounded-sm flex items-center gap-1 transition-colors"
                       >
-                        <Edit3 className="w-3 h-3 text-slateteal" />
-                        <span>RECORD VISIT</span>
+                        <Edit3 className="w-2.5 h-2.5 text-slateteal" />
+                        <span>VISIT</span>
                       </button>
                     )}
                   </div>
@@ -376,21 +409,32 @@ export const DualNodeSyncLab: React.FC<Props> = ({ userRole }) => {
                 ))}
               </div>
 
-              {/* Drain / Sync Button */}
-              <button
-                onClick={() => handleDrain('NODE_B')}
-                disabled={nodeBNetwork === 'OFFLINE' || nodeBSyncing}
-                className="flex items-center gap-1 px-2 py-0.5 text-[11px] font-mono bg-paper hover:bg-canvas border border-stonehairline rounded-sm disabled:opacity-40 text-charcoal transition-colors cursor-pointer"
-                title="Sync Outbox queue with Central Server"
-              >
-                <RefreshCw className={`w-3 h-3 text-slateteal ${nodeBSyncing ? 'animate-spin' : ''}`} />
-                <span>SYNC</span>
-                {nodeBOutbox.length > 0 && (
-                  <span className="bg-amber-500 text-white font-mono text-[9px] px-1 rounded-full font-bold ml-0.5">
-                    {nodeBOutbox.length}
-                  </span>
-                )}
-              </button>
+              {/* Ingest P2P QR & Drain / Sync Button */}
+              <div className="flex items-center gap-1.5">
+                <button
+                  onClick={() => setIsIngestingQr(true)}
+                  className="flex items-center gap-1 px-2 py-0.5 text-[10px] font-mono font-semibold bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 text-emerald-900 rounded-sm transition-colors cursor-pointer"
+                  title="Scan or ingest offline QR referral payload from ASHA tablet"
+                >
+                  <Download className="w-2.5 h-2.5 text-emerald-700" />
+                  <span>INGEST QR</span>
+                </button>
+
+                <button
+                  onClick={() => handleDrain('NODE_B')}
+                  disabled={nodeBNetwork === 'OFFLINE' || nodeBSyncing}
+                  className="flex items-center gap-1 px-2 py-0.5 text-[11px] font-mono bg-paper hover:bg-canvas border border-stonehairline rounded-sm disabled:opacity-40 text-charcoal transition-colors cursor-pointer"
+                  title="Sync Outbox queue with Central Server"
+                >
+                  <RefreshCw className={`w-3 h-3 text-slateteal ${nodeBSyncing ? 'animate-spin' : ''}`} />
+                  <span>SYNC</span>
+                  {nodeBOutbox.length > 0 && (
+                    <span className="bg-amber-500 text-white font-mono text-[9px] px-1 rounded-full font-bold ml-0.5">
+                      {nodeBOutbox.length}
+                    </span>
+                  )}
+                </button>
+              </div>
             </div>
           </div>
 
@@ -427,51 +471,64 @@ export const DualNodeSyncLab: React.FC<Props> = ({ userRole }) => {
                   />
                 </div>
 
-                <div className="text-[11px] font-mono text-mutedink mb-1.5 flex items-center justify-between">
+                <div className="text-[11px] font-mono text-mutedink mb-1 flex items-center justify-between">
                   <span>{patient.conditionTag}</span>
                   <span className="tabular-nums">BASE: v{patient.baseRevision}</span>
                 </div>
+
+                {/* Indian Rural Healthcare NHM Triage Badges */}
+                <NhmTriageBadge patient={patient} compact />
 
                 {/* Vitals Snapshot */}
                 <div className="grid grid-cols-4 gap-1 p-1.5 bg-canvas/60 border border-stonehairline rounded-sm font-mono text-[11px] text-charcoal tabular-nums mb-2">
                   <div>
                     <span className="text-[9px] text-mutedink block">BP</span>
-                    <span className="font-bold">{patient.data.systolicBP}/{patient.data.diastolicBP}</span>
+                    <span className="font-bold">{patient.data?.systolicBP ?? 120}/{patient.data?.diastolicBP ?? 80}</span>
                   </div>
                   <div>
                     <span className="text-[9px] text-mutedink block">HR</span>
-                    <span className="font-bold">{patient.data.heartRate} bpm</span>
+                    <span className="font-bold">{patient.data?.heartRate ?? 72} bpm</span>
                   </div>
                   <div>
                     <span className="text-[9px] text-mutedink block">Hb</span>
-                    <span className="font-bold">{patient.data.hemoglobinGdl} g/dL</span>
+                    <span className="font-bold">{patient.data?.hemoglobinGdl ?? 12.0} g/dL</span>
                   </div>
                   <div>
                     <span className="text-[9px] text-mutedink block">SpO2</span>
-                    <span className="font-bold">{patient.data.spO2}%</span>
+                    <span className="font-bold">{patient.data?.spO2 ?? 98}%</span>
                   </div>
                 </div>
 
                 {/* Actions */}
-                <div className="flex items-center justify-between pt-1 border-t border-stonehairline/60">
+                <div className="flex flex-wrap items-center justify-between pt-1 border-t border-stonehairline/60 gap-1">
                   <span className="text-[9px] font-mono text-mutedink">
                     Mod: {patient.lastModifiedBy}
                   </span>
-                  <div className="flex items-center gap-1.5">
+                  <div className="flex items-center gap-1">
+                    {/* Official Referral Slip Button */}
+                    <button
+                      onClick={() => setReferralPatient(patient)}
+                      className="px-1.5 py-0.5 text-[10px] font-mono text-stone-600 hover:text-charcoal bg-paper hover:bg-stone-200 border border-stonehairline rounded-sm flex items-center gap-1 transition-colors"
+                      title="Print or Download Clinical Referral Slip"
+                    >
+                      <FileText className="w-2.5 h-2.5" />
+                      <span>SLIP</span>
+                    </button>
+
                     {patient.syncStatus === 'CONFLICT' ? (
                       <button
                         onClick={() => setResolvingPatient({ patient, nodeId: 'NODE_B' })}
                         className="px-2 py-0.5 text-[10px] font-mono font-bold bg-red-700 hover:bg-red-800 text-white rounded-sm flex items-center gap-1 animate-pulse"
                       >
                         <GitMerge className="w-3 h-3" />
-                        <span>RESOLVE CONFLICT</span>
+                        <span>RESOLVE</span>
                       </button>
                     ) : (
                       <button
                         onClick={() => setEditingPatient({ patient, nodeId: 'NODE_B' })}
                         className="px-2 py-0.5 text-[10px] font-mono font-semibold bg-canvas hover:bg-stone-200 text-charcoal border border-stonehairline rounded-sm flex items-center gap-1 transition-colors"
                       >
-                        <Edit3 className="w-3 h-3 text-slateteal" />
+                        <Edit3 className="w-2.5 h-2.5 text-slateteal" />
                         <span>PRESCRIBE / EDIT</span>
                       </button>
                     )}
@@ -503,6 +560,36 @@ export const DualNodeSyncLab: React.FC<Props> = ({ userRole }) => {
           userRole={userRole}
           onClose={() => setResolvingPatient(null)}
           onResolved={() => setTick(t => t + 1)}
+        />
+      )}
+
+      {/* Offline P2P QR Slip Modal */}
+      {qrPatient && (
+        <OfflineQrModal
+          patient={qrPatient.patient}
+          sourceNodeId={qrPatient.sourceNodeId}
+          userRole={userRole}
+          onClose={() => setQrPatient(null)}
+          onOpenReferralSlip={p => setReferralPatient(p)}
+          onSimulateHandoffToNodeB={() => setTick(t => t + 1)}
+        />
+      )}
+
+      {/* QR Ingest Modal for Node B */}
+      {isIngestingQr && (
+        <QrIngestModal
+          targetNodeId="NODE_B"
+          onClose={() => setIsIngestingQr(false)}
+          onIngested={() => setTick(t => t + 1)}
+        />
+      )}
+
+      {/* Official Printable Referral Slip Modal */}
+      {referralPatient && (
+        <ReferralSlipModal
+          patient={referralPatient}
+          userRole={userRole}
+          onClose={() => setReferralPatient(null)}
         />
       )}
     </div>

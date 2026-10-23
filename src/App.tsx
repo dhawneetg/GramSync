@@ -8,7 +8,73 @@ import { SecurityVaultView } from './components/SecurityVaultView';
 import { PinAuthModal } from './components/PinAuthModal';
 import { FooterBanner } from './components/FooterBanner';
 
-export const App: React.FC = () => {
+interface ErrorBoundaryProps {
+  children: React.ReactNode;
+}
+
+interface ErrorBoundaryState {
+  hasError: boolean;
+  error: Error | null;
+}
+
+class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  constructor(props: ErrorBoundaryProps) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+    console.error('GramSync Field Engine Crash Caught:', error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="h-screen w-screen bg-canvas p-6 flex items-center justify-center font-mono">
+          <div className="bg-paper border-2 border-red-600 p-6 max-w-lg shadow-xl rounded-sm space-y-4">
+            <div className="flex items-center gap-2 text-red-700 font-bold text-sm">
+              <span className="w-3 h-3 bg-red-600 rounded-full animate-ping"></span>
+              <span>GRAMSYNC CLINICAL CRASH PROTECTION</span>
+            </div>
+            <p className="text-xs text-charcoal leading-relaxed">
+              An unexpected render exception was caught. Local encrypted IndexedDB records remain fully preserved.
+            </p>
+            <div className="bg-canvas p-3 border border-stonehairline text-[11px] text-red-950 max-h-32 overflow-auto font-mono">
+              {this.state.error?.message || 'Unknown runtime error'}
+            </div>
+            <div className="flex gap-2 pt-2">
+              <button
+                onClick={() => {
+                  this.setState({ hasError: false, error: null });
+                  window.location.reload();
+                }}
+                className="px-4 py-1.5 bg-slateteal text-white text-xs font-semibold rounded-sm hover:bg-slateteal-hover cursor-pointer"
+              >
+                ↺ RELOAD CLINICAL WORKSPACE
+              </button>
+              <button
+                onClick={() => {
+                  localStorage.clear();
+                  window.location.reload();
+                }}
+                className="px-3 py-1.5 bg-canvas border border-stonehairline text-xs text-stone-600 hover:text-charcoal rounded-sm cursor-pointer"
+              >
+                CLEAR LOCAL CACHE
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
+export const AppContent: React.FC = () => {
   const [activeTab, setActiveTab] = useState<ActiveTab>('LAB');
   const [currentRole, setCurrentRole] = useState<UserRole>('ASHA_WORKER');
   const [pinTargetRole, setPinTargetRole] = useState<UserRole | null>(null);
@@ -100,5 +166,11 @@ export const App: React.FC = () => {
     </div>
   );
 };
+
+export const App: React.FC = () => (
+  <ErrorBoundary>
+    <AppContent />
+  </ErrorBoundary>
+);
 
 export default App;
