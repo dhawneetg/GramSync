@@ -99,7 +99,7 @@ export const AppContent: React.FC = () => {
   }
 
   return (
-    <div className="h-screen w-screen flex flex-col bg-canvas text-charcoal overflow-hidden font-sans select-none">
+    <div className="min-h-[100dvh] h-[100dvh] w-full flex flex-col bg-canvas text-charcoal overflow-x-hidden font-sans select-none">
       {/* Top Telemetry & Control Bar */}
       <TopTelemetryBar
         activeTab={activeTab}
@@ -110,7 +110,7 @@ export const AppContent: React.FC = () => {
       />
 
       {/* Main Workspace Area */}
-      <main className="flex-1 flex flex-col min-h-0 overflow-hidden">
+      <main className="flex-1 flex flex-col min-h-0 overflow-y-auto lg:overflow-hidden">
         {activeTab === 'LAB' && <DualNodeSyncLab userRole={currentRole} />}
         {activeTab === 'SINGLE_FIELD' && <SingleFieldClinicianView userRole={currentRole} />}
         {activeTab === 'SECURITY' && (

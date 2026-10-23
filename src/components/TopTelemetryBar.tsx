@@ -61,11 +61,11 @@ export const TopTelemetryBar: React.FC<Props> = ({
   };
 
   return (
-    <header className="h-12 bg-paper border-b border-stonehairline px-3 flex items-center justify-between select-none sticky top-0 z-40 text-xs">
-      {/* Left: Industrial App Brand & Track Identifier */}
-      <div className="flex items-center gap-3">
-        <div className="flex items-center gap-2 pr-3 border-r border-stonehairline">
-          <div className="w-5 h-5 bg-slateteal flex items-center justify-center rounded-sm text-white">
+    <header className="bg-paper border-b border-stonehairline px-3 py-1.5 md:py-0 md:h-12 flex flex-col md:flex-row md:items-center md:justify-between select-none sticky top-0 z-40 text-xs gap-2 md:gap-0">
+      {/* Top Row on Mobile / Left on Desktop: App Brand & Track Identifier */}
+      <div className="flex items-center justify-between md:justify-start gap-3">
+        <div className="flex items-center gap-2 pr-2 md:pr-3 md:border-r border-stonehairline">
+          <div className="w-5 h-5 bg-slateteal flex items-center justify-center rounded-sm text-white shrink-0">
             <Activity className="w-3.5 h-3.5" />
           </div>
           <span className="font-mono font-bold tracking-tight text-charcoal text-[13px]">
@@ -79,61 +79,91 @@ export const TopTelemetryBar: React.FC<Props> = ({
           <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping opacity-75"></span>
           <span>{t('trackTitle')}</span>
         </div>
+
+        {/* Mobile-only compact quick actions (Lang + Role + Reset) */}
+        <div className="flex md:hidden items-center gap-1.5">
+          <button
+            onClick={() => setLanguage(lang === 'en' ? 'hi' : 'en')}
+            className="px-2 py-0.5 text-[11px] font-mono font-bold bg-canvas border border-stonehairline rounded-sm text-slateteal"
+            title="Language"
+          >
+            {lang === 'en' ? 'हिंदी' : 'EN'}
+          </button>
+          <button
+            onClick={() => onOpenPinModal(currentRole === 'ASHA_WORKER' ? 'MEDICAL_OFFICER' : 'ASHA_WORKER')}
+            className="px-2 py-0.5 font-mono text-[10px] font-bold rounded-sm border border-stonehairline bg-canvas text-charcoal flex items-center gap-1"
+          >
+            {currentRole === 'MEDICAL_OFFICER' ? <Unlock className="w-3 h-3 text-emerald-600" /> : <Lock className="w-3 h-3 text-slateteal" />}
+            <span>{currentRole === 'MEDICAL_OFFICER' ? 'MO' : 'ASHA'}</span>
+          </button>
+        </div>
       </div>
 
-      {/* Center: Mode Tabs */}
-      <nav className="flex items-center bg-canvas p-0.5 border border-stonehairline rounded-sm">
-        <button
-          onClick={() => setActiveTab('LAB')}
-          className={`flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-sm transition-colors ${
-            activeTab === 'LAB'
-              ? 'bg-paper text-charcoal font-semibold shadow-xs border border-stonehairline'
-              : 'text-mutedink hover:text-charcoal'
-          }`}
-        >
-          <Split className="w-3.5 h-3.5 text-slateteal" />
-          <span>{t('tabLab')}</span>
-        </button>
+      {/* Center on Desktop / Second Row on Mobile: Horizontally Scrollable Mode Tabs */}
+      <div className="flex items-center justify-between gap-2 overflow-x-auto no-scrollbar pb-0.5 md:pb-0">
+        <nav className="flex items-center bg-canvas p-0.5 border border-stonehairline rounded-sm shrink-0">
+          <button
+            onClick={() => setActiveTab('LAB')}
+            className={`flex items-center gap-1 px-2 md:px-2.5 py-1 text-xs font-medium rounded-sm transition-colors whitespace-nowrap ${
+              activeTab === 'LAB'
+                ? 'bg-paper text-charcoal font-semibold shadow-xs border border-stonehairline'
+                : 'text-mutedink hover:text-charcoal'
+            }`}
+          >
+            <Split className="w-3.5 h-3.5 text-slateteal shrink-0" />
+            <span>{t('tabLab')}</span>
+          </button>
 
-        <button
-          onClick={() => setActiveTab('SINGLE_FIELD')}
-          className={`flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-sm transition-colors ${
-            activeTab === 'SINGLE_FIELD'
-              ? 'bg-paper text-charcoal font-semibold shadow-xs border border-stonehairline'
-              : 'text-mutedink hover:text-charcoal'
-          }`}
-        >
-          <UserCheck className="w-3.5 h-3.5 text-slateteal" />
-          <span>{t('tabField')}</span>
-        </button>
+          <button
+            onClick={() => setActiveTab('SINGLE_FIELD')}
+            className={`flex items-center gap-1 px-2 md:px-2.5 py-1 text-xs font-medium rounded-sm transition-colors whitespace-nowrap ${
+              activeTab === 'SINGLE_FIELD'
+                ? 'bg-paper text-charcoal font-semibold shadow-xs border border-stonehairline'
+                : 'text-mutedink hover:text-charcoal'
+            }`}
+          >
+            <UserCheck className="w-3.5 h-3.5 text-slateteal shrink-0" />
+            <span>{t('tabField')}</span>
+          </button>
 
-        <button
-          onClick={() => setActiveTab('SECURITY')}
-          className={`flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-sm transition-colors ${
-            activeTab === 'SECURITY'
-              ? 'bg-paper text-charcoal font-semibold shadow-xs border border-stonehairline'
-              : 'text-mutedink hover:text-charcoal'
-          }`}
-        >
-          <ShieldCheck className="w-3.5 h-3.5 text-slateteal" />
-          <span>{t('tabSecurity')}</span>
-        </button>
+          <button
+            onClick={() => setActiveTab('SECURITY')}
+            className={`flex items-center gap-1 px-2 md:px-2.5 py-1 text-xs font-medium rounded-sm transition-colors whitespace-nowrap ${
+              activeTab === 'SECURITY'
+                ? 'bg-paper text-charcoal font-semibold shadow-xs border border-stonehairline'
+                : 'text-mutedink hover:text-charcoal'
+            }`}
+          >
+            <ShieldCheck className="w-3.5 h-3.5 text-slateteal shrink-0" />
+            <span>{t('tabSecurity')}</span>
+          </button>
 
-        <button
-          onClick={() => setActiveTab('FLOW')}
-          className={`flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-sm transition-colors ${
-            activeTab === 'FLOW'
-              ? 'bg-paper text-charcoal font-semibold shadow-xs border border-stonehairline'
-              : 'text-mutedink hover:text-charcoal'
-          }`}
-        >
-          <GitBranch className="w-3.5 h-3.5 text-slateteal" />
-          <span>{t('tabFlow')}</span>
-        </button>
-      </nav>
+          <button
+            onClick={() => setActiveTab('FLOW')}
+            className={`flex items-center gap-1 px-2 md:px-2.5 py-1 text-xs font-medium rounded-sm transition-colors whitespace-nowrap ${
+              activeTab === 'FLOW'
+                ? 'bg-paper text-charcoal font-semibold shadow-xs border border-stonehairline'
+                : 'text-mutedink hover:text-charcoal'
+            }`}
+          >
+            <GitBranch className="w-3.5 h-3.5 text-slateteal shrink-0" />
+            <span>{t('tabFlow')}</span>
+          </button>
+        </nav>
 
-      {/* Right: Demo Macros, Language Toggle & RBAC Indicator */}
-      <div className="flex items-center gap-2">
+        {/* Mobile Stage Conflict Macro button in tab row */}
+        <button
+          onClick={handleStageConflict}
+          disabled={isStaging}
+          className="md:hidden flex items-center gap-1 px-2 py-1 text-[11px] font-mono font-bold bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 rounded-sm shrink-0 whitespace-nowrap"
+        >
+          <Zap className={`w-3 h-3 text-amber-600 ${isStaging ? 'animate-spin' : ''}`} />
+          <span>{isStaging ? '...' : '⚡ STAGE'}</span>
+        </button>
+      </div>
+
+      {/* Right on Desktop: Demo Macros, Language Toggle & RBAC Indicator */}
+      <div className="hidden md:flex items-center gap-2">
         {/* Language Switcher (EN | हिंदी) */}
         <button
           onClick={() => setLanguage(lang === 'en' ? 'hi' : 'en')}

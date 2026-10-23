@@ -161,9 +161,9 @@ export const ConflictResolutionModal: React.FC<Props> = ({
         </div>
 
         {/* 3-Way Git Diff Table */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-4">
-          <div className="border border-stonehairline rounded-sm overflow-hidden bg-white shadow-xs">
-            <table className="w-full border-collapse text-left text-xs font-mono">
+        <div className="flex-1 overflow-y-auto p-2 sm:p-4 space-y-4">
+          <div className="border border-stonehairline rounded-sm overflow-x-auto bg-white shadow-xs">
+            <table className="w-full min-w-[640px] border-collapse text-left text-xs font-mono">
               <thead>
                 <tr className="bg-canvas border-b border-stonehairline text-[11px] text-mutedink uppercase">
                   <th className="p-2.5 border-r border-stonehairline w-48 font-bold">
@@ -327,7 +327,7 @@ export const ConflictResolutionModal: React.FC<Props> = ({
         </div>
 
         {/* Footer Actions */}
-        <div className="px-4 py-3 bg-canvas border-t border-stonehairline flex items-center justify-between">
+        <div className="px-3 sm:px-4 py-2.5 sm:py-3 bg-canvas border-t border-stonehairline flex flex-wrap items-center justify-between gap-2">
           <div className="text-[11px] font-mono text-mutedink flex items-center gap-2">
             <span>Resolving as Role:</span>
             <span className="font-bold text-charcoal bg-paper px-2 py-0.5 border border-stonehairline rounded-sm">

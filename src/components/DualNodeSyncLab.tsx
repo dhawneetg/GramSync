@@ -29,6 +29,7 @@ export const DualNodeSyncLab: React.FC<Props> = ({ userRole }) => {
   // Modal states
   const [editingPatient, setEditingPatient] = useState<{ patient: PatientRecord; nodeId: NodeId } | null>(null);
   const [resolvingPatient, setResolvingPatient] = useState<{ patient: PatientRecord; nodeId: NodeId } | null>(null);
+  const [mobileActiveNode, setMobileActiveNode] = useState<'NODE_A' | 'SERVER' | 'NODE_B'>('NODE_A');
 
   useEffect(() => {
     // Re-render when storage or coordinator state changes
@@ -63,11 +64,11 @@ export const DualNodeSyncLab: React.FC<Props> = ({ userRole }) => {
   };
 
   return (
-    <div className="flex-1 flex flex-col p-3 gap-3 overflow-hidden">
+    <div className="flex-1 flex flex-col p-2 sm:p-3 gap-2 sm:gap-3 overflow-y-auto lg:overflow-hidden">
       {/* Simulation Lab Ribbon */}
-      <div className="bg-paper border border-stonehairline p-2.5 rounded-sm flex flex-wrap items-center justify-between gap-2 text-xs">
+      <div className="bg-paper border border-stonehairline p-2 sm:p-2.5 rounded-sm flex flex-wrap items-center justify-between gap-2 text-xs">
         <div className="flex items-center gap-2">
-          <span className="font-mono font-bold text-charcoal flex items-center gap-1.5">
+          <span className="font-mono font-bold text-charcoal flex items-center gap-1.5 text-xs">
             <span className="w-2.5 h-2.5 bg-slateteal rounded-xs inline-block"></span>
             MULTI-NODE CLINICAL SYNC SIMULATOR
           </span>
@@ -75,10 +76,38 @@ export const DualNodeSyncLab: React.FC<Props> = ({ userRole }) => {
             | Two isolated offline endpoints synchronizing with central Primary Health Centre cloud revision coordinator
           </span>
         </div>
-        <div className="flex items-center gap-4 text-[11px] font-mono text-mutedink">
-          <span>Active Session Privileges: <strong className="text-charcoal font-semibold">{userRole}</strong></span>
-          <span>IndexedDB Stores: <strong className="text-emerald-700">ONLINE & PERSISTED</strong></span>
+        <div className="flex items-center gap-3 text-[10px] sm:text-[11px] font-mono text-mutedink">
+          <span>Role: <strong className="text-charcoal font-semibold">{userRole}</strong></span>
+          <span>IndexedDB: <strong className="text-emerald-700">ONLINE</strong></span>
         </div>
+      </div>
+
+      {/* Mobile Node Switcher Tab Bar */}
+      <div className="flex lg:hidden items-center bg-canvas p-1 border border-stonehairline rounded-sm text-xs font-mono">
+        <button
+          onClick={() => setMobileActiveNode('NODE_A')}
+          className={`flex-1 py-1 px-1.5 rounded-xs text-center font-bold transition-colors ${
+            mobileActiveNode === 'NODE_A' ? 'bg-amber-100 text-amber-900 border border-amber-300 shadow-xs' : 'text-stone-500'
+          }`}
+        >
+          📱 Node A (ASHA)
+        </button>
+        <button
+          onClick={() => setMobileActiveNode('SERVER')}
+          className={`flex-1 py-1 px-1.5 rounded-xs text-center font-bold transition-colors ${
+            mobileActiveNode === 'SERVER' ? 'bg-emerald-100 text-emerald-900 border border-emerald-300 shadow-xs' : 'text-stone-500'
+          }`}
+        >
+          ☁️ PHC Cloud
+        </button>
+        <button
+          onClick={() => setMobileActiveNode('NODE_B')}
+          className={`flex-1 py-1 px-1.5 rounded-xs text-center font-bold transition-colors ${
+            mobileActiveNode === 'NODE_B' ? 'bg-blue-100 text-blue-900 border border-blue-300 shadow-xs' : 'text-stone-500'
+          }`}
+        >
+          💻 Node B (Clinic)
+        </button>
       </div>
 
       {/* 3-Column Split Bench */}
@@ -87,7 +116,7 @@ export const DualNodeSyncLab: React.FC<Props> = ({ userRole }) => {
         {/* ========================================================= */}
         {/* COLUMN 1: NODE A (ASHA FIELD TABLET)                     */}
         {/* ========================================================= */}
-        <div className="lg:col-span-4 flex flex-col bg-paper border border-stonehairline rounded-sm min-h-[460px] lg:min-h-0 overflow-hidden shadow-xs">
+        <div className={`lg:col-span-4 flex-col bg-paper border border-stonehairline rounded-sm min-h-[460px] lg:min-h-0 overflow-hidden shadow-xs ${mobileActiveNode === 'NODE_A' ? 'flex' : 'hidden lg:flex'}`}>
           {/* Node Header */}
           <div className="p-3 bg-canvas border-b border-stonehairline flex flex-col gap-2">
             <div className="flex items-center justify-between">
@@ -240,7 +269,7 @@ export const DualNodeSyncLab: React.FC<Props> = ({ userRole }) => {
         {/* ========================================================= */}
         {/* COLUMN 2: CENTRAL PHC CLOUD REGISTRY & TELEMETRY STREAM   */}
         {/* ========================================================= */}
-        <div className="lg:col-span-4 flex flex-col bg-paper border border-stonehairline rounded-sm min-h-[460px] lg:min-h-0 overflow-hidden shadow-xs">
+        <div className={`lg:col-span-4 flex-col bg-paper border border-stonehairline rounded-sm min-h-[460px] lg:min-h-0 overflow-hidden shadow-xs ${mobileActiveNode === 'SERVER' ? 'flex' : 'hidden lg:flex'}`}>
           {/* Center Spine Header */}
           <div className="p-3 bg-canvas border-b border-stonehairline flex flex-col gap-1.5">
             <div className="flex items-center justify-between">
@@ -341,9 +370,7 @@ export const DualNodeSyncLab: React.FC<Props> = ({ userRole }) => {
         </div>
 
         {/* ========================================================= */}
-        {/* COLUMN 3: NODE B (PHC CLINIC DESK TERMINAL)               */}
-        {/* ========================================================= */}
-        <div className="lg:col-span-4 flex flex-col bg-paper border border-stonehairline rounded-sm min-h-[460px] lg:min-h-0 overflow-hidden shadow-xs">
+        <div className={`lg:col-span-4 flex-col bg-paper border border-stonehairline rounded-sm min-h-[460px] lg:min-h-0 overflow-hidden shadow-xs ${mobileActiveNode === 'NODE_B' ? 'flex' : 'hidden lg:flex'}`}>
           {/* Node Header */}
           <div className="p-3 bg-canvas border-b border-stonehairline flex flex-col gap-2">
             <div className="flex items-center justify-between">

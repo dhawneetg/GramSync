@@ -37,6 +37,7 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [isResolving, setIsResolving] = useState(false);
   const [isCreatingNew, setIsCreatingNew] = useState(false);
+  const [mobileView, setMobileView] = useState<'DIRECTORY' | 'CHART'>('CHART');
 
   // New patient state
   const [newPatientName, setNewPatientName] = useState('');
@@ -209,10 +210,30 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
         </div>
       </div>
 
+      {/* Mobile Directory / Chart Switcher */}
+      <div className="flex md:hidden items-center bg-canvas p-1 border border-stonehairline rounded-sm text-xs font-mono">
+        <button
+          onClick={() => setMobileView('DIRECTORY')}
+          className={`flex-1 py-1.5 px-2 rounded-xs text-center font-bold transition-colors ${
+            mobileView === 'DIRECTORY' ? 'bg-slateteal text-white shadow-xs' : 'text-stone-600'
+          }`}
+        >
+          📋 Patient List ({filteredPatients.length})
+        </button>
+        <button
+          onClick={() => setMobileView('CHART')}
+          className={`flex-1 py-1.5 px-2 rounded-xs text-center font-bold transition-colors ${
+            mobileView === 'CHART' ? 'bg-slateteal text-white shadow-xs' : 'text-stone-600'
+          }`}
+        >
+          🩺 Patient Chart {selectedPatient ? `• ${selectedPatient.fullName}` : ''}
+        </button>
+      </div>
+
       {/* Main Workspace Split */}
       <div className="flex-1 grid grid-cols-1 md:grid-cols-12 gap-3 min-h-0 overflow-y-auto md:overflow-hidden">
         {/* Left Column: Patient Directory & Search */}
-        <div className="md:col-span-4 flex flex-col bg-paper border border-stonehairline rounded-sm overflow-hidden shadow-xs">
+        <div className={`md:col-span-4 flex-col bg-paper border border-stonehairline rounded-sm overflow-hidden shadow-xs ${mobileView === 'DIRECTORY' ? 'flex' : 'hidden md:flex'}`}>
           {/* Search & Add Patient Toolbar */}
           <div className="p-2.5 bg-canvas border-b border-stonehairline flex items-center gap-2">
             <div className="flex-1 relative">
@@ -242,7 +263,10 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
               return (
                 <div
                   key={p.patientId}
-                  onClick={() => setSelectedPatientId(p.patientId)}
+                  onClick={() => {
+                    setSelectedPatientId(p.patientId);
+                    setMobileView('CHART');
+                  }}
                   className={`p-3 cursor-pointer transition-colors ${
                     isSelected ? 'bg-stone-100/90 border-l-4 border-slateteal' : 'hover:bg-canvas'
                   }`}
@@ -269,12 +293,18 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
         </div>
 
         {/* Right Column: Detailed Patient Triage & Vitals Sheet */}
-        <div className="md:col-span-8 flex flex-col bg-paper border border-stonehairline rounded-sm overflow-hidden shadow-xs">
+        <div className={`md:col-span-8 flex-col bg-paper border border-stonehairline rounded-sm overflow-hidden shadow-xs ${mobileView === 'CHART' ? 'flex' : 'hidden md:flex'}`}>
           {selectedPatient ? (
             <div className="flex-1 flex flex-col overflow-y-auto">
               {/* Patient Banner */}
-              <div className="p-4 bg-canvas border-b border-stonehairline flex flex-wrap items-center justify-between gap-3">
+              <div className="p-3 sm:p-4 bg-canvas border-b border-stonehairline flex flex-wrap items-center justify-between gap-3">
                 <div>
+                  <button
+                    onClick={() => setMobileView('DIRECTORY')}
+                    className="md:hidden mb-2 px-2 py-0.5 text-[11px] font-mono font-semibold bg-paper border border-stonehairline rounded-sm text-stone-700 hover:text-charcoal flex items-center gap-1 cursor-pointer"
+                  >
+                    ← Back to Patient List
+                  </button>
                   <div className="flex items-center gap-2">
                     <h2 className="font-mono text-base font-bold text-charcoal">
                       {selectedPatient.fullName}

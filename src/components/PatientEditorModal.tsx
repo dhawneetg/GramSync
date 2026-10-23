@@ -124,8 +124,8 @@ export const PatientEditorModal: React.FC<Props> = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-charcoal/50 backdrop-blur-xs flex items-center justify-center z-50 p-4">
-      <div className="bg-paper border border-stonehairline w-full max-w-2xl rounded-sm shadow-2xl flex flex-col max-h-[92vh]">
+    <div className="fixed inset-0 bg-charcoal/50 backdrop-blur-xs flex items-center justify-center z-50 p-2 sm:p-4">
+      <div className="bg-paper border border-stonehairline w-full max-w-2xl rounded-sm shadow-2xl flex flex-col max-h-[96vh]">
         {/* Modal Header */}
         <div className="px-4 py-3 bg-canvas border-b border-stonehairline flex items-center justify-between">
           <div className="flex items-center gap-2.5">

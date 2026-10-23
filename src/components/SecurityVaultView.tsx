@@ -285,8 +285,8 @@ export const SecurityVaultView: React.FC<Props> = ({ currentRole, onOpenPinModal
         </div>
 
         {/* Audit Log Table */}
-        <div className="border border-stonehairline rounded-sm overflow-hidden max-h-80 overflow-y-auto">
-          <table className="w-full text-left font-mono text-xs">
+        <div className="border border-stonehairline rounded-sm overflow-x-auto max-h-80 overflow-y-auto">
+          <table className="w-full min-w-[560px] text-left font-mono text-xs">
             <thead>
               <tr className="bg-canvas border-b border-stonehairline text-[10px] text-mutedink uppercase">
                 <th className="p-2 border-r border-stonehairline w-28">Event ID</th>
