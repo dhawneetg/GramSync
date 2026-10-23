@@ -100,7 +100,20 @@ export const DICTIONARY = {
     issuedBy: 'Prescribed By',
     beforeFood: 'Before Food',
     afterFood: 'After Food',
-    withFood: 'With Food'
+    withFood: 'With Food',
+
+    // QR & Dynamic Entry additions
+    qrShareBtn: 'Medicine QR',
+    addLabBtn: '+ Add Lab Test',
+    addPrescriptionBtn: '+ Add Prescription',
+    qrPrescriptionTitle: 'Offline Prescription & Health Passport (QR)',
+    qrPrescriptionSubtitle: 'Instant scan by local chemist, pharmacist, or hospital without internet',
+    downloadQr: 'Download QR Image',
+    previewQrData: 'Preview Scanned Data',
+    scanHelp: 'Scan with any smartphone camera or 2D barcode scanner',
+    latestMedicines: 'Active Prescriptions',
+    saveReport: 'Save Record',
+    cancel: 'Cancel'
   },
   hi: {
     // Top bar
@@ -178,7 +191,20 @@ export const DICTIONARY = {
     issuedBy: 'परामर्शक',
     beforeFood: 'खाली पेट',
     afterFood: 'खाने के बाद',
-    withFood: 'भोजन के साथ'
+    withFood: 'भोजन के साथ',
+
+    // QR & Dynamic Entry additions
+    qrShareBtn: 'दवा QR',
+    addLabBtn: '+ नया टेस्ट जोड़ें',
+    addPrescriptionBtn: '+ नई दवा जोड़ें',
+    qrPrescriptionTitle: 'ऑफ़लाइन दवा पर्ची व स्वास्थ्य पासपोर्ट (QR)',
+    qrPrescriptionSubtitle: 'स्थानीय केमिस्ट, फार्मासिस्ट या अस्पताल द्वारा बिना इंटरनेट तुरंत स्कैन',
+    downloadQr: 'क्यूआर कोड डाउनलोड करें',
+    previewQrData: 'स्कैन डेटा देखें',
+    scanHelp: 'किसी भी स्मार्टफोन कैमरे या 2D बारकोड स्कैनर से स्कैन करें',
+    latestMedicines: 'सक्रिय दवाइयाँ',
+    saveReport: 'रिकॉर्ड सहेजें',
+    cancel: 'रद्द करें'
   }
 };
 

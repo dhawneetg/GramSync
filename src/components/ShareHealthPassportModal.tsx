@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
+import QRCode from 'qrcode';
 import { 
   X, 
   Printer, 
@@ -12,9 +13,15 @@ import {
   Phone, 
   MapPin, 
   Calendar,
-  User
+  User,
+  QrCode,
+  Download,
+  Eye,
+  EyeOff,
+  Sparkles
 } from 'lucide-react';
 import { PatientRecord } from '../types/clinical';
+import { t } from '../services/languageService';
 
 interface Props {
   patient: PatientRecord;
@@ -23,13 +30,61 @@ interface Props {
 
 export const ShareHealthPassportModal: React.FC<Props> = ({ patient, onClose }) => {
   const [copied, setCopied] = useState(false);
+  const [qrUrl, setQrUrl] = useState<string>('');
+  const [showRawPayload, setShowRawPayload] = useState(false);
 
   const abha = patient.abhaId || `91-${patient.patientId}-2026-9912`;
   const labs = patient.labReports || [];
   const rxs = patient.prescriptions || [];
 
+  // Scannable payload formatted for clean readability on any phone camera / QR reader
+  const qrTextPayload = useMemo(() => {
+    return [
+      `🏛️ GRAMSYNC OFFLINE HEALTH PASSPORT`,
+      `Name: ${patient.fullName} (${patient.gender === 'Female' ? 'F' : 'M'}, ${patient.age}y)`,
+      `ABHA ID: ${abha}`,
+      `Village: ${patient.villageCluster}`,
+      `Condition: ${patient.conditionTag}`,
+      `Vitals: BP ${patient.data.systolicBP}/${patient.data.diastolicBP} mmHg | SpO2 ${patient.data.spO2}% | Hb ${patient.data.hemoglobinGdl} g/dL | Pulse ${patient.data.heartRate} bpm`,
+      `--- ACTIVE MEDICINES ---`,
+      ...(rxs.length > 0
+        ? rxs.map((r, i) => `${i + 1}. ${r.medicineName} (${r.dosage}) - ${r.frequency} [${r.timing === 'AFTER_FOOD' ? 'After Food' : 'Before Food'}] - ${r.daysPrescribed}d (By: ${r.issuedBy})`)
+        : [`1. ${patient.data.medicationsIssued}`]),
+      ...(labs.length > 0 ? [
+        `--- PHC LAB TESTS ---`,
+        ...labs.map(l => `• ${l.testName}: ${l.resultValue} [${l.status}] (${l.performedAt})`)
+      ] : []),
+      `Verified Offline via GramSync Engine`
+    ].join('\n');
+  }, [patient, abha, rxs, labs]);
+
+  // Generate offline QR code as base64 data URL
+  useEffect(() => {
+    QRCode.toDataURL(qrTextPayload, {
+      width: 320,
+      margin: 1.5,
+      color: {
+        dark: '#042f2e',
+        light: '#ffffff'
+      },
+      errorCorrectionLevel: 'M'
+    })
+      .then(url => setQrUrl(url))
+      .catch(err => console.error('Failed to generate offline QR', err));
+  }, [qrTextPayload]);
+
   const handlePrint = () => {
     window.print();
+  };
+
+  const handleDownloadQr = () => {
+    if (!qrUrl) return;
+    const a = document.createElement('a');
+    a.href = qrUrl;
+    a.download = `GramSync-Passport-${patient.patientId}-${patient.fullName.replace(/\s+/g, '_')}.png`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
   };
 
   const handleCopySummary = () => {
@@ -50,10 +105,10 @@ export const ShareHealthPassportModal: React.FC<Props> = ({ patient, onClose }) 
 • Temp: ${patient.data.temperatureC}°C
 
 *PHC LAB INVESTIGATIONS:*
-${labs.map(l => `• ${l.testName}: ${l.resultValue} (${l.normalRange}) - [${l.status}]`).join('\n') || '• No pending lab investigations.'}
+${labs.map(l => `• ${l.testName}: ${l.resultValue} (${l.normalRange}) - [${l.status}] - ${l.performedAt}`).join('\n') || '• No pending lab investigations.'}
 
 *ACTIVE PRESCRIPTION SCHEDULE:*
-${rxs.map(r => `• ${r.medicineName} (${r.dosage}) - ${r.frequency} for ${r.daysPrescribed} days`).join('\n') || `• ${patient.data.medicationsIssued}`}
+${rxs.map(r => `• ${r.medicineName} (${r.dosage}) - ${r.frequency} [${r.timing === 'AFTER_FOOD' ? 'After Food' : 'Before Food'}] for ${r.daysPrescribed} days (Prescribed by: ${r.issuedBy})`).join('\n') || `• ${patient.data.medicationsIssued}`}
 
 *CLINICAL FIELD NOTES:*
 ${patient.data.clinicalNotes}
@@ -83,7 +138,7 @@ ${patient.data.clinicalNotes}
                 </span>
               </div>
               <h3 className="text-base font-bold text-white tracking-tight">
-                Unified Clinical Record & Lab Passport
+                Unified Clinical Record & Prescription QR
               </h3>
             </div>
           </div>
@@ -97,6 +152,85 @@ ${patient.data.clinicalNotes}
 
         {/* Modal Scrollable Body */}
         <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-5 bg-stone-50/50">
+          
+          {/* FEATURE HIGHLIGHT: Instant Scannable Offline Medicine QR Code Card */}
+          <div className="bg-gradient-to-br from-emerald-950 via-teal-900 to-emerald-900 text-white rounded-2xl p-4 sm:p-5 shadow-md border border-emerald-700/50 relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-36 h-36 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none" />
+            
+            <div className="flex flex-col sm:flex-row items-center gap-5">
+              {/* QR Code Container */}
+              <div className="bg-white p-2.5 rounded-2xl shadow-lg border-2 border-emerald-300/40 shrink-0 text-center relative group">
+                {qrUrl ? (
+                  <img 
+                    src={qrUrl} 
+                    alt="Patient Offline Prescription QR" 
+                    className="w-40 h-40 sm:w-44 sm:h-44 object-contain rounded-lg"
+                  />
+                ) : (
+                  <div className="w-40 h-40 sm:w-44 sm:h-44 flex items-center justify-center bg-stone-100 rounded-lg text-stone-400">
+                    <QrCode className="w-8 h-8 animate-pulse text-stone-400" />
+                  </div>
+                )}
+                <div className="mt-1 flex items-center justify-center gap-1 text-[10px] font-bold text-emerald-900 uppercase tracking-wider">
+                  <Sparkles className="w-3 h-3 text-emerald-600" />
+                  <span>100% Offline QR</span>
+                </div>
+              </div>
+
+              {/* QR Info & Actions */}
+              <div className="flex-1 text-center sm:text-left space-y-2">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-400/20 text-emerald-200 text-[11px] font-bold border border-emerald-400/30">
+                  <QrCode className="w-3.5 h-3.5" />
+                  <span>{t('qrPrescriptionTitle')}</span>
+                </div>
+
+                <h4 className="text-base sm:text-lg font-bold text-white leading-tight">
+                  {patient.fullName} • {t('latestMedicines')} ({rxs.length} दवाइयाँ)
+                </h4>
+
+                <p className="text-xs text-emerald-100/90 leading-relaxed max-w-xl">
+                  {t('qrPrescriptionSubtitle')}. 
+                  इस क्यूआर कोड को किसी भी स्मार्टफ़ोन कैमरे, 2D स्कैनर या केमिस्ट सॉफ्टवेयर से स्कैन करके वर्तमान दवाइयाँ व शारीरिक स्थिति देखी जा सकती है।
+                </p>
+
+                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 pt-2">
+                  <button
+                    onClick={handleDownloadQr}
+                    className="px-3 py-1.5 text-xs font-bold bg-white text-emerald-950 hover:bg-emerald-50 rounded-xl flex items-center gap-1.5 shadow-sm transition-all cursor-pointer"
+                  >
+                    <Download className="w-3.5 h-3.5 text-emerald-700" />
+                    <span>{t('downloadQr')}</span>
+                  </button>
+
+                  <button
+                    onClick={() => setShowRawPayload(!showRawPayload)}
+                    className="px-3 py-1.5 text-xs font-semibold bg-emerald-800/80 hover:bg-emerald-800 text-emerald-100 rounded-xl flex items-center gap-1.5 border border-emerald-600/40 transition-colors cursor-pointer"
+                  >
+                    {showRawPayload ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                    <span>{t('previewQrData')}</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Optional Scanned Payload Inspector */}
+            {showRawPayload && (
+              <div className="mt-4 pt-3 border-t border-emerald-700/50 animate-in fade-in duration-200">
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-[11px] font-mono text-emerald-300 font-bold uppercase tracking-wider">
+                    {t('scanHelp')} (Decoded String):
+                  </span>
+                  <span className="text-[10px] text-emerald-400 font-mono">
+                    {qrTextPayload.length} bytes
+                  </span>
+                </div>
+                <pre className="bg-emerald-950/90 p-3 rounded-xl border border-emerald-700/60 text-emerald-200 text-[11px] font-mono leading-relaxed whitespace-pre-wrap max-h-48 overflow-y-auto">
+                  {qrTextPayload}
+                </pre>
+              </div>
+            )}
+          </div>
+
           {/* ABHA Patient ID Card Header */}
           <div className="bg-white border-2 border-emerald-600/30 rounded-2xl p-4 sm:p-5 shadow-xs relative overflow-hidden">
             <div className="absolute top-0 right-0 bg-emerald-600 text-white text-[10px] font-bold uppercase px-3 py-1 rounded-bl-xl tracking-wider">
@@ -122,7 +256,7 @@ ${patient.data.clinicalNotes}
                     {patient.fullName}
                   </h4>
                   <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-stone-100 text-stone-700">
-                    {patient.gender}, {patient.age} वर्ष
+                    {patient.gender === 'Female' ? 'महिला' : 'पुरुष'}, {patient.age} वर्ष
                   </span>
                   <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300">
                     {patient.conditionTag}
@@ -267,7 +401,7 @@ ${patient.data.clinicalNotes}
                 3. Active Prescriptions & Medication Regimen
               </span>
               <span className="text-[11px] text-rose-700 font-bold bg-rose-50 px-2 py-0.5 rounded-full">
-                Doctor Prescribed
+                {rxs.length} Prescribed
               </span>
             </div>
 
@@ -315,7 +449,7 @@ ${patient.data.clinicalNotes}
         {/* Modal Footer Actions */}
         <div className="px-5 py-3.5 bg-white border-t border-stone-200 flex flex-wrap items-center justify-between gap-2.5">
           <div className="text-[11px] text-stone-500 font-mono">
-            GramSync v2.4 • Offline ABDM Clinical Summary
+            GramSync • Offline ABDM Clinical Summary
           </div>
 
           <div className="flex items-center gap-2">

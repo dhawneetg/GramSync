@@ -15,9 +15,10 @@ import {
   FlaskConical,
   MapPin,
   Wifi,
-  WifiOff
+  WifiOff,
+  QrCode
 } from 'lucide-react';
-import { PatientRecord, NodeId, UserRole } from '../types/clinical';
+import { PatientRecord, NodeId, UserRole, LabInvestigation, StructuredPrescription } from '../types/clinical';
 import { storageEngine } from '../services/storageEngine';
 import { syncCoordinator } from '../services/syncCoordinator';
 import { SyncStatusBadge } from './SyncStatusBadge';
@@ -25,6 +26,8 @@ import { PatientEditorModal } from './PatientEditorModal';
 import { ConflictResolutionModal } from './ConflictResolutionModal';
 import { NhmTriageBadge } from './NhmTriageBadge';
 import { ShareHealthPassportModal } from './ShareHealthPassportModal';
+import { AddLabTestModal } from './AddLabTestModal';
+import { AddPrescriptionModal } from './AddPrescriptionModal';
 import { t, subscribeLanguage } from '../services/languageService';
 
 interface Props {
@@ -45,6 +48,8 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
   const [isResolving, setIsResolving] = useState(false);
   const [isCreatingNew, setIsCreatingNew] = useState(false);
   const [showPassportModal, setShowPassportModal] = useState(false);
+  const [showAddLabModal, setShowAddLabModal] = useState(false);
+  const [showAddRxModal, setShowAddRxModal] = useState(false);
   const [mobileView, setMobileView] = useState<'DIRECTORY' | 'CHART'>('CHART');
 
   // New patient state
@@ -165,6 +170,92 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
     setMobileView('CHART');
     setIsCreatingNew(false);
     setNewPatientName('');
+  };
+
+  const handleAddLab = (newLab: LabInvestigation) => {
+    if (!selectedPatient) return;
+    const updatedReports = [newLab, ...(selectedPatient.labReports || [])];
+    const updatedPatient: PatientRecord = {
+      ...selectedPatient,
+      labReports: updatedReports,
+      revision: selectedPatient.revision + 1,
+      lastModifiedBy: activeNode === 'NODE_A' ? 'ASHA_NODE_A' : 'CLINIC_NODE_B',
+      lastModifiedAt: new Date().toISOString(),
+      syncStatus: 'LOCAL'
+    };
+
+    const allPatients = storageEngine.getPatients(activeNode);
+    const idx = allPatients.findIndex(p => p.patientId === selectedPatient.patientId);
+    if (idx >= 0) {
+      allPatients[idx] = updatedPatient;
+      storageEngine.setPatients(activeNode, allPatients);
+    }
+
+    storageEngine.enqueueOutboxMutation({
+      mutationId: `MUT-${Date.now()}-LAB`,
+      nodeId: activeNode,
+      patientId: selectedPatient.patientId,
+      timestamp: new Date().toISOString(),
+      baseRevision: selectedPatient.revision,
+      draftData: selectedPatient.data,
+      author: activeNode === 'NODE_A' ? 'ASHA_NODE_A' : 'CLINIC_NODE_B',
+      role: userRole,
+      retryCount: 0
+    });
+
+    storageEngine.logAudit({
+      nodeId: activeNode,
+      role: userRole,
+      action: 'RECORD_UPDATED',
+      patientId: selectedPatient.patientId,
+      revision: updatedPatient.revision,
+      details: `New lab report '${newLab.testName}: ${newLab.resultValue}' recorded.`
+    });
+
+    setShowAddLabModal(false);
+  };
+
+  const handleAddPrescription = (newRx: StructuredPrescription) => {
+    if (!selectedPatient) return;
+    const updatedRxs = [newRx, ...(selectedPatient.prescriptions || [])];
+    const updatedPatient: PatientRecord = {
+      ...selectedPatient,
+      prescriptions: updatedRxs,
+      revision: selectedPatient.revision + 1,
+      lastModifiedBy: activeNode === 'NODE_A' ? 'ASHA_NODE_A' : 'CLINIC_NODE_B',
+      lastModifiedAt: new Date().toISOString(),
+      syncStatus: 'LOCAL'
+    };
+
+    const allPatients = storageEngine.getPatients(activeNode);
+    const idx = allPatients.findIndex(p => p.patientId === selectedPatient.patientId);
+    if (idx >= 0) {
+      allPatients[idx] = updatedPatient;
+      storageEngine.setPatients(activeNode, allPatients);
+    }
+
+    storageEngine.enqueueOutboxMutation({
+      mutationId: `MUT-${Date.now()}-RX`,
+      nodeId: activeNode,
+      patientId: selectedPatient.patientId,
+      timestamp: new Date().toISOString(),
+      baseRevision: selectedPatient.revision,
+      draftData: selectedPatient.data,
+      author: activeNode === 'NODE_A' ? 'ASHA_NODE_A' : 'CLINIC_NODE_B',
+      role: userRole,
+      retryCount: 0
+    });
+
+    storageEngine.logAudit({
+      nodeId: activeNode,
+      role: userRole,
+      action: 'RECORD_UPDATED',
+      patientId: selectedPatient.patientId,
+      revision: updatedPatient.revision,
+      details: `Doctor prescription added: '${newRx.medicineName} (${newRx.dosage}) for ${newRx.daysPrescribed}d'.`
+    });
+
+    setShowAddRxModal(false);
   };
 
   return (
@@ -419,6 +510,16 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
                     <span>{t('shareRecordBtn')}</span>
                   </button>
 
+                  {/* Quick Medicine QR Button */}
+                  <button
+                    onClick={() => setShowPassportModal(true)}
+                    className="px-3.5 py-2 text-xs font-bold bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-300 rounded-xl flex items-center gap-1.5 shadow-xs transition-all hover:scale-[1.02] active:scale-95 cursor-pointer"
+                    title="View Offline Medicine & Prescription QR Code"
+                  >
+                    <QrCode className="w-3.5 h-3.5 text-emerald-700" />
+                    <span>{t('qrShareBtn')}</span>
+                  </button>
+
                   {/* Record Visit / Resolve Conflict Button */}
                   {selectedPatient.syncStatus === 'CONFLICT' ? (
                     <button
@@ -574,13 +675,28 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
               {/* Tab 2: PHC Diagnostic Lab Reports */}
               {activeDetailTab === 'LABS' && (
                 <div className="p-4 sm:p-5 space-y-3 animate-in fade-in duration-150">
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-xs font-bold uppercase tracking-wider text-stone-700">
-                      {t('labsHeader')}
-                    </span>
-                    <span className="text-xs font-bold text-indigo-700 bg-indigo-50 px-2.5 py-0.5 rounded-full">
-                      {selectedPatient.labReports?.length || 0} {t('testsAvailable')}
-                    </span>
+                  <div className="flex flex-wrap items-center justify-between gap-2 mb-1">
+                    <div>
+                      <span className="text-xs font-bold uppercase tracking-wider text-stone-700 block">
+                        {t('labsHeader')}
+                      </span>
+                      <span className="text-[11px] text-stone-500">
+                        PHC प्रयोगशाला एवं फील्ड रैपिड टेस्ट परिणाम
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-bold text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-full">
+                        {selectedPatient.labReports?.length || 0} {t('testsAvailable')}
+                      </span>
+                      <button
+                        onClick={() => setShowAddLabModal(true)}
+                        className="px-3 py-1.5 text-xs font-bold bg-indigo-700 hover:bg-indigo-800 text-white rounded-xl flex items-center gap-1.5 shadow-xs transition-all hover:scale-[1.02] active:scale-95 cursor-pointer"
+                      >
+                        <Plus className="w-3.5 h-3.5" />
+                        <span>{t('addLabBtn')}</span>
+                      </button>
+                    </div>
                   </div>
 
                   {(selectedPatient.labReports && selectedPatient.labReports.length > 0) ? (
@@ -628,13 +744,34 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
               {/* Tab 3: Structured Prescriptions */}
               {activeDetailTab === 'PRESCRIPTIONS' && (
                 <div className="p-4 sm:p-5 space-y-3 animate-in fade-in duration-150">
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-xs font-bold uppercase tracking-wider text-stone-700">
-                      {t('prescriptionsHeader')}
-                    </span>
-                    <span className="text-xs font-bold text-rose-700 bg-rose-50 px-2.5 py-0.5 rounded-full">
-                      {selectedPatient.prescriptions?.length || 0} {t('prescriptionsAvailable')}
-                    </span>
+                  <div className="flex flex-wrap items-center justify-between gap-2 mb-1">
+                    <div>
+                      <span className="text-xs font-bold uppercase tracking-wider text-stone-700 block">
+                        {t('prescriptionsHeader')}
+                      </span>
+                      <span className="text-[11px] text-stone-500">
+                        डॉक्टर द्वारा प्रमाणित डिजिटल पर्ची व दवाइयाँ
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => setShowPassportModal(true)}
+                        className="px-3 py-1.5 text-xs font-bold bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-300 rounded-xl flex items-center gap-1.5 shadow-xs transition-all hover:scale-[1.02] active:scale-95 cursor-pointer"
+                        title="Open Patient QR Code"
+                      >
+                        <QrCode className="w-3.5 h-3.5 text-emerald-700" />
+                        <span>{t('qrShareBtn')}</span>
+                      </button>
+
+                      <button
+                        onClick={() => setShowAddRxModal(true)}
+                        className="px-3 py-1.5 text-xs font-bold bg-rose-700 hover:bg-rose-800 text-white rounded-xl flex items-center gap-1.5 shadow-xs transition-all hover:scale-[1.02] active:scale-95 cursor-pointer"
+                      >
+                        <Plus className="w-3.5 h-3.5" />
+                        <span>{t('addPrescriptionBtn')}</span>
+                      </button>
+                    </div>
                   </div>
 
                   {(selectedPatient.prescriptions && selectedPatient.prescriptions.length > 0) ? (
@@ -794,6 +931,24 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
             </form>
           </div>
         </div>
+      )}
+
+      {/* Add Lab Report Modal */}
+      {showAddLabModal && selectedPatient && (
+        <AddLabTestModal
+          patientName={selectedPatient.fullName}
+          onClose={() => setShowAddLabModal(false)}
+          onSave={handleAddLab}
+        />
+      )}
+
+      {/* Add Prescription Modal */}
+      {showAddRxModal && selectedPatient && (
+        <AddPrescriptionModal
+          patientName={selectedPatient.fullName}
+          onClose={() => setShowAddRxModal(false)}
+          onSave={handleAddPrescription}
+        />
       )}
     </div>
   );
