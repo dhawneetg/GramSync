@@ -455,9 +455,25 @@ class StorageEngine {
       nodeId === 'NODE_B' ? KEY_NODE_B_PATIENTS : KEY_SERVER_PATIENTS;
     try {
       const data = localStorage.getItem(key);
-      return data ? JSON.parse(data) : [];
+      const parsed: PatientRecord[] = data ? JSON.parse(data) : [];
+      if (parsed.length === 0) {
+        return SEED_PATIENTS;
+      }
+      return parsed.map(p => {
+        const seed = SEED_PATIENTS.find(s => s.patientId === p.patientId);
+        if (seed) {
+          return {
+            ...p,
+            abhaId: p.abhaId || seed.abhaId,
+            phone: p.phone || seed.phone,
+            labReports: (p.labReports && p.labReports.length > 0) ? p.labReports : seed.labReports,
+            prescriptions: (p.prescriptions && p.prescriptions.length > 0) ? p.prescriptions : seed.prescriptions
+          };
+        }
+        return p;
+      });
     } catch {
-      return [];
+      return SEED_PATIENTS;
     }
   }
 

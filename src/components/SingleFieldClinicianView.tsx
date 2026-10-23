@@ -178,14 +178,14 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
           <div>
             <div className="flex items-center gap-2">
               <h1 className="text-sm sm:text-base font-bold text-stone-900 tracking-tight">
-                ग्रामीण स्वास्थ्य साथी • GramHealth Field Companion
+                {t('bannerTitle')}
               </h1>
-              <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 hidden sm:inline">
-                National Health Mission (NHM)
+              <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 hidden sm:inline">
+                {t('nhmBadge')}
               </span>
             </div>
             <p className="text-xs text-stone-500 mt-0.5">
-              आशा कार्यकर्ता एवं प्राथमिक स्वास्थ्य केंद्र (PHC) ऑफलाइन क्लिनिकल रिकॉर्ड
+              {t('bannerSubtitle')}
             </p>
           </div>
         </div>
@@ -196,30 +196,30 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
           <div className="flex items-center bg-stone-100 p-0.5 rounded-xl border border-stone-200 text-xs">
             <button
               onClick={() => setActiveNode('NODE_A')}
-              className={`px-2.5 py-1 rounded-lg font-bold transition-all ${
+              className={`px-3 py-1 rounded-lg font-bold transition-all ${
                 activeNode === 'NODE_A'
                   ? 'bg-white text-stone-900 shadow-xs'
                   : 'text-stone-500 hover:text-stone-900'
               }`}
             >
-              📱 आशा टैबलेट (Node A)
+              {t('nodeA')}
             </button>
             <button
               onClick={() => setActiveNode('NODE_B')}
-              className={`px-2.5 py-1 rounded-lg font-bold transition-all ${
+              className={`px-3 py-1 rounded-lg font-bold transition-all ${
                 activeNode === 'NODE_B'
                   ? 'bg-white text-stone-900 shadow-xs'
                   : 'text-stone-500 hover:text-stone-900'
               }`}
             >
-              💻 PHC क्लीनिक (Node B)
+              {t('nodeB')}
             </button>
           </div>
 
           {/* Online/Offline Badge */}
           <button
             onClick={() => syncCoordinator.setNetworkMode(activeNode, networkMode === 'ONLINE' ? 'OFFLINE' : 'ONLINE')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer border ${
+            className={`flex items-center justify-center min-w-[90px] gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer border ${
               networkMode === 'ONLINE'
                 ? 'bg-emerald-50 text-emerald-800 border-emerald-200 hover:bg-emerald-100'
                 : 'bg-rose-50 text-rose-800 border-rose-200 hover:bg-rose-100'
@@ -227,17 +227,17 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
             title="Click to toggle network state"
           >
             {networkMode === 'ONLINE' ? <Wifi className="w-3.5 h-3.5 text-emerald-600" /> : <WifiOff className="w-3.5 h-3.5 text-rose-600" />}
-            <span>{networkMode === 'ONLINE' ? 'ऑनलाइन' : 'ऑफलाइन'}</span>
+            <span>{networkMode === 'ONLINE' ? t('online') : t('offline')}</span>
           </button>
 
           {/* Sync Now Button */}
           <button
             onClick={() => syncCoordinator.drainOutbox(activeNode)}
             disabled={networkMode === 'OFFLINE' || isSyncing}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl shadow-xs transition-all disabled:opacity-40 cursor-pointer"
+            className="flex items-center justify-center min-w-[95px] gap-1.5 px-3 py-1.5 text-xs font-bold bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl shadow-xs transition-all disabled:opacity-40 cursor-pointer"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isSyncing ? 'animate-spin' : ''}`} />
-            <span>सिंक करें</span>
+            <span>{t('syncNow')}</span>
             {outbox.length > 0 && (
               <span className="bg-amber-400 text-amber-950 text-[10px] px-1.5 py-0.2 rounded-full font-bold ml-0.5">
                 {outbox.length}
@@ -255,7 +255,7 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
             mobileView === 'DIRECTORY' ? 'bg-emerald-700 text-white shadow-xs' : 'text-stone-600'
           }`}
         >
-          📋 मरीज सूची ({filteredPatients.length})
+          📋 {t('patientDirectory')} ({filteredPatients.length})
         </button>
         <button
           onClick={() => setMobileView('CHART')}
@@ -263,7 +263,7 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
             mobileView === 'CHART' ? 'bg-emerald-700 text-white shadow-xs' : 'text-stone-600'
           }`}
         >
-          🩺 स्वास्थ्य कार्ड {selectedPatient ? `• ${selectedPatient.fullName}` : ''}
+          🩺 {t('healthCard')} {selectedPatient ? `• ${selectedPatient.fullName}` : ''}
         </button>
       </div>
 
@@ -332,7 +332,7 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
                         <SyncStatusBadge status={p.syncStatus} revision={p.revision} />
                       </div>
                       <div className="text-[11px] text-stone-500 flex items-center justify-between">
-                        <span>{p.gender === 'Female' ? 'महिला' : 'पुरुष'} • {p.age} वर्ष</span>
+                        <span>{p.gender === 'Female' ? t('female') : t('male')} • {p.age} {t('years')}</span>
                         <span className="text-[10px] text-stone-400 font-mono">{p.patientId}</span>
                       </div>
                       <div className="text-[11px] font-semibold text-stone-700 truncate mt-0.5">
@@ -486,7 +486,7 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
                     {/* BP */}
                     <div className="p-3.5 bg-stone-50 rounded-2xl border border-stone-200/80">
                       <div className="flex items-center justify-between text-stone-500 mb-1">
-                        <span className="text-[11px] font-bold uppercase tracking-wider">रक्तचाप (Blood Pressure)</span>
+                        <span className="text-[11px] font-bold uppercase tracking-wider">{t('bpTitle')}</span>
                         <Activity className="w-4 h-4 text-rose-600" />
                       </div>
                       <div className="font-mono text-2xl font-bold tabular-nums text-stone-900">
@@ -494,14 +494,14 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
                         <span className="text-xs text-stone-500 font-normal ml-1">mmHg</span>
                       </div>
                       <div className="text-[11px] font-semibold text-amber-800 mt-1">
-                        {(selectedPatient.data?.systolicBP ?? 120) > 140 ? '⚠️ High Stage-1 (उच्च)' : '✓ सामान्य (Normal)'}
+                        {(selectedPatient.data?.systolicBP ?? 120) > 140 ? `⚠️ ${t('bpHigher')}` : `✓ ${t('bpNormal')}`}
                       </div>
                     </div>
 
                     {/* Heart Rate */}
                     <div className="p-3.5 bg-stone-50 rounded-2xl border border-stone-200/80">
                       <div className="flex items-center justify-between text-stone-500 mb-1">
-                        <span className="text-[11px] font-bold uppercase tracking-wider">हृदय गति (Heart Rate)</span>
+                        <span className="text-[11px] font-bold uppercase tracking-wider">{t('hrTitle')}</span>
                         <Heart className="w-4 h-4 text-rose-600" />
                       </div>
                       <div className="font-mono text-2xl font-bold tabular-nums text-stone-900">
@@ -509,14 +509,14 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
                         <span className="text-xs text-stone-500 font-normal ml-1">BPM</span>
                       </div>
                       <div className="text-[11px] font-semibold text-emerald-800 mt-1">
-                        ✓ नियमित ताल (Regular)
+                        ✓ {t('hrRegular')}
                       </div>
                     </div>
 
                     {/* SpO2 */}
                     <div className="p-3.5 bg-stone-50 rounded-2xl border border-stone-200/80">
                       <div className="flex items-center justify-between text-stone-500 mb-1">
-                        <span className="text-[11px] font-bold uppercase tracking-wider">ऑक्सीजन (SpO2)</span>
+                        <span className="text-[11px] font-bold uppercase tracking-wider">{t('spo2Title')}</span>
                         <Wind className="w-4 h-4 text-blue-600" />
                       </div>
                       <div className="font-mono text-2xl font-bold tabular-nums text-stone-900">
@@ -524,14 +524,14 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
                         <span className="text-xs text-stone-500 font-normal ml-1">%</span>
                       </div>
                       <div className="text-[11px] font-semibold text-emerald-800 mt-1">
-                        {(selectedPatient.data?.spO2 ?? 98) < 95 ? '⚠️ कम ऑक्सीजन' : '✓ सामान्य ऑक्सीजन'}
+                        {(selectedPatient.data?.spO2 ?? 98) < 95 ? `⚠️ ${t('spo2Low')}` : `✓ ${t('spo2Normal')}`}
                       </div>
                     </div>
 
                     {/* Hemoglobin */}
                     <div className="p-3.5 bg-stone-50 rounded-2xl border border-stone-200/80">
                       <div className="flex items-center justify-between text-stone-500 mb-1">
-                        <span className="text-[11px] font-bold uppercase tracking-wider">हीमोग्लोबिन (Hb)</span>
+                        <span className="text-[11px] font-bold uppercase tracking-wider">{t('hbTitle')}</span>
                         <Activity className="w-4 h-4 text-amber-700" />
                       </div>
                       <div className="font-mono text-2xl font-bold tabular-nums text-stone-900">
@@ -539,14 +539,14 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
                         <span className="text-xs text-stone-500 font-normal ml-1">g/dL</span>
                       </div>
                       <div className="text-[11px] font-semibold text-amber-800 mt-1">
-                        {(selectedPatient.data?.hemoglobinGdl ?? 12.0) < 11 ? '⚠️ रक्ताल्पता (Anemia)' : '✓ सुरक्षित स्तर'}
+                        {(selectedPatient.data?.hemoglobinGdl ?? 12.0) < 11 ? `⚠️ ${t('hbAnemia')}` : `✓ ${t('hbNormal')}`}
                       </div>
                     </div>
 
                     {/* Temperature */}
                     <div className="p-3.5 bg-stone-50 rounded-2xl border border-stone-200/80">
                       <div className="flex items-center justify-between text-stone-500 mb-1">
-                        <span className="text-[11px] font-bold uppercase tracking-wider">तापमान (Temperature)</span>
+                        <span className="text-[11px] font-bold uppercase tracking-wider">{t('tempTitle')}</span>
                         <Thermometer className="w-4 h-4 text-orange-600" />
                       </div>
                       <div className="font-mono text-2xl font-bold tabular-nums text-stone-900">
@@ -554,7 +554,7 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
                         <span className="text-xs text-stone-500 font-normal ml-1">°C</span>
                       </div>
                       <div className="text-[11px] font-semibold text-emerald-800 mt-1">
-                        ✓ सामान्य (Normal)
+                        ✓ {t('tempNormal')}
                       </div>
                     </div>
                   </div>
@@ -562,7 +562,7 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
                   {/* Clinical Field Notes */}
                   <div className="p-4 bg-amber-50/70 border border-amber-200/80 rounded-2xl">
                     <span className="text-xs font-bold text-amber-950 uppercase tracking-wider block mb-1">
-                      आशा कार्यकर्ता नैदानिक टिप्पणियाँ (Clinical Field Observations)
+                      {t('notesTitle')}
                     </span>
                     <p className="text-xs text-amber-900 leading-relaxed font-sans">
                       {selectedPatient.data.clinicalNotes}
@@ -576,10 +576,10 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
                 <div className="p-4 sm:p-5 space-y-3 animate-in fade-in duration-150">
                   <div className="flex items-center justify-between mb-1">
                     <span className="text-xs font-bold uppercase tracking-wider text-stone-700">
-                      सरकारी स्वास्थ्य केंद्र लैब परिणाम (Diagnostic Test Records)
+                      {t('labsHeader')}
                     </span>
                     <span className="text-xs font-bold text-indigo-700 bg-indigo-50 px-2.5 py-0.5 rounded-full">
-                      {selectedPatient.labReports?.length || 0} परीक्षण उपलब्ध
+                      {selectedPatient.labReports?.length || 0} {t('testsAvailable')}
                     </span>
                   </div>
 
@@ -597,29 +597,29 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
                                   ? 'bg-amber-100 text-amber-800 border border-amber-200'
                                   : 'bg-emerald-100 text-emerald-800 border border-emerald-200'
                               }`}>
-                                {lab.status === 'CRITICAL' ? '⚠️ गंभीर' : lab.status === 'ELEVATED' ? 'मध्यम' : '✓ सामान्य'}
+                                {lab.status === 'CRITICAL' ? `⚠️ ${t('statusCritical')}` : lab.status === 'ELEVATED' ? t('statusElevated') : `✓ ${t('statusNormal')}`}
                               </span>
                             </div>
                             <div className="text-xs text-stone-500 flex items-center gap-2">
-                              <span>स्थान: <strong>{lab.performedAt}</strong></span>
+                              <span>{t('performedAt')}: <strong>{lab.performedAt}</strong></span>
                               <span>•</span>
-                              <span>तारीख: {new Date(lab.testDate).toLocaleDateString()}</span>
+                              <span>{t('testDate')}: {new Date(lab.testDate).toLocaleDateString()}</span>
                             </div>
                             <p className="text-xs text-stone-600 italic">
-                              डॉक्टर सलाह: {lab.doctorRemarks}
+                              {t('doctorRemarks')}: {lab.doctorRemarks}
                             </p>
                           </div>
 
                           <div className="bg-stone-50 p-3 rounded-xl border border-stone-100 sm:text-right shrink-0">
                             <div className="text-lg font-bold text-stone-900 font-mono">{lab.resultValue}</div>
-                            <div className="text-[11px] text-stone-500">सामान्य सीमा: {lab.normalRange}</div>
+                            <div className="text-[11px] text-stone-500">{t('normalRange')}: {lab.normalRange}</div>
                           </div>
                         </div>
                       ))}
                     </div>
                   ) : (
                     <div className="text-center py-8 text-xs text-stone-400">
-                      इस मरीज के लिए अभी कोई लैब रिपोर्ट उपलब्ध नहीं है।
+                      No lab records available.
                     </div>
                   )}
                 </div>
@@ -630,10 +630,10 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
                 <div className="p-4 sm:p-5 space-y-3 animate-in fade-in duration-150">
                   <div className="flex items-center justify-between mb-1">
                     <span className="text-xs font-bold uppercase tracking-wider text-stone-700">
-                      सक्रिय दवाइयाँ एवं खुराक (Active Prescriptions)
+                      {t('prescriptionsHeader')}
                     </span>
                     <span className="text-xs font-bold text-rose-700 bg-rose-50 px-2.5 py-0.5 rounded-full">
-                      चिकित्सा अधिकारी द्वारा अनुमोदित
+                      {selectedPatient.prescriptions?.length || 0} {t('prescriptionsAvailable')}
                     </span>
                   </div>
 
@@ -644,18 +644,18 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
                           <div className="flex items-center justify-between">
                             <span className="font-bold text-sm text-stone-900">{rx.medicineName}</span>
                             <span className="text-[10px] font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full">
-                              {rx.daysPrescribed} दिन की दवा
+                              {rx.daysPrescribed} {t('days')}
                             </span>
                           </div>
                           <div className="text-xs text-stone-600 flex items-center justify-between">
-                            <span>खुराक: <strong>{rx.dosage}</strong></span>
-                            <span className="text-stone-500">{rx.timing === 'AFTER_FOOD' ? 'खाने के बाद' : 'खाली पेट'}</span>
+                            <span>{t('dosage')}: <strong>{rx.dosage}</strong></span>
+                            <span className="text-stone-500">{rx.timing === 'AFTER_FOOD' ? t('afterFood') : t('beforeFood')}</span>
                           </div>
                           <div className="text-xs text-emerald-700 font-semibold bg-emerald-50/60 p-2 rounded-xl">
-                            नियम: {rx.frequency}
+                            {t('timing')}: {rx.frequency}
                           </div>
                           <div className="text-[10px] text-stone-400 pt-1.5 border-t border-stone-100">
-                            {rx.issuedBy} ({rx.issuedDate})
+                            {t('issuedBy')}: {rx.issuedBy} ({rx.issuedDate})
                           </div>
                         </div>
                       ))}

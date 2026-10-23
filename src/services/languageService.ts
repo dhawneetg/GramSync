@@ -1,4 +1,4 @@
-// GramSync Bilingual Field Dictionary (English & Hindi)
+// GramSync Comprehensive Bilingual Field Dictionary (English & Hindi)
 export type SupportedLang = 'en' | 'hi';
 
 let currentLang: SupportedLang = (localStorage.getItem('gramsync_lang') as SupportedLang) || 'en';
@@ -25,96 +25,160 @@ export const subscribeLanguage = (fn: (lang: SupportedLang) => void) => {
 
 export const DICTIONARY = {
   en: {
+    // Top bar
     tabField: 'ASHA Companion',
     tabLab: 'Sync Simulator',
     tabSecurity: 'Security Vault',
     tabFlow: 'System Flow',
     stageConflict: 'Stage Conflict',
     reset: 'Reset',
-    roleAsha: 'ASHA Worker',
-    roleMo: 'Medical Officer',
+    roleAsha: 'ASHA WORKER (PIN 1234)',
+    roleMo: 'DR. / MO (PIN 9999)',
+
+    // Header banner
+    bannerTitle: 'GramHealth Field Companion',
+    bannerSubtitle: 'ASHA Field Worker & Primary Health Centre (PHC) Offline Clinical Records',
+    nhmBadge: 'National Health Mission (NHM)',
+    nodeA: '📱 ASHA Tablet (Node A)',
+    nodeB: '💻 PHC Clinic (Node B)',
+    online: 'Online',
+    offline: 'Offline',
+    syncNow: 'Sync Now',
+
+    // Left List
     searchPlaceholder: 'Search by Name, ABHA ID or Village...',
     newPatientBtn: 'New Patient',
     patientDirectory: 'Patient Directory',
-    tabVitals: '1. Vitals & Screening',
-    tabLabs: '2. PHC Lab Reports',
-    tabPrescriptions: '3. Prescriptions',
-    shareRecordBtn: 'Share Record',
-    newVisitBtn: 'Record Visit',
-    offlineBanner: 'Offline Mode (Data encrypted locally on device)',
-    onlineBanner: 'Online (Ready to sync with PHC server)',
-    bp: 'Blood Pressure',
-    heartRate: 'Heart Rate',
-    spo2: 'Oxygen (SpO2)',
-    hemoglobin: 'Hemoglobin (Hb)',
-    temperature: 'Body Temp',
-    respiratoryRate: 'Respiratory Rate',
-    clinicalNotes: 'Clinical Triage Notes & Observations',
-    medications: 'Pharmaceutical & Stock Dispensation',
-    saveVisit: 'Commit Clinical Entry',
-    resolveConflict: 'Resolve 3-Way Conflict',
-    normal: 'Normal Range',
-    highRisk: 'High Risk',
-    anemia: 'Nutritional Anemia Warning',
-    hypoxemia: 'Hypoxemia Warning',
+    healthCard: 'Health Card',
     female: 'Female',
     male: 'Male',
     years: 'yrs',
+
+    // Active Profile Header & Actions
+    shareRecordBtn: 'Share Record',
+    newVisitBtn: 'Record Visit',
+    resolveConflict: 'Resolve Conflict',
+
+    // Tabs
+    tabVitals: '1. Vitals & Screening',
+    tabLabs: '2. PHC Lab Reports',
+    tabPrescriptions: '3. Doctor Prescriptions',
+
+    // Vitals Cards
+    bpTitle: 'Blood Pressure',
+    bpHigher: 'High Stage-1 (Elevated)',
+    bpNormal: 'Normal Range',
+    hrTitle: 'Heart Rate',
+    hrRegular: 'Regular Rhythm',
+    spo2Title: 'Oxygen (SpO2)',
+    spo2Low: 'Low Oxygen (<95%)',
+    spo2Normal: 'Normal Oxygen (>95%)',
+    hbTitle: 'Hemoglobin (Hb)',
+    hbAnemia: 'Moderate Anemia Warning',
+    hbNormal: 'Normal Safe Range',
+    tempTitle: 'Body Temperature',
+    tempNormal: 'Afebrile (Normal)',
+    notesTitle: 'ASHA Field Clinical Observations & Notes',
+
+    // Labs Tab
+    labsHeader: 'Government Health Centre Diagnostic Lab Records',
+    testsAvailable: 'Tests Recorded',
+    statusNormal: 'Normal',
+    statusElevated: 'Elevated',
+    statusCritical: 'Critical',
+    normalRange: 'Normal Range',
     doctorRemarks: 'Doctor Remarks',
-    prescribedMeds: 'Prescribed Regimen',
+    performedAt: 'Testing Facility',
+    testDate: 'Date',
+
+    // Prescriptions Tab
+    prescriptionsHeader: 'Active PHC Medical Officer Prescriptions',
+    prescriptionsAvailable: 'Medications Prescribed',
     dosage: 'Dosage',
     timing: 'Timing',
     days: 'Days',
-    issuedBy: 'Issued By',
-    beforeFood: 'Before Food (खाली पेट)',
-    afterFood: 'After Food (खाने के बाद)',
-    withFood: 'With Food (भोजन के साथ)',
+    issuedBy: 'Prescribed By',
+    beforeFood: 'Before Food',
+    afterFood: 'After Food',
+    withFood: 'With Food'
   },
   hi: {
+    // Top bar
     tabField: 'आशा साथी',
     tabLab: 'सिंक सिमुलेटर',
     tabSecurity: 'सुरक्षा वॉल्ट',
     tabFlow: 'सिस्टम फ्लो',
     stageConflict: 'टकराव उत्पन्न करें',
     reset: 'रीसेट',
-    roleAsha: 'आशा कार्यकर्ता',
-    roleMo: 'चिकित्सा अधिकारी',
+    roleAsha: 'आशा कार्यकर्ता (PIN 1234)',
+    roleMo: 'चिकित्सा अधिकारी (PIN 9999)',
+
+    // Header banner
+    bannerTitle: 'ग्रामीण स्वास्थ्य साथी (GramHealth)',
+    bannerSubtitle: 'आशा कार्यकर्ता एवं प्राथमिक स्वास्थ्य केंद्र (PHC) ऑफ़लाइन क्लिनिकल रिकॉर्ड',
+    nhmBadge: 'राष्ट्रीय स्वास्थ्य मिशन (NHM)',
+    nodeA: '📱 आशा टैबलेट (Node A)',
+    nodeB: '💻 PHC क्लीनिक (Node B)',
+    online: 'ऑनलाइन',
+    offline: 'ऑफलाइन',
+    syncNow: 'सिंक करें',
+
+    // Left List
     searchPlaceholder: 'नाम, ABHA ID या गाँव से खोजें...',
     newPatientBtn: 'नया मरीज',
     patientDirectory: 'मरीज सूची',
-    tabVitals: '1. शारीरिक जाँच (Vitals)',
-    tabLabs: '2. PHC लैब रिपोर्ट (Labs)',
-    tabPrescriptions: '3. डॉक्टर की दवाइयाँ',
-    shareRecordBtn: 'रिकॉर्ड साझा करें',
-    newVisitBtn: 'नई विज़िट दर्ज करें',
-    offlineBanner: 'ऑफ़लाइन मोड (डेटा डिवाइस में सुरक्षित रूप से संचित है)',
-    onlineBanner: 'ऑनलाइन (PHC क्लाउड से सिंक हेतु तैयार)',
-    bp: 'रक्तचाप (BP)',
-    heartRate: 'हृदय गति (HR)',
-    spo2: 'ऑक्सीजन स्तर (SpO2)',
-    hemoglobin: 'हीमोग्लोबिन (Hb)',
-    temperature: 'शरीर का तापमान',
-    respiratoryRate: 'श्वसन दर (RR)',
-    clinicalNotes: 'नैदानिक परीक्षण एवं लक्षण नोट्स',
-    medications: 'दवा एवं स्टॉक वितरण',
-    saveVisit: 'क्लिनिकल डेटा सुरक्षित करें',
-    resolveConflict: '3-तरफा टकराव हल करें',
-    normal: 'सामान्य स्थिति',
-    highRisk: 'गंभीर जोखिम',
-    anemia: 'रक्ताल्पता (एनीमिया) चेतावनी',
-    hypoxemia: 'कम ऑक्सीजन स्तर चेतावनी',
+    healthCard: 'स्वास्थ्य कार्ड',
     female: 'महिला',
     male: 'पुरुष',
     years: 'वर्ष',
+
+    // Active Profile Header & Actions
+    shareRecordBtn: 'रिकॉर्ड साझा करें',
+    newVisitBtn: 'शारीरिक जाँच दर्ज करें',
+    resolveConflict: 'मतभेद हल करें',
+
+    // Tabs
+    tabVitals: '1. शारीरिक जाँच (Vitals)',
+    tabLabs: '2. PHC लैब रिपोर्ट',
+    tabPrescriptions: '3. डॉक्टर की दवाइयाँ',
+
+    // Vitals Cards
+    bpTitle: 'रक्तचाप (Blood Pressure)',
+    bpHigher: 'उच्च रक्तचाप (Stage 1)',
+    bpNormal: 'सामान्य सीमा',
+    hrTitle: 'हृदय गति (Heart Rate)',
+    hrRegular: 'नियमित ताल (Regular)',
+    spo2Title: 'ऑक्सीजन स्तर (SpO2)',
+    spo2Low: 'कम ऑक्सीजन (<95%)',
+    spo2Normal: 'सामान्य ऑक्सीजन (>95%)',
+    hbTitle: 'हीमोग्लोबिन (Hb)',
+    hbAnemia: 'रक्ताल्पता (एनीमिया) चेतावनी',
+    hbNormal: 'सुरक्षित सामान्य स्तर',
+    tempTitle: 'शरीर का तापमान',
+    tempNormal: 'सामान्य (बुखार नहीं)',
+    notesTitle: 'आशा कार्यकर्ता नैदानिक टिप्पणियाँ एवं फील्ड प्रेक्षण',
+
+    // Labs Tab
+    labsHeader: 'सरकारी स्वास्थ्य केंद्र लैब परिणाम (PHC Diagnostics)',
+    testsAvailable: 'परीक्षण उपलब्ध',
+    statusNormal: 'सामान्य',
+    statusElevated: 'मध्यम',
+    statusCritical: 'गंभीर',
+    normalRange: 'सामान्य सीमा',
     doctorRemarks: 'चिकित्सक टिप्पणी',
-    prescribedMeds: 'दवाइयों की खुराक',
+    performedAt: 'जाँच केंद्र',
+    testDate: 'जाँच दिनांक',
+
+    // Prescriptions Tab
+    prescriptionsHeader: 'प्राथमिक स्वास्थ्य केंद्र डॉक्टर की दवाइयाँ',
+    prescriptionsAvailable: 'दवाइयाँ उपलब्ध',
     dosage: 'मात्रा',
-    timing: 'सेवन का समय',
+    timing: 'सेवन समय',
     days: 'दिन',
-    issuedBy: 'द्वारा जारी',
+    issuedBy: 'परामर्शक',
     beforeFood: 'खाली पेट',
     afterFood: 'खाने के बाद',
-    withFood: 'भोजन के साथ',
+    withFood: 'भोजन के साथ'
   }
 };
 
