@@ -14,7 +14,11 @@ import {
   Wifi,
   WifiOff,
   QrCode,
-  LayoutGrid
+  LayoutGrid,
+  Tablet,
+  Monitor,
+  ClipboardList,
+  Phone
 } from 'lucide-react';
 import { PatientRecord, NodeId, UserRole, LabInvestigation, StructuredPrescription } from '../types/clinical';
 import { storageEngine } from '../services/storageEngine';
@@ -322,23 +326,25 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
           <div className="flex items-center bg-canvas p-0.5 rounded-sm border border-stonehairline">
             <button
               onClick={() => setActiveNode('NODE_A')}
-              className={`px-2.5 py-1 rounded-xs font-semibold transition-colors cursor-pointer ${
+              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-xs font-semibold transition-colors cursor-pointer ${
                 activeNode === 'NODE_A'
                   ? 'bg-paper text-charcoal shadow-2xs border border-stonehairline/60'
                   : 'text-stone-500 hover:text-charcoal'
               }`}
             >
-              {t('nodeA')}
+              <Tablet className="w-3.5 h-3.5 text-stone-500" />
+              <span>{t('nodeA')}</span>
             </button>
             <button
               onClick={() => setActiveNode('NODE_B')}
-              className={`px-2.5 py-1 rounded-xs font-semibold transition-colors cursor-pointer ${
+              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-xs font-semibold transition-colors cursor-pointer ${
                 activeNode === 'NODE_B'
                   ? 'bg-paper text-charcoal shadow-2xs border border-stonehairline/60'
                   : 'text-stone-500 hover:text-charcoal'
               }`}
             >
-              {t('nodeB')}
+              <Monitor className="w-3.5 h-3.5 text-stone-500" />
+              <span>{t('nodeB')}</span>
             </button>
           </div>
 
@@ -377,19 +383,21 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
       <div className="flex md:hidden items-center bg-paper p-1 border border-stonehairline rounded-sm text-xs font-mono shadow-2xs">
         <button
           onClick={() => setMobileView('DIRECTORY')}
-          className={`flex-1 py-1.5 px-2 rounded-xs text-center font-bold transition-colors ${
+          className={`flex-1 py-1.5 px-2 rounded-xs text-center font-bold transition-colors flex items-center justify-center gap-1.5 ${
             mobileView === 'DIRECTORY' ? 'bg-slateteal text-white' : 'text-stone-600'
           }`}
         >
-          📋 {t('patientDirectory')} ({filteredPatients.length})
+          <ClipboardList className="w-3.5 h-3.5" />
+          <span>{t('patientDirectory')} ({filteredPatients.length})</span>
         </button>
         <button
           onClick={() => setMobileView('CHART')}
-          className={`flex-1 py-1.5 px-2 rounded-xs text-center font-bold transition-colors ${
+          className={`flex-1 py-1.5 px-2 rounded-xs text-center font-bold transition-colors flex items-center justify-center gap-1.5 ${
             mobileView === 'CHART' ? 'bg-slateteal text-white' : 'text-stone-600'
           }`}
         >
-          🩺 {t('healthCard')} {selectedPatient ? `• ${selectedPatient.fullName}` : ''}
+          <Stethoscope className="w-3.5 h-3.5" />
+          <span>{t('healthCard')} {selectedPatient ? `• ${selectedPatient.fullName}` : ''}</span>
         </button>
       </div>
 
@@ -524,7 +532,8 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
                         <>
                           <span>•</span>
                           <span className="flex items-center gap-1 text-stone-600">
-                            📞 {selectedPatient.phone}
+                            <Phone className="w-3 h-3 text-stone-400" />
+                            <span>{selectedPatient.phone}</span>
                           </span>
                         </>
                       )}

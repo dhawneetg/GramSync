@@ -11,7 +11,8 @@ import {
   CheckCircle, 
   Edit3,
   FlaskConical,
-  Pill
+  Pill,
+  Cloud
 } from 'lucide-react';
 import { PatientRecord, NodeId, NetworkMode, UserRole } from '../types/clinical';
 import { storageEngine } from '../services/storageEngine';
@@ -85,30 +86,33 @@ export const DualNodeSyncLab: React.FC<Props> = ({ userRole }) => {
       </div>
 
       {/* Mobile Node Switcher Tab Bar */}
-      <div className="flex lg:hidden items-center bg-white p-1 border border-stone-200 rounded-xl text-xs font-medium shadow-xs">
+      <div className="flex lg:hidden items-center bg-white p-1 border border-stone-200 rounded-sm text-xs font-mono shadow-xs">
         <button
           onClick={() => setMobileActiveNode('NODE_A')}
-          className={`flex-1 py-1.5 px-2 rounded-lg text-center font-bold transition-all duration-200 ${
+          className={`flex-1 py-1.5 px-2 rounded-xs text-center font-bold transition-all duration-200 flex items-center justify-center gap-1.5 ${
             mobileActiveNode === 'NODE_A' ? 'bg-amber-100 text-amber-900 border border-amber-300 shadow-xs' : 'text-stone-500'
           }`}
         >
-          📱 Node A (ASHA)
+          <Tablet className="w-3.5 h-3.5" />
+          <span>Node A (ASHA)</span>
         </button>
         <button
           onClick={() => setMobileActiveNode('SERVER')}
-          className={`flex-1 py-1.5 px-2 rounded-lg text-center font-bold transition-all duration-200 ${
+          className={`flex-1 py-1.5 px-2 rounded-xs text-center font-bold transition-all duration-200 flex items-center justify-center gap-1.5 ${
             mobileActiveNode === 'SERVER' ? 'bg-emerald-100 text-emerald-900 border border-emerald-300 shadow-xs' : 'text-stone-500'
           }`}
         >
-          ☁️ PHC Cloud
+          <Cloud className="w-3.5 h-3.5" />
+          <span>PHC Cloud</span>
         </button>
         <button
           onClick={() => setMobileActiveNode('NODE_B')}
-          className={`flex-1 py-1.5 px-2 rounded-lg text-center font-bold transition-all duration-200 ${
+          className={`flex-1 py-1.5 px-2 rounded-xs text-center font-bold transition-all duration-200 flex items-center justify-center gap-1.5 ${
             mobileActiveNode === 'NODE_B' ? 'bg-blue-100 text-blue-900 border border-blue-300 shadow-xs' : 'text-stone-500'
           }`}
         >
-          💻 Node B (Clinic)
+          <Monitor className="w-3.5 h-3.5" />
+          <span>Node B (Clinic)</span>
         </button>
       </div>
 
