@@ -442,11 +442,11 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
         </div>
 
         {/* Right Column: Detailed Patient Health Record & Dashboard */}
-        <div className={`md:col-span-8 flex-col bg-white border border-stone-200/80 rounded-2xl overflow-hidden shadow-xs ${mobileView === 'CHART' ? 'flex' : 'hidden md:flex'}`}>
+        <div className={`md:col-span-8 flex flex-col bg-white border border-stone-200/80 rounded-2xl overflow-hidden shadow-xs ${mobileView === 'CHART' ? 'flex' : 'hidden md:flex'}`}>
           {selectedPatient ? (
-            <div className="flex-1 flex flex-col overflow-y-auto">
+            <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
               {/* Patient Profile Header Card */}
-              <div className="p-4 sm:p-5 bg-gradient-to-r from-stone-50 to-emerald-50/30 border-b border-stone-200 flex flex-wrap items-center justify-between gap-3">
+              <div className="p-3.5 sm:p-4 bg-gradient-to-r from-stone-50 to-emerald-50/30 border-b border-stone-200 flex flex-wrap items-center justify-between gap-2.5 shrink-0">
                 <div className="flex items-start gap-3.5">
                   <div className="w-12 sm:w-14 h-12 sm:h-14 rounded-2xl bg-gradient-to-br from-emerald-600 via-teal-700 to-emerald-800 text-white flex flex-col items-center justify-center shadow-md shrink-0 border-2 border-emerald-400/30 ring-2 ring-emerald-100 relative">
                     <span className="text-sm sm:text-base font-bold font-mono">
@@ -486,6 +486,14 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
                         <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
                         ABHA ID: <strong className="text-stone-800 font-mono">{selectedPatient.abhaId || `91-${selectedPatient.patientId}-8801`}</strong>
                       </span>
+                      {selectedPatient.phone && (
+                        <>
+                          <span>•</span>
+                          <span className="flex items-center gap-1 font-mono text-stone-600">
+                            📞 {selectedPatient.phone}
+                          </span>
+                        </>
+                      )}
                       <span>•</span>
                       <span className="flex items-center gap-1">
                         <MapPin className="w-3.5 h-3.5 text-stone-400" />
@@ -500,31 +508,31 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
                 </div>
 
                 {/* Primary Action Buttons */}
-                <div className="flex flex-wrap items-center gap-2">
+                <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
                   {/* Quick Add Lab Test Button */}
                   <button
                     onClick={() => setShowAddLabModal(true)}
-                    className="px-3.5 py-2 text-xs font-bold bg-indigo-700 hover:bg-indigo-800 text-white rounded-xl flex items-center gap-1.5 shadow-sm transition-all hover:scale-[1.02] active:scale-95 cursor-pointer"
+                    className="px-3 py-1.5 text-xs font-bold bg-indigo-700 hover:bg-indigo-800 text-white rounded-xl flex items-center gap-1.5 shadow-sm transition-all hover:scale-[1.02] active:scale-95 cursor-pointer"
                     title="Add Diagnostic Lab Test Result"
                   >
                     <FlaskConical className="w-3.5 h-3.5 text-indigo-200" />
-                    <span>+ नया टेस्ट</span>
+                    <span>{t('addLabBtn')}</span>
                   </button>
 
                   {/* Quick Add Prescription Button */}
                   <button
                     onClick={() => setShowAddRxModal(true)}
-                    className="px-3.5 py-2 text-xs font-bold bg-rose-700 hover:bg-rose-800 text-white rounded-xl flex items-center gap-1.5 shadow-sm transition-all hover:scale-[1.02] active:scale-95 cursor-pointer"
+                    className="px-3 py-1.5 text-xs font-bold bg-rose-700 hover:bg-rose-800 text-white rounded-xl flex items-center gap-1.5 shadow-sm transition-all hover:scale-[1.02] active:scale-95 cursor-pointer"
                     title="Add Doctor Medicine Prescription"
                   >
                     <Pill className="w-3.5 h-3.5 text-rose-200" />
-                    <span>+ नई दवा</span>
+                    <span>{t('addPrescriptionBtn')}</span>
                   </button>
 
                   {/* Quick Medicine QR Button */}
                   <button
                     onClick={() => setShowPassportModal(true)}
-                    className="px-3.5 py-2 text-xs font-bold bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-300 rounded-xl flex items-center gap-1.5 shadow-xs transition-all hover:scale-[1.02] active:scale-95 cursor-pointer"
+                    className="px-3 py-1.5 text-xs font-bold bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-300 rounded-xl flex items-center gap-1.5 shadow-xs transition-all hover:scale-[1.02] active:scale-95 cursor-pointer"
                     title="View Offline Medicine & Prescription QR Code"
                   >
                     <QrCode className="w-3.5 h-3.5 text-emerald-700" />
@@ -534,7 +542,7 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
                   {/* Share Health Passport Button */}
                   <button
                     onClick={() => setShowPassportModal(true)}
-                    className="px-3.5 py-2 text-xs font-bold bg-white hover:bg-stone-50 text-emerald-800 border border-emerald-300/80 rounded-xl flex items-center gap-1.5 shadow-xs transition-all hover:scale-[1.02] active:scale-95 cursor-pointer"
+                    className="px-3 py-1.5 text-xs font-bold bg-white hover:bg-stone-50 text-emerald-800 border border-emerald-300/80 rounded-xl flex items-center gap-1.5 shadow-xs transition-all hover:scale-[1.02] active:scale-95 cursor-pointer"
                     title="Generate and Share Unified Patient Health Record"
                   >
                     <Share2 className="w-3.5 h-3.5 text-emerald-600" />
@@ -545,7 +553,7 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
                   {selectedPatient.syncStatus === 'CONFLICT' ? (
                     <button
                       onClick={() => setIsResolving(true)}
-                      className="px-4 py-2 text-xs font-bold bg-rose-700 hover:bg-rose-800 text-white rounded-xl flex items-center gap-1.5 shadow-sm transition-all animate-pulse cursor-pointer"
+                      className="px-3.5 py-1.5 text-xs font-bold bg-rose-700 hover:bg-rose-800 text-white rounded-xl flex items-center gap-1.5 shadow-sm transition-all animate-pulse cursor-pointer"
                     >
                       <AlertTriangle className="w-3.5 h-3.5" />
                       <span>{t('resolveConflict')}</span>
@@ -553,7 +561,7 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
                   ) : (
                     <button
                       onClick={() => setIsEditing(true)}
-                      className="px-4 py-2 text-xs font-bold bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl flex items-center gap-1.5 shadow-sm transition-all hover:scale-[1.02] active:scale-95 cursor-pointer"
+                      className="px-3.5 py-1.5 text-xs font-bold bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl flex items-center gap-1.5 shadow-sm transition-all hover:scale-[1.02] active:scale-95 cursor-pointer"
                     >
                       <Stethoscope className="w-3.5 h-3.5" />
                       <span>{t('newVisitBtn')}</span>
@@ -563,13 +571,13 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
               </div>
 
               {/* Patient Dashboard Tab Navigation */}
-              <div className="px-4 sm:px-5 pt-3 bg-white border-b border-stone-200 flex items-center gap-2 overflow-x-auto no-scrollbar">
+              <div className="px-4 sm:px-5 pt-2 pb-0 bg-white border-b border-stone-200 flex items-center gap-2 overflow-x-auto no-scrollbar shrink-0 shadow-2xs">
                 <button
                   onClick={() => setActiveDetailTab('ALL')}
                   className={`flex items-center gap-2 px-3.5 py-2 text-xs font-bold border-b-2 transition-all whitespace-nowrap cursor-pointer ${
                     activeDetailTab === 'ALL'
-                      ? 'border-emerald-700 text-emerald-800 bg-emerald-50/50 rounded-t-lg'
-                      : 'border-transparent text-stone-500 hover:text-stone-800'
+                      ? 'border-emerald-700 text-emerald-800 bg-emerald-50/60 rounded-t-lg shadow-2xs'
+                      : 'border-transparent text-stone-500 hover:text-stone-800 hover:bg-stone-50 rounded-t-lg'
                   }`}
                 >
                   <LayoutGrid className="w-4 h-4 text-emerald-600" />
@@ -580,20 +588,20 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
                   onClick={() => setActiveDetailTab('VITALS')}
                   className={`flex items-center gap-2 px-3.5 py-2 text-xs font-bold border-b-2 transition-all whitespace-nowrap cursor-pointer ${
                     activeDetailTab === 'VITALS'
-                      ? 'border-emerald-700 text-emerald-800 bg-emerald-50/50 rounded-t-lg'
-                      : 'border-transparent text-stone-500 hover:text-stone-800'
+                      ? 'border-emerald-700 text-emerald-800 bg-emerald-50/60 rounded-t-lg shadow-2xs'
+                      : 'border-transparent text-stone-500 hover:text-stone-800 hover:bg-stone-50 rounded-t-lg'
                   }`}
                 >
                   <Activity className="w-4 h-4 text-emerald-600" />
-                  <span>{t('tabVitals')}</span>
+                  <span>{t('tabVitals')} (5)</span>
                 </button>
 
                 <button
                   onClick={() => setActiveDetailTab('LABS')}
                   className={`flex items-center gap-2 px-3.5 py-2 text-xs font-bold border-b-2 transition-all whitespace-nowrap cursor-pointer ${
                     activeDetailTab === 'LABS'
-                      ? 'border-indigo-700 text-indigo-800 bg-indigo-50/50 rounded-t-lg'
-                      : 'border-transparent text-stone-500 hover:text-stone-800'
+                      ? 'border-indigo-700 text-indigo-800 bg-indigo-50/60 rounded-t-lg shadow-2xs'
+                      : 'border-transparent text-stone-500 hover:text-stone-800 hover:bg-stone-50 rounded-t-lg'
                   }`}
                 >
                   <FlaskConical className="w-4 h-4 text-indigo-600" />
@@ -604,14 +612,17 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
                   onClick={() => setActiveDetailTab('PRESCRIPTIONS')}
                   className={`flex items-center gap-2 px-3.5 py-2 text-xs font-bold border-b-2 transition-all whitespace-nowrap cursor-pointer ${
                     activeDetailTab === 'PRESCRIPTIONS'
-                      ? 'border-rose-700 text-rose-800 bg-rose-50/50 rounded-t-lg'
-                      : 'border-transparent text-stone-500 hover:text-stone-800'
+                      ? 'border-rose-700 text-rose-800 bg-rose-50/60 rounded-t-lg shadow-2xs'
+                      : 'border-transparent text-stone-500 hover:text-stone-800 hover:bg-stone-50 rounded-t-lg'
                   }`}
                 >
                   <Pill className="w-4 h-4 text-rose-600" />
                   <span>{t('tabPrescriptions')} ({selectedPatient.prescriptions?.length || 0})</span>
                 </button>
               </div>
+
+              {/* Scrollable Tab Views Container */}
+              <div className="flex-1 overflow-y-auto min-h-0 divide-y divide-stone-100">
 
               {/* Tab 1: Vitals & Field Triage View */}
               {(activeDetailTab === 'ALL' || activeDetailTab === 'VITALS') && (
@@ -808,7 +819,8 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
                   </div>
 
                   {(selectedPatient.prescriptions && selectedPatient.prescriptions.length > 0) ? (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       {selectedPatient.prescriptions.map(rx => (
                         <div key={rx.id} className="p-4 bg-white border border-stone-200 rounded-2xl shadow-2xs space-y-2">
                           <div className="flex items-center justify-between">
@@ -830,6 +842,14 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
                         </div>
                       ))}
                     </div>
+
+                    {selectedPatient.data.medicationsIssued && (
+                      <div className="p-3 bg-stone-50 border border-stone-200/80 rounded-xl text-xs text-stone-700 flex flex-wrap items-center justify-between gap-1.5 mt-3">
+                        <span className="text-stone-500 font-medium">फील्ड में वितरित दवाइयाँ (Field Dispensed):</span>
+                        <strong className="text-stone-800">{selectedPatient.data.medicationsIssued}</strong>
+                      </div>
+                    )}
+                    </>
                   ) : (
                     <div className="p-4 bg-stone-50 rounded-2xl text-xs text-stone-700">
                       {selectedPatient.data.medicationsIssued}
@@ -837,6 +857,7 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
                   )}
                 </div>
               )}
+              </div>
             </div>
           ) : (
             <div className="flex-1 flex items-center justify-center text-xs text-stone-400">
