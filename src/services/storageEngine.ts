@@ -518,7 +518,8 @@ class StorageEngine {
     nodeId: NodeId,
     patientId: string,
     updatedData: Partial<PatientRecord['data']>,
-    role: UserRole
+    role: UserRole,
+    demographics?: Partial<Pick<PatientRecord, 'fullName' | 'age' | 'gender' | 'villageCluster' | 'conditionTag' | 'phone' | 'abhaId'>>
   ): Promise<PatientRecord> {
     const patients = this.getPatients(nodeId);
     const index = patients.findIndex(p => p.patientId === patientId);
@@ -532,6 +533,7 @@ class StorageEngine {
 
     const updatedRecord: PatientRecord = {
       ...current,
+      ...(demographics || {}),
       syncStatus: 'LOCAL',
       lastModifiedBy: nodeId === 'NODE_A' ? 'ASHA_NODE_A' : 'CLINIC_NODE_B',
       lastModifiedAt: new Date().toISOString(),

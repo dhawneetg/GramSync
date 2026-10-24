@@ -20,6 +20,13 @@ export const PatientEditorModal: React.FC<Props> = ({
   onSaved
 }) => {
   const [formData, setFormData] = useState<VitalSignPayload>({ ...patient.data });
+  const [fullName, setFullName] = useState(patient.fullName);
+  const [age, setAge] = useState(patient.age);
+  const [gender, setGender] = useState<'Female' | 'Male' | 'Other'>(patient.gender);
+  const [phone, setPhone] = useState(patient.phone || '');
+  const [villageCluster, setVillageCluster] = useState(patient.villageCluster);
+  const [conditionTag, setConditionTag] = useState(patient.conditionTag);
+  const [showDemographics, setShowDemographics] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const [voiceLang, setVoiceLang] = useState<'en-IN' | 'hi-IN'>('en-IN');
@@ -108,7 +115,15 @@ export const PatientEditorModal: React.FC<Props> = ({
         nodeId,
         patient.patientId,
         formData,
-        userRole
+        userRole,
+        {
+          fullName: fullName.trim(),
+          age: Number(age),
+          gender,
+          phone: phone.trim(),
+          villageCluster: villageCluster.trim(),
+          conditionTag: conditionTag.trim()
+        }
       );
 
       // If online, immediately drain outbox to server
@@ -180,6 +195,113 @@ export const PatientEditorModal: React.FC<Props> = ({
 
         {/* Form Body */}
         <form onSubmit={handleSave} className="p-4 overflow-y-auto space-y-4">
+          {/* Patient Profile & Demographics Settings Accordion */}
+          <div className="border border-stone-200 rounded-xl bg-stone-50/70 p-3 space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-stone-800 flex items-center gap-1.5">
+                <span>👤</span>
+                <span>मरीज विवरण एवं प्रोफाइल सेटिंग्स (Profile & Gender)</span>
+              </span>
+              <button
+                type="button"
+                onClick={() => setShowDemographics(!showDemographics)}
+                className="text-[11px] font-bold text-emerald-700 hover:text-emerald-800 underline cursor-pointer"
+              >
+                {showDemographics ? 'कम विवरण छुपाएं (Hide)' : 'प्रोफाइल / लिंग बदलें (Edit Profile)'}
+              </button>
+            </div>
+
+            {showDemographics && (
+              <div className="pt-2 border-t border-stone-200 space-y-3 animate-in fade-in duration-150">
+                {/* Gender Switcher */}
+                <div>
+                  <label className="block text-[11px] font-bold text-stone-600 mb-1.5">
+                    लिंग (Gender Selection)
+                  </label>
+                  <div className="grid grid-cols-3 gap-2">
+                    {(['Female', 'Male', 'Other'] as const).map(g => (
+                      <button
+                        key={g}
+                        type="button"
+                        onClick={() => setGender(g)}
+                        className={`py-1.5 px-3 rounded-lg text-xs font-bold transition-all border flex items-center justify-center gap-1.5 cursor-pointer ${
+                          gender === g
+                            ? g === 'Female'
+                              ? 'bg-rose-50 border-rose-300 text-rose-800 shadow-2xs'
+                              : g === 'Male'
+                              ? 'bg-blue-50 border-blue-300 text-blue-800 shadow-2xs'
+                              : 'bg-emerald-50 border-emerald-300 text-emerald-800 shadow-2xs'
+                            : 'bg-white border-stone-200 text-stone-600 hover:bg-stone-100'
+                        }`}
+                      >
+                        <span>{g === 'Female' ? '👩' : g === 'Male' ? '👨' : '🧑'}</span>
+                        <span>{g === 'Female' ? 'महिला (Female)' : g === 'Male' ? 'पुरुष (Male)' : 'अन्य (Other)'}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-[11px] font-bold text-stone-600 mb-1">पूरा नाम (Full Name)</label>
+                    <input
+                      type="text"
+                      required
+                      value={fullName}
+                      onChange={e => setFullName(e.target.value)}
+                      className="w-full bg-white border border-stone-200 px-2.5 py-1.5 rounded-lg text-xs text-stone-900 font-semibold focus:outline-emerald-600"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <label className="block text-[11px] font-bold text-stone-600 mb-1">उम्र (Age)</label>
+                      <input
+                        type="number"
+                        min={1}
+                        max={110}
+                        required
+                        value={age}
+                        onChange={e => setAge(Number(e.target.value))}
+                        className="w-full bg-white border border-stone-200 px-2.5 py-1.5 rounded-lg text-xs text-stone-900 focus:outline-emerald-600"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[11px] font-bold text-stone-600 mb-1">मोबाइल (Phone)</label>
+                      <input
+                        type="text"
+                        value={phone}
+                        onChange={e => setPhone(e.target.value)}
+                        className="w-full bg-white border border-stone-200 px-2.5 py-1.5 rounded-lg text-xs text-stone-900 focus:outline-emerald-600 font-mono"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-[11px] font-bold text-stone-600 mb-1">स्वास्थ्य स्थिति (Condition Tag)</label>
+                    <input
+                      type="text"
+                      value={conditionTag}
+                      onChange={e => setConditionTag(e.target.value)}
+                      className="w-full bg-white border border-stone-200 px-2.5 py-1.5 rounded-lg text-xs text-stone-900 focus:outline-emerald-600"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[11px] font-bold text-stone-600 mb-1">गाँव / उप-केंद्र (Village Cluster)</label>
+                    <input
+                      type="text"
+                      value={villageCluster}
+                      onChange={e => setVillageCluster(e.target.value)}
+                      className="w-full bg-white border border-stone-200 px-2.5 py-1.5 rounded-lg text-xs text-stone-900 focus:outline-emerald-600"
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
           {/* Vitals Grid */}
           <div>
             <div className="text-[11px] font-mono font-bold uppercase tracking-wider text-mutedink mb-2">
