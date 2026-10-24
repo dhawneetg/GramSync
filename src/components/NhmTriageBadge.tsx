@@ -24,8 +24,8 @@ export const NhmTriageBadge: React.FC<Props> = ({ patient, alerts: providedAlert
             compact ? 'px-1.5 py-0.5 text-[9px]' : 'px-2 py-0.5 text-[10px]'
           } ${
             alert.severity === 'CRITICAL'
-              ? 'bg-red-100/90 border-red-500 text-red-950 font-bold ring-1 ring-red-400'
-              : 'bg-amber-100/90 border-amber-500 text-amber-950 font-semibold'
+              ? 'bg-rose-50 border-rose-300 text-rose-900 font-bold'
+              : 'bg-amber-50 border-amber-300 text-amber-900 font-semibold'
           }`}
         >
           {alert.severity === 'CRITICAL' ? (

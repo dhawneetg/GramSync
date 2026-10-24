@@ -56,25 +56,25 @@ export const AddPrescriptionModal: React.FC<Props> = ({ patientName, onClose, on
 
   return (
     <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center z-50 p-3 sm:p-4 animate-in fade-in duration-200">
-      <div className="bg-white border border-stone-200 w-full max-w-lg rounded-2xl shadow-2xl flex flex-col max-h-[92vh] overflow-hidden">
+      <div className="bg-paper border border-stonehairline w-full max-w-lg rounded-sm shadow-xl flex flex-col max-h-[92vh] overflow-hidden">
         {/* Header */}
-        <div className="px-5 py-3.5 bg-gradient-to-r from-rose-800 to-rose-950 text-white flex items-center justify-between">
+        <div className="px-4 py-3 bg-paper border-b border-stonehairline text-charcoal flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center">
-              <Pill className="w-4 h-4 text-rose-300" />
+            <div className="w-8 h-8 rounded-sm bg-slateteal text-white flex items-center justify-center shadow-2xs">
+              <Pill className="w-4 h-4 text-white" />
             </div>
             <div>
-              <h3 className="text-sm font-bold tracking-tight">
+              <h3 className="text-sm font-bold tracking-tight text-charcoal font-sans">
                 नई डॉक्टर पर्ची / दवा जोड़ें (Add Prescription)
               </h3>
-              <p className="text-[11px] text-rose-200">
-                मरीज: <strong className="text-white">{patientName}</strong>
+              <p className="text-[11px] text-mutedink font-mono">
+                मरीज: <strong className="text-charcoal">{patientName}</strong>
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="text-white/70 hover:text-white p-1 rounded-lg hover:bg-white/10 transition-colors cursor-pointer"
+            className="text-stone-400 hover:text-charcoal p-1 rounded-sm hover:bg-canvas transition-colors cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
@@ -84,7 +84,7 @@ export const AddPrescriptionModal: React.FC<Props> = ({ patientName, onClose, on
         <form onSubmit={handleSubmit} className="p-4 sm:p-5 space-y-4 overflow-y-auto">
           {/* Preset Buttons */}
           <div>
-            <label className="text-[11px] font-bold uppercase text-stone-500 block mb-1.5">
+            <label className="text-[10px] font-mono font-bold uppercase text-mutedink block mb-1.5">
               सामान्य आवश्यक दवाइयाँ (Essential PHC Medicine Formulary):
             </label>
             <div className="flex flex-wrap gap-1.5">
@@ -93,10 +93,10 @@ export const AddPrescriptionModal: React.FC<Props> = ({ patientName, onClose, on
                   type="button"
                   key={d.name}
                   onClick={() => handleSelectPreset(d)}
-                  className={`text-[11px] px-2.5 py-1 rounded-lg border font-medium transition-colors cursor-pointer ${
+                  className={`text-[11px] px-2 py-1 rounded-sm border font-medium transition-colors cursor-pointer font-mono ${
                     medicineName === d.name 
-                      ? 'bg-rose-50 border-rose-300 text-rose-900 font-bold' 
-                      : 'bg-stone-50 border-stone-200 text-stone-700 hover:bg-stone-100'
+                      ? 'bg-slateteal text-white border-slateteal font-semibold shadow-2xs' 
+                      : 'bg-canvas border-stonehairline text-stone-700 hover:bg-stone-200'
                   }`}
                 >
                   {d.name.split(' ')[0]}
@@ -213,17 +213,17 @@ export const AddPrescriptionModal: React.FC<Props> = ({ patientName, onClose, on
           </div>
 
           {/* Actions */}
-          <div className="pt-2 flex items-center justify-end gap-2 border-t border-stone-100">
+          <div className="pt-2 flex items-center justify-end gap-2 border-t border-stonehairline">
             <button
               type="button"
               onClick={onClose}
-              className="px-3.5 py-2 text-xs font-semibold text-stone-600 hover:bg-stone-100 rounded-xl transition-colors cursor-pointer"
+              className="px-3 py-1.5 text-xs font-semibold text-stone-600 hover:text-charcoal bg-paper hover:bg-canvas border border-stonehairline rounded-sm transition-colors cursor-pointer"
             >
               {t('cancel')}
             </button>
             <button
               type="submit"
-              className="px-4 py-2 text-xs font-bold bg-rose-700 hover:bg-rose-800 text-white rounded-xl shadow-xs transition-colors flex items-center gap-1.5 cursor-pointer"
+              className="px-3.5 py-1.5 text-xs font-bold bg-slateteal hover:bg-slateteal-hover text-white rounded-sm shadow-xs border border-slateteal transition-colors flex items-center gap-1.5 cursor-pointer"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>{t('saveReport')}</span>

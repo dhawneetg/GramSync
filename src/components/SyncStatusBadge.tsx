@@ -14,19 +14,19 @@ export const SyncStatusBadge: React.FC<Props> = ({ status, revision, className =
 
   switch (status) {
     case 'LOCAL':
-      badgeStyles = 'bg-[#F3F4F6] border-[#9CA3AF] text-[#374151]';
+      badgeStyles = 'bg-canvas border-stonehairline text-stone-600';
       content = '● LOCAL ONLY';
       break;
     case 'PENDING':
-      badgeStyles = 'bg-[#FEF3C7] border-[#D97706] text-[#92400E] animate-pulse';
+      badgeStyles = 'bg-amber-50 border-amber-300 text-amber-900 animate-pulse';
       content = '↻ OUTBOX QUEUED';
       break;
     case 'SYNCED':
-      badgeStyles = 'bg-[#DCFCE7] border-[#15803D] text-[#14532D]';
+      badgeStyles = 'bg-emerald-50/80 border-emerald-300 text-emerald-800';
       content = `✓ VERIFIED v${revision ?? 1}`;
       break;
     case 'CONFLICT':
-      badgeStyles = 'bg-[#FEE2E2] border-[#B91C1C] text-[#7F1D1D] font-bold ring-1 ring-red-400';
+      badgeStyles = 'bg-rose-50 border-rose-400 text-rose-900 font-bold';
       content = '! REVISION CONFLICT';
       break;
   }

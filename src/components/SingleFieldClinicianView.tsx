@@ -6,10 +6,7 @@ import {
   Stethoscope, 
   ShieldCheck, 
   AlertTriangle, 
-  Heart, 
   Activity, 
-  Thermometer, 
-  Wind, 
   Pill, 
   Share2,
   FlaskConical,
@@ -297,48 +294,48 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
   };
 
   return (
-    <div className="flex-1 flex flex-col p-2 sm:p-4 gap-3 bg-stone-100/60 overflow-y-auto lg:overflow-hidden select-none">
-      {/* Top Rural Health Banner */}
-      <div className="bg-white border border-stone-200/80 p-3 sm:p-4 rounded-2xl shadow-xs flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-700 text-white flex items-center justify-center shadow-sm shrink-0">
-            <Stethoscope className="w-5 h-5" />
+    <div className="flex-1 flex flex-col p-2 sm:p-3 gap-2.5 bg-canvas overflow-y-auto lg:overflow-hidden select-none">
+      {/* Top Clinical Station Strip */}
+      <div className="bg-paper border border-stonehairline p-2.5 sm:px-3 sm:py-2 rounded-sm shadow-2xs flex flex-wrap items-center justify-between gap-2.5 shrink-0">
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-sm bg-slateteal text-white flex items-center justify-center shadow-2xs shrink-0">
+            <Stethoscope className="w-4 h-4" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-sm sm:text-base font-bold text-stone-900 tracking-tight">
+              <h1 className="text-xs sm:text-sm font-bold text-charcoal tracking-tight font-sans">
                 {t('bannerTitle')}
               </h1>
-              <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 hidden sm:inline">
+              <span className="text-[10px] font-mono font-bold uppercase px-2 py-0.5 rounded-sm bg-canvas text-stone-600 border border-stonehairline hidden sm:inline">
                 {t('nhmBadge')}
               </span>
             </div>
-            <p className="text-xs text-stone-500 mt-0.5">
+            <p className="text-[11px] text-mutedink">
               {t('bannerSubtitle')}
             </p>
           </div>
         </div>
 
         {/* Network & Quick Sync Controls */}
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2 font-mono text-xs">
           {/* Node Switcher */}
-          <div className="flex items-center bg-stone-100 p-0.5 rounded-xl border border-stone-200 text-xs">
+          <div className="flex items-center bg-canvas p-0.5 rounded-sm border border-stonehairline">
             <button
               onClick={() => setActiveNode('NODE_A')}
-              className={`px-3 py-1 rounded-lg font-bold transition-all ${
+              className={`px-2.5 py-1 rounded-xs font-semibold transition-colors cursor-pointer ${
                 activeNode === 'NODE_A'
-                  ? 'bg-white text-stone-900 shadow-xs'
-                  : 'text-stone-500 hover:text-stone-900'
+                  ? 'bg-paper text-charcoal shadow-2xs border border-stonehairline/60'
+                  : 'text-stone-500 hover:text-charcoal'
               }`}
             >
               {t('nodeA')}
             </button>
             <button
               onClick={() => setActiveNode('NODE_B')}
-              className={`px-3 py-1 rounded-lg font-bold transition-all ${
+              className={`px-2.5 py-1 rounded-xs font-semibold transition-colors cursor-pointer ${
                 activeNode === 'NODE_B'
-                  ? 'bg-white text-stone-900 shadow-xs'
-                  : 'text-stone-500 hover:text-stone-900'
+                  ? 'bg-paper text-charcoal shadow-2xs border border-stonehairline/60'
+                  : 'text-stone-500 hover:text-charcoal'
               }`}
             >
               {t('nodeB')}
@@ -348,14 +345,14 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
           {/* Online/Offline Badge */}
           <button
             onClick={() => syncCoordinator.setNetworkMode(activeNode, networkMode === 'ONLINE' ? 'OFFLINE' : 'ONLINE')}
-            className={`flex items-center justify-center min-w-[90px] gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer border ${
+            className={`flex items-center justify-center min-w-[85px] gap-1.5 px-2.5 py-1 rounded-sm text-xs font-semibold transition-colors cursor-pointer border shadow-2xs ${
               networkMode === 'ONLINE'
-                ? 'bg-emerald-50 text-emerald-800 border-emerald-200 hover:bg-emerald-100'
-                : 'bg-rose-50 text-rose-800 border-rose-200 hover:bg-rose-100'
+                ? 'bg-emerald-50/70 text-emerald-800 border-emerald-300 hover:bg-emerald-100/70'
+                : 'bg-rose-50/70 text-rose-800 border-rose-300 hover:bg-rose-100/70'
             }`}
             title="Click to toggle network state"
           >
-            {networkMode === 'ONLINE' ? <Wifi className="w-3.5 h-3.5 text-emerald-600" /> : <WifiOff className="w-3.5 h-3.5 text-rose-600" />}
+            {networkMode === 'ONLINE' ? <Wifi className="w-3.5 h-3.5 text-emerald-700" /> : <WifiOff className="w-3.5 h-3.5 text-rose-700" />}
             <span>{networkMode === 'ONLINE' ? t('online') : t('offline')}</span>
           </button>
 
@@ -363,12 +360,12 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
           <button
             onClick={() => syncCoordinator.drainOutbox(activeNode)}
             disabled={networkMode === 'OFFLINE' || isSyncing}
-            className="flex items-center justify-center min-w-[95px] gap-1.5 px-3 py-1.5 text-xs font-bold bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl shadow-xs transition-all disabled:opacity-40 cursor-pointer"
+            className="flex items-center justify-center min-w-[90px] gap-1.5 px-3 py-1 text-xs font-bold bg-slateteal hover:bg-slateteal-hover text-white rounded-sm border border-slateteal shadow-2xs transition-colors disabled:opacity-40 cursor-pointer"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isSyncing ? 'animate-spin' : ''}`} />
             <span>{t('syncNow')}</span>
             {outbox.length > 0 && (
-              <span className="bg-amber-400 text-amber-950 text-[10px] px-1.5 py-0.2 rounded-full font-bold ml-0.5">
+              <span className="bg-amber-400 text-amber-950 text-[10px] px-1.5 py-0.2 rounded-xs font-bold ml-0.5">
                 {outbox.length}
               </span>
             )}
@@ -377,19 +374,19 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
       </div>
 
       {/* Mobile Directory / Chart Switcher */}
-      <div className="flex md:hidden items-center bg-white p-1 border border-stone-200 rounded-xl text-xs">
+      <div className="flex md:hidden items-center bg-paper p-1 border border-stonehairline rounded-sm text-xs font-mono shadow-2xs">
         <button
           onClick={() => setMobileView('DIRECTORY')}
-          className={`flex-1 py-1.5 px-2 rounded-lg text-center font-bold transition-all ${
-            mobileView === 'DIRECTORY' ? 'bg-emerald-700 text-white shadow-xs' : 'text-stone-600'
+          className={`flex-1 py-1.5 px-2 rounded-xs text-center font-bold transition-colors ${
+            mobileView === 'DIRECTORY' ? 'bg-slateteal text-white' : 'text-stone-600'
           }`}
         >
           📋 {t('patientDirectory')} ({filteredPatients.length})
         </button>
         <button
           onClick={() => setMobileView('CHART')}
-          className={`flex-1 py-1.5 px-2 rounded-lg text-center font-bold transition-all ${
-            mobileView === 'CHART' ? 'bg-emerald-700 text-white shadow-xs' : 'text-stone-600'
+          className={`flex-1 py-1.5 px-2 rounded-xs text-center font-bold transition-colors ${
+            mobileView === 'CHART' ? 'bg-slateteal text-white' : 'text-stone-600'
           }`}
         >
           🩺 {t('healthCard')} {selectedPatient ? `• ${selectedPatient.fullName}` : ''}
@@ -397,24 +394,24 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
       </div>
 
       {/* Main Workspace Split */}
-      <div className="flex-1 grid grid-cols-1 md:grid-cols-12 gap-3 min-h-0 overflow-y-auto md:overflow-hidden">
+      <div className="flex-1 grid grid-cols-1 md:grid-cols-12 gap-2.5 min-h-0 overflow-y-auto md:overflow-hidden">
         {/* Left Column: Patient Directory (मरीज सूची) */}
-        <div className={`md:col-span-4 flex-col bg-white border border-stone-200/80 rounded-2xl overflow-hidden shadow-xs ${mobileView === 'DIRECTORY' ? 'flex' : 'hidden md:flex'}`}>
+        <div className={`md:col-span-4 flex-col bg-paper border border-stonehairline rounded-sm overflow-hidden shadow-2xs ${mobileView === 'DIRECTORY' ? 'flex' : 'hidden md:flex'}`}>
           {/* Search & Add Patient Toolbar */}
-          <div className="p-3 bg-stone-50/70 border-b border-stone-200 flex items-center gap-2">
+          <div className="p-2.5 bg-canvas border-b border-stonehairline flex items-center gap-2">
             <div className="flex-1 relative">
-              <Search className="w-4 h-4 text-stone-400 absolute left-3 top-2.5" />
+              <Search className="w-3.5 h-3.5 text-stone-400 absolute left-2.5 top-2.5" />
               <input
                 type="text"
                 placeholder={t('searchPlaceholder')}
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
-                className="w-full bg-white border border-stone-200 pl-9 pr-3 py-1.5 text-xs text-stone-800 rounded-xl focus:outline-emerald-600 placeholder:text-stone-400 font-sans"
+                className="w-full bg-paper border border-stonehairline pl-8 pr-2.5 py-1 text-xs text-charcoal rounded-sm focus:outline-slateteal placeholder:text-stone-400 font-sans shadow-2xs"
               />
             </div>
             <button
               onClick={() => setIsCreatingNew(true)}
-              className="px-3 py-1.5 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold rounded-xl flex items-center gap-1 shadow-xs transition-colors cursor-pointer shrink-0"
+              className="px-2.5 py-1 bg-slateteal hover:bg-slateteal-hover text-white text-xs font-semibold rounded-sm flex items-center gap-1 shadow-2xs border border-slateteal transition-colors cursor-pointer shrink-0"
               title="Add New Patient"
             >
               <Plus className="w-3.5 h-3.5" />
@@ -423,7 +420,7 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
           </div>
 
           {/* Patient Directory List */}
-          <div className="flex-1 overflow-y-auto divide-y divide-stone-100 p-1.5 space-y-1">
+          <div className="flex-1 overflow-y-auto divide-y divide-stone-100 p-1 space-y-0.5">
             {filteredPatients.map(p => {
               const isSelected = p.patientId === selectedPatient?.patientId;
               const isHighRisk = p.conditionTag.toLowerCase().includes('htn') || p.conditionTag.toLowerCase().includes('anemia');
@@ -435,36 +432,36 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
                     setSelectedPatientId(p.patientId);
                     setMobileView('CHART');
                   }}
-                  className={`p-3 rounded-xl cursor-pointer transition-all ${
+                  className={`p-2.5 rounded-sm cursor-pointer transition-colors ${
                     isSelected 
-                      ? 'bg-emerald-50/80 border-2 border-emerald-600 shadow-xs' 
-                      : 'hover:bg-stone-50 border border-transparent'
+                      ? 'bg-slateteal-light/50 border-l-4 border-l-slateteal border-y-0 border-r-0 shadow-2xs' 
+                      : 'hover:bg-canvas/70 border-l-4 border-l-transparent'
                   }`}
                 >
-                  <div className="flex items-center gap-3">
-                    {/* Patient Avatar Circle */}
-                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold text-sm shrink-0 ${
+                  <div className="flex items-center gap-2.5">
+                    {/* Patient Avatar Tile */}
+                    <div className={`w-9 h-9 rounded-sm flex items-center justify-center font-mono font-bold text-xs shrink-0 border ${
                       isSelected 
-                        ? 'bg-emerald-700 text-white' 
+                        ? 'bg-slateteal text-white border-slateteal' 
                         : isHighRisk 
-                        ? 'bg-rose-100 text-rose-800' 
-                        : 'bg-stone-100 text-stone-700'
+                        ? 'bg-rose-50 text-rose-800 border-rose-200' 
+                        : 'bg-canvas text-stone-700 border-stonehairline'
                     }`}>
                       {p.fullName.charAt(0)}
                     </div>
 
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between mb-0.5">
-                        <span className="font-bold text-xs sm:text-sm text-stone-900 truncate">
+                        <span className="font-bold text-xs sm:text-sm text-charcoal truncate">
                           {p.fullName}
                         </span>
                         <SyncStatusBadge status={p.syncStatus} revision={p.revision} />
                       </div>
-                      <div className="text-[11px] text-stone-500 flex items-center justify-between">
+                      <div className="text-[11px] text-mutedink flex items-center justify-between font-mono">
                         <span>{p.gender === 'Female' ? t('female') : t('male')} • {p.age} {t('years')}</span>
-                        <span className="text-[10px] text-stone-400 font-mono">{p.patientId}</span>
+                        <span className="text-[10px] text-stone-400">{p.patientId}</span>
                       </div>
-                      <div className="text-[11px] font-semibold text-stone-700 truncate mt-0.5">
+                      <div className="text-[11px] font-medium text-stone-700 truncate mt-0.5">
                         {p.conditionTag}
                       </div>
                       <div className="mt-1">
@@ -479,32 +476,32 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
         </div>
 
         {/* Right Column: Detailed Patient Health Record & Dashboard */}
-        <div className={`md:col-span-8 flex flex-col bg-white border border-stone-200/80 rounded-2xl overflow-hidden shadow-xs ${mobileView === 'CHART' ? 'flex' : 'hidden md:flex'}`}>
+        <div className={`md:col-span-8 flex flex-col bg-paper border border-stonehairline rounded-sm overflow-hidden shadow-2xs ${mobileView === 'CHART' ? 'flex' : 'hidden md:flex'}`}>
           {selectedPatient ? (
             <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
               {/* Patient Profile Header Card */}
-              <div className="p-3.5 sm:p-4 bg-gradient-to-r from-stone-50 to-emerald-50/30 border-b border-stone-200 flex flex-wrap items-center justify-between gap-2.5 shrink-0">
-                <div className="flex items-start gap-3.5">
-                  <div className="w-12 sm:w-14 h-12 sm:h-14 rounded-2xl bg-gradient-to-br from-emerald-600 via-teal-700 to-emerald-800 text-white flex flex-col items-center justify-center shadow-md shrink-0 border-2 border-emerald-400/30 ring-2 ring-emerald-100 relative">
-                    <span className="text-sm sm:text-base font-bold font-mono">
+              <div className="p-3 sm:p-3.5 bg-paper border-b border-stonehairline flex flex-wrap items-center justify-between gap-3 shrink-0">
+                <div className="flex items-start gap-3">
+                  <div className="w-11 h-11 rounded-sm bg-canvas border border-stonehairline text-slateteal flex flex-col items-center justify-center shadow-2xs shrink-0 font-mono">
+                    <span className="text-sm font-bold tracking-tight">
                       {selectedPatient.fullName.split(' ').map(n => n[0]).join('').slice(0, 2)}
                     </span>
-                    <span className="text-[8px] uppercase tracking-wider text-emerald-100 font-medium">
+                    <span className="text-[8px] uppercase tracking-wider text-mutedink font-medium">
                       {selectedPatient.gender === 'Female' ? t('female') : t('male')}
                     </span>
                   </div>
                   <div>
                     <button
                       onClick={() => setMobileView('DIRECTORY')}
-                      className="md:hidden mb-1.5 px-2 py-0.5 text-[11px] font-bold bg-white border border-stone-200 rounded-lg text-stone-700 flex items-center gap-1 cursor-pointer"
+                      className="md:hidden mb-1.5 px-2 py-0.5 text-[11px] font-bold bg-canvas border border-stonehairline rounded-sm text-charcoal flex items-center gap-1 cursor-pointer"
                     >
                       ← {t('patientDirectory')}
                     </button>
                     <div className="flex flex-wrap items-center gap-2">
-                      <h2 className="text-base sm:text-lg font-bold text-stone-900">
+                      <h2 className="text-base sm:text-lg font-bold text-charcoal tracking-tight font-sans">
                         {selectedPatient.fullName}
                       </h2>
-                      <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-white border border-stone-200 text-stone-700 shadow-2xs">
+                      <span className="text-xs font-mono px-2 py-0.5 rounded-sm bg-canvas border border-stonehairline text-stone-700">
                         {selectedPatient.gender === 'Female' ? t('female') : t('male')}, {selectedPatient.age} {t('years')}
                       </span>
                       <SyncStatusBadge
@@ -518,21 +515,21 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
                       />
                     </div>
 
-                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-stone-500 mt-1">
+                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-mutedink mt-1 font-mono">
                       <span className="flex items-center gap-1">
-                        <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-                        ABHA ID: <strong className="text-stone-800 font-mono">{selectedPatient.abhaId || `91-${selectedPatient.patientId}-8801`}</strong>
+                        <ShieldCheck className="w-3.5 h-3.5 text-slateteal" />
+                        ABHA: <strong className="text-charcoal bg-stone-100 px-1 py-0.2 rounded-xs border border-stone-200">{selectedPatient.abhaId || `91-${selectedPatient.patientId}-8801`}</strong>
                       </span>
                       {selectedPatient.phone && (
                         <>
                           <span>•</span>
-                          <span className="flex items-center gap-1 font-mono text-stone-600">
+                          <span className="flex items-center gap-1 text-stone-600">
                             📞 {selectedPatient.phone}
                           </span>
                         </>
                       )}
                       <span>•</span>
-                      <span className="flex items-center gap-1">
+                      <span className="flex items-center gap-1 font-sans">
                         <MapPin className="w-3.5 h-3.5 text-stone-400" />
                         {selectedPatient.villageCluster}
                       </span>
@@ -544,53 +541,50 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
                   </div>
                 </div>
 
-                {/* Primary Action Buttons */}
+                {/* Patient Clinical Action Toolbar */}
                 <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
-                  {/* Quick Add Lab Test Button */}
+                  {/* Secondary Clinical Instrument Buttons */}
                   <button
                     onClick={() => setShowAddLabModal(true)}
-                    className="px-3 py-1.5 text-xs font-bold bg-indigo-700 hover:bg-indigo-800 text-white rounded-xl flex items-center gap-1.5 shadow-sm transition-all hover:scale-[1.02] active:scale-95 cursor-pointer"
+                    className="px-2.5 py-1.5 text-xs font-semibold bg-white hover:bg-stone-50 text-stone-700 border border-stonehairline rounded-sm flex items-center gap-1.5 shadow-2xs transition-colors cursor-pointer"
                     title="Add Diagnostic Lab Test Result"
                   >
-                    <FlaskConical className="w-3.5 h-3.5 text-indigo-200" />
+                    <FlaskConical className="w-3.5 h-3.5 text-stone-500" />
                     <span>{t('addLabBtn')}</span>
                   </button>
 
-                  {/* Quick Add Prescription Button */}
                   <button
                     onClick={() => setShowAddRxModal(true)}
-                    className="px-3 py-1.5 text-xs font-bold bg-rose-700 hover:bg-rose-800 text-white rounded-xl flex items-center gap-1.5 shadow-sm transition-all hover:scale-[1.02] active:scale-95 cursor-pointer"
+                    className="px-2.5 py-1.5 text-xs font-semibold bg-white hover:bg-stone-50 text-stone-700 border border-stonehairline rounded-sm flex items-center gap-1.5 shadow-2xs transition-colors cursor-pointer"
                     title="Add Doctor Medicine Prescription"
                   >
-                    <Pill className="w-3.5 h-3.5 text-rose-200" />
+                    <Pill className="w-3.5 h-3.5 text-stone-500" />
                     <span>{t('addPrescriptionBtn')}</span>
                   </button>
 
-                  {/* Quick Medicine QR Button */}
                   <button
                     onClick={() => setShowPassportModal(true)}
-                    className="px-3 py-1.5 text-xs font-bold bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-300 rounded-xl flex items-center gap-1.5 shadow-xs transition-all hover:scale-[1.02] active:scale-95 cursor-pointer"
+                    className="px-2.5 py-1.5 text-xs font-semibold bg-white hover:bg-stone-50 text-stone-700 border border-stonehairline rounded-sm flex items-center gap-1.5 shadow-2xs transition-colors cursor-pointer"
                     title="View Offline Medicine & Prescription QR Code"
                   >
-                    <QrCode className="w-3.5 h-3.5 text-emerald-700" />
+                    <QrCode className="w-3.5 h-3.5 text-stone-500" />
                     <span>{t('qrShareBtn')}</span>
                   </button>
 
-                  {/* Share Health Passport Button */}
                   <button
                     onClick={() => setShowPassportModal(true)}
-                    className="px-3 py-1.5 text-xs font-bold bg-white hover:bg-stone-50 text-emerald-800 border border-emerald-300/80 rounded-xl flex items-center gap-1.5 shadow-xs transition-all hover:scale-[1.02] active:scale-95 cursor-pointer"
+                    className="px-2.5 py-1.5 text-xs font-semibold bg-white hover:bg-stone-50 text-stone-700 border border-stonehairline rounded-sm flex items-center gap-1.5 shadow-2xs transition-colors cursor-pointer"
                     title="Generate and Share Unified Patient Health Record"
                   >
-                    <Share2 className="w-3.5 h-3.5 text-emerald-600" />
+                    <Share2 className="w-3.5 h-3.5 text-stone-500" />
                     <span>{t('shareRecordBtn')}</span>
                   </button>
 
-                  {/* Record Visit / Resolve Conflict Button */}
+                  {/* Primary CTA: Record Visit or Resolve Conflict */}
                   {selectedPatient.syncStatus === 'CONFLICT' ? (
                     <button
                       onClick={() => setIsResolving(true)}
-                      className="px-3.5 py-1.5 text-xs font-bold bg-rose-700 hover:bg-rose-800 text-white rounded-xl flex items-center gap-1.5 shadow-sm transition-all animate-pulse cursor-pointer"
+                      className="px-3.5 py-1.5 text-xs font-bold bg-rose-700 hover:bg-rose-800 text-white rounded-sm flex items-center gap-1.5 shadow-xs transition-colors animate-pulse cursor-pointer border border-rose-700"
                     >
                       <AlertTriangle className="w-3.5 h-3.5" />
                       <span>{t('resolveConflict')}</span>
@@ -598,7 +592,7 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
                   ) : (
                     <button
                       onClick={() => setIsEditing(true)}
-                      className="px-3.5 py-1.5 text-xs font-bold bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl flex items-center gap-1.5 shadow-sm transition-all hover:scale-[1.02] active:scale-95 cursor-pointer"
+                      className="px-3.5 py-1.5 text-xs font-bold bg-slateteal hover:bg-slateteal-hover text-white rounded-sm flex items-center gap-1.5 shadow-xs transition-colors cursor-pointer border border-slateteal"
                     >
                       <Stethoscope className="w-3.5 h-3.5" />
                       <span>{t('newVisitBtn')}</span>
@@ -608,53 +602,56 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
               </div>
 
               {/* Patient Dashboard Tab Navigation */}
-              <div className="px-4 sm:px-5 pt-2 pb-0 bg-white border-b border-stone-200 flex items-center gap-2 overflow-x-auto no-scrollbar shrink-0 shadow-2xs">
+              <div className="px-3 sm:px-4 pt-1 pb-0 bg-paper border-b border-stonehairline flex items-center gap-1 overflow-x-auto no-scrollbar shrink-0 shadow-2xs">
                 <button
                   onClick={() => setActiveDetailTab('ALL')}
-                  className={`flex items-center gap-2 px-3.5 py-2 text-xs font-bold border-b-2 transition-all whitespace-nowrap cursor-pointer ${
+                  className={`flex items-center gap-1.5 px-3 py-2 text-xs font-semibold border-b-2 transition-colors whitespace-nowrap cursor-pointer ${
                     activeDetailTab === 'ALL'
-                      ? 'border-emerald-700 text-emerald-800 bg-emerald-50/60 rounded-t-lg shadow-2xs'
-                      : 'border-transparent text-stone-500 hover:text-stone-800 hover:bg-stone-50 rounded-t-lg'
+                      ? 'border-slateteal text-slateteal bg-slateteal-light/30'
+                      : 'border-transparent text-stone-500 hover:text-charcoal hover:bg-canvas'
                   }`}
                 >
-                  <LayoutGrid className="w-4 h-4 text-emerald-600" />
+                  <LayoutGrid className="w-3.5 h-3.5 text-stone-500" />
                   <span>{t('tabAll')}</span>
                 </button>
 
                 <button
                   onClick={() => setActiveDetailTab('VITALS')}
-                  className={`flex items-center gap-2 px-3.5 py-2 text-xs font-bold border-b-2 transition-all whitespace-nowrap cursor-pointer ${
+                  className={`flex items-center gap-1.5 px-3 py-2 text-xs font-semibold border-b-2 transition-colors whitespace-nowrap cursor-pointer ${
                     activeDetailTab === 'VITALS'
-                      ? 'border-emerald-700 text-emerald-800 bg-emerald-50/60 rounded-t-lg shadow-2xs'
-                      : 'border-transparent text-stone-500 hover:text-stone-800 hover:bg-stone-50 rounded-t-lg'
+                      ? 'border-slateteal text-slateteal bg-slateteal-light/30'
+                      : 'border-transparent text-stone-500 hover:text-charcoal hover:bg-canvas'
                   }`}
                 >
-                  <Activity className="w-4 h-4 text-emerald-600" />
-                  <span>{t('tabVitals')} (5)</span>
+                  <Activity className="w-3.5 h-3.5 text-stone-500" />
+                  <span>{t('tabVitals')}</span>
+                  <span className={`px-1.5 py-0.2 text-[10px] font-mono rounded-xs font-bold ${activeDetailTab === 'VITALS' ? 'bg-slateteal text-white' : 'bg-canvas text-stone-600 border border-stonehairline'}`}>5</span>
                 </button>
 
                 <button
                   onClick={() => setActiveDetailTab('LABS')}
-                  className={`flex items-center gap-2 px-3.5 py-2 text-xs font-bold border-b-2 transition-all whitespace-nowrap cursor-pointer ${
+                  className={`flex items-center gap-1.5 px-3 py-2 text-xs font-semibold border-b-2 transition-colors whitespace-nowrap cursor-pointer ${
                     activeDetailTab === 'LABS'
-                      ? 'border-indigo-700 text-indigo-800 bg-indigo-50/60 rounded-t-lg shadow-2xs'
-                      : 'border-transparent text-stone-500 hover:text-stone-800 hover:bg-stone-50 rounded-t-lg'
+                      ? 'border-slateteal text-slateteal bg-slateteal-light/30'
+                      : 'border-transparent text-stone-500 hover:text-charcoal hover:bg-canvas'
                   }`}
                 >
-                  <FlaskConical className="w-4 h-4 text-indigo-600" />
-                  <span>{t('tabLabs')} ({selectedPatient.labReports?.length || 0})</span>
+                  <FlaskConical className="w-3.5 h-3.5 text-stone-500" />
+                  <span>{t('tabLabs')}</span>
+                  <span className={`px-1.5 py-0.2 text-[10px] font-mono rounded-xs font-bold ${activeDetailTab === 'LABS' ? 'bg-slateteal text-white' : 'bg-canvas text-stone-600 border border-stonehairline'}`}>{selectedPatient.labReports?.length || 0}</span>
                 </button>
 
                 <button
                   onClick={() => setActiveDetailTab('PRESCRIPTIONS')}
-                  className={`flex items-center gap-2 px-3.5 py-2 text-xs font-bold border-b-2 transition-all whitespace-nowrap cursor-pointer ${
+                  className={`flex items-center gap-1.5 px-3 py-2 text-xs font-semibold border-b-2 transition-colors whitespace-nowrap cursor-pointer ${
                     activeDetailTab === 'PRESCRIPTIONS'
-                      ? 'border-rose-700 text-rose-800 bg-rose-50/60 rounded-t-lg shadow-2xs'
-                      : 'border-transparent text-stone-500 hover:text-stone-800 hover:bg-stone-50 rounded-t-lg'
+                      ? 'border-slateteal text-slateteal bg-slateteal-light/30'
+                      : 'border-transparent text-stone-500 hover:text-charcoal hover:bg-canvas'
                   }`}
                 >
-                  <Pill className="w-4 h-4 text-rose-600" />
-                  <span>{t('tabPrescriptions')} ({selectedPatient.prescriptions?.length || 0})</span>
+                  <Pill className="w-3.5 h-3.5 text-stone-500" />
+                  <span>{t('tabPrescriptions')}</span>
+                  <span className={`px-1.5 py-0.2 text-[10px] font-mono rounded-xs font-bold ${activeDetailTab === 'PRESCRIPTIONS' ? 'bg-slateteal text-white' : 'bg-canvas text-stone-600 border border-stonehairline'}`}>{selectedPatient.prescriptions?.length || 0}</span>
                 </button>
               </div>
 
@@ -663,90 +660,112 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
 
               {/* Tab 1: Vitals & Field Triage View */}
               {(activeDetailTab === 'ALL' || activeDetailTab === 'VITALS') && (
-                <div className="p-4 sm:p-5 space-y-4 animate-in fade-in duration-150">
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                <div className="p-3.5 sm:p-4 space-y-3 animate-in fade-in duration-150">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
                     {/* BP */}
-                    <div className="p-3.5 bg-stone-50 rounded-2xl border border-stone-200/80">
-                      <div className="flex items-center justify-between text-stone-500 mb-1">
-                        <span className="text-[11px] font-bold uppercase tracking-wider">{t('bpTitle')}</span>
-                        <Activity className="w-4 h-4 text-rose-600" />
+                    <div className="p-3 bg-paper rounded-sm border border-stonehairline flex flex-col justify-between shadow-2xs hover:border-stone-400 transition-colors">
+                      <div className="flex items-center justify-between text-mutedink mb-1">
+                        <span className="text-[10px] font-mono font-bold uppercase tracking-wider">{t('bpTitle')}</span>
+                        <span className="text-[9px] font-mono text-stone-400">&lt;120/80</span>
                       </div>
-                      <div className="font-mono text-2xl font-bold tabular-nums text-stone-900">
+                      <div className="font-mono text-2xl font-bold tabular-nums text-charcoal">
                         {selectedPatient.data?.systolicBP ?? 120}/{selectedPatient.data?.diastolicBP ?? 80}
-                        <span className="text-xs text-stone-500 font-normal ml-1">mmHg</span>
+                        <span className="text-xs text-mutedink font-normal ml-1 font-sans">mmHg</span>
                       </div>
-                      <div className="text-[11px] font-semibold text-amber-800 mt-1">
-                        {(selectedPatient.data?.systolicBP ?? 120) > 140 ? `⚠️ ${t('bpHigher')}` : `✓ ${t('bpNormal')}`}
+                      <div className="mt-2">
+                        <span className={`text-[10px] font-mono font-semibold px-1.5 py-0.5 rounded-xs border inline-flex items-center gap-1 ${
+                          (selectedPatient.data?.systolicBP ?? 120) > 140 
+                            ? 'text-amber-900 bg-amber-50 border-amber-300' 
+                            : 'text-emerald-900 bg-emerald-50 border-emerald-200'
+                        }`}>
+                          {(selectedPatient.data?.systolicBP ?? 120) > 140 ? `▲ ${t('bpHigher')}` : `● ${t('bpNormal')}`}
+                        </span>
                       </div>
                     </div>
 
                     {/* Heart Rate */}
-                    <div className="p-3.5 bg-stone-50 rounded-2xl border border-stone-200/80">
-                      <div className="flex items-center justify-between text-stone-500 mb-1">
-                        <span className="text-[11px] font-bold uppercase tracking-wider">{t('hrTitle')}</span>
-                        <Heart className="w-4 h-4 text-rose-600" />
+                    <div className="p-3 bg-paper rounded-sm border border-stonehairline flex flex-col justify-between shadow-2xs hover:border-stone-400 transition-colors">
+                      <div className="flex items-center justify-between text-mutedink mb-1">
+                        <span className="text-[10px] font-mono font-bold uppercase tracking-wider">{t('hrTitle')}</span>
+                        <span className="text-[9px] font-mono text-stone-400">60-100</span>
                       </div>
-                      <div className="font-mono text-2xl font-bold tabular-nums text-stone-900">
+                      <div className="font-mono text-2xl font-bold tabular-nums text-charcoal">
                         {selectedPatient.data?.heartRate ?? 72}
-                        <span className="text-xs text-stone-500 font-normal ml-1">BPM</span>
+                        <span className="text-xs text-mutedink font-normal ml-1 font-sans">BPM</span>
                       </div>
-                      <div className="text-[11px] font-semibold text-emerald-800 mt-1">
-                        ✓ {t('hrRegular')}
+                      <div className="mt-2">
+                        <span className="text-[10px] font-mono font-semibold px-1.5 py-0.5 rounded-xs border border-emerald-200 text-emerald-900 bg-emerald-50 inline-flex items-center gap-1">
+                          ● {t('hrRegular')}
+                        </span>
                       </div>
                     </div>
 
                     {/* SpO2 */}
-                    <div className="p-3.5 bg-stone-50 rounded-2xl border border-stone-200/80">
-                      <div className="flex items-center justify-between text-stone-500 mb-1">
-                        <span className="text-[11px] font-bold uppercase tracking-wider">{t('spo2Title')}</span>
-                        <Wind className="w-4 h-4 text-blue-600" />
+                    <div className="p-3 bg-paper rounded-sm border border-stonehairline flex flex-col justify-between shadow-2xs hover:border-stone-400 transition-colors">
+                      <div className="flex items-center justify-between text-mutedink mb-1">
+                        <span className="text-[10px] font-mono font-bold uppercase tracking-wider">{t('spo2Title')}</span>
+                        <span className="text-[9px] font-mono text-stone-400">&gt;95%</span>
                       </div>
-                      <div className="font-mono text-2xl font-bold tabular-nums text-stone-900">
+                      <div className="font-mono text-2xl font-bold tabular-nums text-charcoal">
                         {selectedPatient.data?.spO2 ?? 98}
-                        <span className="text-xs text-stone-500 font-normal ml-1">%</span>
+                        <span className="text-xs text-mutedink font-normal ml-1 font-sans">%</span>
                       </div>
-                      <div className="text-[11px] font-semibold text-emerald-800 mt-1">
-                        {(selectedPatient.data?.spO2 ?? 98) < 95 ? `⚠️ ${t('spo2Low')}` : `✓ ${t('spo2Normal')}`}
+                      <div className="mt-2">
+                        <span className={`text-[10px] font-mono font-semibold px-1.5 py-0.5 rounded-xs border inline-flex items-center gap-1 ${
+                          (selectedPatient.data?.spO2 ?? 98) < 95 
+                            ? 'text-amber-900 bg-amber-50 border-amber-300' 
+                            : 'text-emerald-900 bg-emerald-50 border-emerald-200'
+                        }`}>
+                          {(selectedPatient.data?.spO2 ?? 98) < 95 ? `▼ ${t('spo2Low')}` : `● ${t('spo2Normal')}`}
+                        </span>
                       </div>
                     </div>
 
                     {/* Hemoglobin */}
-                    <div className="p-3.5 bg-stone-50 rounded-2xl border border-stone-200/80">
-                      <div className="flex items-center justify-between text-stone-500 mb-1">
-                        <span className="text-[11px] font-bold uppercase tracking-wider">{t('hbTitle')}</span>
-                        <Activity className="w-4 h-4 text-amber-700" />
+                    <div className="p-3 bg-paper rounded-sm border border-stonehairline flex flex-col justify-between shadow-2xs hover:border-stone-400 transition-colors">
+                      <div className="flex items-center justify-between text-mutedink mb-1">
+                        <span className="text-[10px] font-mono font-bold uppercase tracking-wider">{t('hbTitle')}</span>
+                        <span className="text-[9px] font-mono text-stone-400">12-16</span>
                       </div>
-                      <div className="font-mono text-2xl font-bold tabular-nums text-stone-900">
+                      <div className="font-mono text-2xl font-bold tabular-nums text-charcoal">
                         {selectedPatient.data?.hemoglobinGdl ?? 12.0}
-                        <span className="text-xs text-stone-500 font-normal ml-1">g/dL</span>
+                        <span className="text-xs text-mutedink font-normal ml-1 font-sans">g/dL</span>
                       </div>
-                      <div className="text-[11px] font-semibold text-amber-800 mt-1">
-                        {(selectedPatient.data?.hemoglobinGdl ?? 12.0) < 11 ? `⚠️ ${t('hbAnemia')}` : `✓ ${t('hbNormal')}`}
+                      <div className="mt-2">
+                        <span className={`text-[10px] font-mono font-semibold px-1.5 py-0.5 rounded-xs border inline-flex items-center gap-1 ${
+                          (selectedPatient.data?.hemoglobinGdl ?? 12.0) < 11 
+                            ? 'text-amber-900 bg-amber-50 border-amber-300' 
+                            : 'text-emerald-900 bg-emerald-50 border-emerald-200'
+                        }`}>
+                          {(selectedPatient.data?.hemoglobinGdl ?? 12.0) < 11 ? `▲ ${t('hbAnemia')}` : `● ${t('hbNormal')}`}
+                        </span>
                       </div>
                     </div>
 
                     {/* Temperature */}
-                    <div className="p-3.5 bg-stone-50 rounded-2xl border border-stone-200/80">
-                      <div className="flex items-center justify-between text-stone-500 mb-1">
-                        <span className="text-[11px] font-bold uppercase tracking-wider">{t('tempTitle')}</span>
-                        <Thermometer className="w-4 h-4 text-orange-600" />
+                    <div className="p-3 bg-paper rounded-sm border border-stonehairline flex flex-col justify-between shadow-2xs hover:border-stone-400 transition-colors">
+                      <div className="flex items-center justify-between text-mutedink mb-1">
+                        <span className="text-[10px] font-mono font-bold uppercase tracking-wider">{t('tempTitle')}</span>
+                        <span className="text-[9px] font-mono text-stone-400">36.5-37.5</span>
                       </div>
-                      <div className="font-mono text-2xl font-bold tabular-nums text-stone-900">
+                      <div className="font-mono text-2xl font-bold tabular-nums text-charcoal">
                         {selectedPatient.data?.temperatureC ?? 36.8}
-                        <span className="text-xs text-stone-500 font-normal ml-1">°C</span>
+                        <span className="text-xs text-mutedink font-normal ml-1 font-sans">°C</span>
                       </div>
-                      <div className="text-[11px] font-semibold text-emerald-800 mt-1">
-                        ✓ {t('tempNormal')}
+                      <div className="mt-2">
+                        <span className="text-[10px] font-mono font-semibold px-1.5 py-0.5 rounded-xs border border-emerald-200 text-emerald-900 bg-emerald-50 inline-flex items-center gap-1">
+                          ● {t('tempNormal')}
+                        </span>
                       </div>
                     </div>
                   </div>
 
                   {/* Clinical Field Notes */}
-                  <div className="p-4 bg-amber-50/70 border border-amber-200/80 rounded-2xl">
-                    <span className="text-xs font-bold text-amber-950 uppercase tracking-wider block mb-1">
+                  <div className="p-3 bg-canvas border border-stonehairline rounded-sm space-y-1">
+                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-mutedink block">
                       {t('notesTitle')}
                     </span>
-                    <p className="text-xs text-amber-900 leading-relaxed font-sans">
+                    <p className="text-xs text-charcoal leading-relaxed font-sans">
                       {selectedPatient.data.clinicalNotes}
                     </p>
                   </div>
@@ -755,50 +774,50 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
 
               {/* Tab 2: PHC Diagnostic Lab Reports */}
               {(activeDetailTab === 'ALL' || activeDetailTab === 'LABS') && (
-                <div className="p-4 sm:p-5 space-y-3 animate-in fade-in duration-150">
+                <div className="p-3.5 sm:p-4 space-y-3 animate-in fade-in duration-150">
                   <div className="flex flex-wrap items-center justify-between gap-2 mb-1">
                     <div>
-                      <span className="text-xs font-bold uppercase tracking-wider text-stone-700 block">
+                      <span className="text-xs font-mono font-bold uppercase tracking-wider text-charcoal block">
                         {t('labsHeader')}
                       </span>
-                      <span className="text-[11px] text-stone-500">
+                      <span className="text-[11px] text-mutedink">
                         PHC प्रयोगशाला एवं फील्ड रैपिड टेस्ट परिणाम
                       </span>
                     </div>
 
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-bold text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-full">
+                      <span className="text-xs font-mono font-semibold text-stone-700 bg-canvas border border-stonehairline px-2 py-0.5 rounded-sm">
                         {selectedPatient.labReports?.length || 0} {t('testsAvailable')}
                       </span>
                       <button
                         onClick={() => setShowAddLabModal(true)}
-                        className="px-3 py-1.5 text-xs font-bold bg-indigo-700 hover:bg-indigo-800 text-white rounded-xl flex items-center gap-1.5 shadow-xs transition-all hover:scale-[1.02] active:scale-95 cursor-pointer"
+                        className="px-2.5 py-1 text-xs font-semibold bg-white hover:bg-stone-50 text-stone-700 border border-stonehairline rounded-sm flex items-center gap-1.5 shadow-2xs transition-colors cursor-pointer"
                       >
-                        <Plus className="w-3.5 h-3.5" />
+                        <Plus className="w-3.5 h-3.5 text-stone-500" />
                         <span>{t('addLabBtn')}</span>
                       </button>
                     </div>
                   </div>
 
                   {(selectedPatient.labReports && selectedPatient.labReports.length > 0) ? (
-                    <div className="space-y-2.5">
+                    <div className="space-y-2">
                       {selectedPatient.labReports.map(lab => (
-                        <div key={lab.id} className="p-4 bg-white border border-stone-200 rounded-2xl shadow-2xs hover:shadow-xs transition-shadow flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div key={lab.id} className="p-3.5 bg-paper border border-stonehairline rounded-sm shadow-2xs hover:border-stone-400 transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                           <div className="space-y-1">
                             <div className="flex items-center gap-2">
-                              <h4 className="font-bold text-sm text-stone-900">{lab.testName}</h4>
-                              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                              <h4 className="font-bold text-xs sm:text-sm text-charcoal">{lab.testName}</h4>
+                              <span className={`text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-xs border ${
                                 lab.status === 'CRITICAL'
-                                  ? 'bg-rose-100 text-rose-800 border border-rose-200'
+                                  ? 'bg-rose-50 text-rose-800 border-rose-300'
                                   : lab.status === 'ELEVATED'
-                                  ? 'bg-amber-100 text-amber-800 border border-amber-200'
-                                  : 'bg-emerald-100 text-emerald-800 border border-emerald-200'
+                                  ? 'bg-amber-50 text-amber-800 border-amber-300'
+                                  : 'bg-emerald-50 text-emerald-800 border-emerald-200'
                               }`}>
                                 {lab.status === 'CRITICAL' ? `⚠️ ${t('statusCritical')}` : lab.status === 'ELEVATED' ? t('statusElevated') : `✓ ${t('statusNormal')}`}
                               </span>
                             </div>
-                            <div className="text-xs text-stone-500 flex items-center gap-2">
-                              <span>{t('performedAt')}: <strong>{lab.performedAt}</strong></span>
+                            <div className="text-xs text-mutedink flex items-center gap-2 font-mono">
+                              <span>{t('performedAt')}: <strong className="text-charcoal">{lab.performedAt}</strong></span>
                               <span>•</span>
                               <span>{t('testDate')}: {new Date(lab.testDate).toLocaleDateString()}</span>
                             </div>
@@ -807,15 +826,15 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
                             </p>
                           </div>
 
-                          <div className="bg-stone-50 p-3 rounded-xl border border-stone-100 sm:text-right shrink-0">
-                            <div className="text-lg font-bold text-stone-900 font-mono">{lab.resultValue}</div>
-                            <div className="text-[11px] text-stone-500">{t('normalRange')}: {lab.normalRange}</div>
+                          <div className="bg-canvas p-2.5 rounded-sm border border-stonehairline sm:text-right shrink-0">
+                            <div className="text-base font-bold text-charcoal font-mono tabular-nums">{lab.resultValue}</div>
+                            <div className="text-[10px] text-mutedink font-mono">{t('normalRange')}: {lab.normalRange}</div>
                           </div>
                         </div>
                       ))}
                     </div>
                   ) : (
-                    <div className="text-center py-8 text-xs text-stone-400">
+                    <div className="text-center py-8 text-xs text-stone-400 font-mono">
                       No lab records available.
                     </div>
                   )}
@@ -824,13 +843,13 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
 
               {/* Tab 3: Structured Prescriptions */}
               {(activeDetailTab === 'ALL' || activeDetailTab === 'PRESCRIPTIONS') && (
-                <div className="p-4 sm:p-5 space-y-3 animate-in fade-in duration-150">
+                <div className="p-3.5 sm:p-4 space-y-3 animate-in fade-in duration-150">
                   <div className="flex flex-wrap items-center justify-between gap-2 mb-1">
                     <div>
-                      <span className="text-xs font-bold uppercase tracking-wider text-stone-700 block">
+                      <span className="text-xs font-mono font-bold uppercase tracking-wider text-charcoal block">
                         {t('prescriptionsHeader')}
                       </span>
-                      <span className="text-[11px] text-stone-500">
+                      <span className="text-[11px] text-mutedink">
                         डॉक्टर द्वारा प्रमाणित डिजिटल पर्ची व दवाइयाँ
                       </span>
                     </div>
@@ -838,18 +857,18 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => setShowPassportModal(true)}
-                        className="px-3 py-1.5 text-xs font-bold bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-300 rounded-xl flex items-center gap-1.5 shadow-xs transition-all hover:scale-[1.02] active:scale-95 cursor-pointer"
+                        className="px-2.5 py-1 text-xs font-semibold bg-white hover:bg-stone-50 text-stone-700 border border-stonehairline rounded-sm flex items-center gap-1.5 shadow-2xs transition-colors cursor-pointer"
                         title="Open Patient QR Code"
                       >
-                        <QrCode className="w-3.5 h-3.5 text-emerald-700" />
+                        <QrCode className="w-3.5 h-3.5 text-stone-500" />
                         <span>{t('qrShareBtn')}</span>
                       </button>
 
                       <button
                         onClick={() => setShowAddRxModal(true)}
-                        className="px-3 py-1.5 text-xs font-bold bg-rose-700 hover:bg-rose-800 text-white rounded-xl flex items-center gap-1.5 shadow-xs transition-all hover:scale-[1.02] active:scale-95 cursor-pointer"
+                        className="px-2.5 py-1 text-xs font-semibold bg-white hover:bg-stone-50 text-stone-700 border border-stonehairline rounded-sm flex items-center gap-1.5 shadow-2xs transition-colors cursor-pointer"
                       >
-                        <Plus className="w-3.5 h-3.5" />
+                        <Plus className="w-3.5 h-3.5 text-stone-500" />
                         <span>{t('addPrescriptionBtn')}</span>
                       </button>
                     </div>
@@ -857,23 +876,23 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
 
                   {(selectedPatient.prescriptions && selectedPatient.prescriptions.length > 0) ? (
                     <>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                       {selectedPatient.prescriptions.map(rx => (
-                        <div key={rx.id} className="p-4 bg-white border border-stone-200 rounded-2xl shadow-2xs space-y-2">
+                        <div key={rx.id} className="p-3.5 bg-paper border border-stonehairline rounded-sm shadow-2xs space-y-2">
                           <div className="flex items-center justify-between">
-                            <span className="font-bold text-sm text-stone-900">{rx.medicineName}</span>
-                            <span className="text-[10px] font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full">
+                            <span className="font-bold text-xs sm:text-sm text-charcoal">{rx.medicineName}</span>
+                            <span className="text-[10px] font-mono font-bold text-stone-700 bg-canvas border border-stonehairline px-2 py-0.5 rounded-sm">
                               {rx.daysPrescribed} {t('days')}
                             </span>
                           </div>
                           <div className="text-xs text-stone-600 flex items-center justify-between">
-                            <span>{t('dosage')}: <strong>{rx.dosage}</strong></span>
+                            <span>{t('dosage')}: <strong className="text-charcoal font-mono">{rx.dosage}</strong></span>
                             <span className="text-stone-500">{rx.timing === 'AFTER_FOOD' ? t('afterFood') : t('beforeFood')}</span>
                           </div>
-                          <div className="text-xs text-emerald-700 font-semibold bg-emerald-50/60 p-2 rounded-xl">
+                          <div className="text-xs text-slateteal font-semibold bg-slateteal-light/40 border border-slateteal/20 p-2 rounded-sm font-mono">
                             {t('timing')}: {rx.frequency}
                           </div>
-                          <div className="text-[10px] text-stone-400 pt-1.5 border-t border-stone-100">
+                          <div className="text-[10px] text-mutedink pt-1.5 border-t border-stone-100 font-mono">
                             {t('issuedBy')}: {rx.issuedBy} ({rx.issuedDate})
                           </div>
                         </div>
@@ -881,14 +900,14 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
                     </div>
 
                     {selectedPatient.data.medicationsIssued && (
-                      <div className="p-3 bg-stone-50 border border-stone-200/80 rounded-xl text-xs text-stone-700 flex flex-wrap items-center justify-between gap-1.5 mt-3">
-                        <span className="text-stone-500 font-medium">फील्ड में वितरित दवाइयाँ (Field Dispensed):</span>
-                        <strong className="text-stone-800">{selectedPatient.data.medicationsIssued}</strong>
+                      <div className="p-2.5 bg-canvas border border-stonehairline rounded-sm text-xs text-stone-700 flex flex-wrap items-center justify-between gap-1.5 mt-2.5">
+                        <span className="text-mutedink font-medium">फील्ड में वितरित दवाइयाँ (Field Dispensed):</span>
+                        <strong className="text-charcoal font-mono">{selectedPatient.data.medicationsIssued}</strong>
                       </div>
                     )}
                     </>
                   ) : (
-                    <div className="p-4 bg-stone-50 rounded-2xl text-xs text-stone-700">
+                    <div className="p-3 bg-canvas border border-stonehairline rounded-sm text-xs text-stone-700">
                       {selectedPatient.data.medicationsIssued}
                     </div>
                   )}
@@ -937,25 +956,25 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
       {/* Add New Patient Modal with Full Gender Switching & Custom Clinical Settings */}
       {isCreatingNew && (
         <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center z-50 p-3 sm:p-4 animate-in fade-in duration-150">
-          <div className="bg-white border border-stone-200 w-full max-w-lg rounded-2xl shadow-2xl flex flex-col max-h-[92vh] overflow-hidden">
+          <div className="bg-paper border border-stonehairline w-full max-w-lg rounded-sm shadow-xl flex flex-col max-h-[92vh] overflow-hidden">
             {/* Modal Header */}
-            <div className="p-4 sm:p-5 bg-gradient-to-r from-stone-50 to-emerald-50/40 border-b border-stone-200 flex items-center justify-between shrink-0">
+            <div className="p-3.5 sm:p-4 bg-paper border-b border-stonehairline flex items-center justify-between shrink-0">
               <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-xl bg-emerald-700 text-white flex items-center justify-center font-bold shadow-xs">
-                  <Plus className="w-5 h-5" />
+                <div className="w-8 h-8 rounded-sm bg-slateteal text-white flex items-center justify-center font-bold shadow-2xs">
+                  <Plus className="w-4 h-4" />
                 </div>
                 <div>
-                  <h3 className="text-base font-bold text-stone-900">
+                  <h3 className="text-sm font-bold text-charcoal font-sans">
                     नया मरीज पंजीकृत करें (Patient Registration)
                   </h3>
-                  <p className="text-[11px] text-stone-500">
+                  <p className="text-[11px] text-mutedink font-mono">
                     ऑफ़लाइन सुरक्षित पंजीकरण • इंटरनेट मिलते ही PHC सर्वर से सिंक
                   </p>
                 </div>
               </div>
               <button
                 onClick={() => setIsCreatingNew(false)}
-                className="w-8 h-8 rounded-lg text-stone-400 hover:text-stone-700 hover:bg-stone-100 flex items-center justify-center cursor-pointer transition-colors"
+                className="w-7 h-7 rounded-sm text-stone-400 hover:text-charcoal hover:bg-canvas flex items-center justify-center cursor-pointer transition-colors"
               >
                 ✕
               </button>
@@ -1259,17 +1278,17 @@ export const SingleFieldClinicianView: React.FC<Props> = ({ userRole }) => {
               </div>
 
               {/* Form Action Buttons */}
-              <div className="pt-3 border-t border-stone-100 flex items-center justify-end gap-2.5">
+              <div className="pt-3 border-t border-stonehairline flex items-center justify-end gap-2">
                 <button
                   type="button"
                   onClick={() => setIsCreatingNew(false)}
-                  className="px-4 py-2 text-xs font-semibold text-stone-600 hover:text-stone-900 bg-stone-100 hover:bg-stone-200 rounded-xl cursor-pointer transition-colors"
+                  className="px-3.5 py-1.5 text-xs font-semibold text-stone-600 hover:text-charcoal bg-paper hover:bg-canvas border border-stonehairline rounded-sm cursor-pointer transition-colors"
                 >
                   रद्द करें (Cancel)
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 text-xs font-bold text-white bg-emerald-700 hover:bg-emerald-800 rounded-xl shadow-xs cursor-pointer transition-all hover:scale-[1.02] active:scale-95 flex items-center gap-1.5"
+                  className="px-4 py-1.5 text-xs font-bold text-white bg-slateteal hover:bg-slateteal-hover rounded-sm shadow-xs border border-slateteal cursor-pointer transition-colors flex items-center gap-1.5"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   <span>मरीज पंजीकृत करें (Register Patient)</span>

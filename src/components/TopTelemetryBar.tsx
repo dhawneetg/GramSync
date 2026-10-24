@@ -61,30 +61,35 @@ export const TopTelemetryBar: React.FC<Props> = ({
   };
 
   return (
-    <header className="bg-white border-b border-stone-200/90 px-3 md:px-5 py-2 min-h-[56px] flex flex-wrap md:flex-nowrap items-center justify-between select-none sticky top-0 z-40 text-xs gap-2.5 shadow-2xs">
+    <header className="bg-paper border-b border-stonehairline px-3 md:px-5 py-2 min-h-[52px] flex flex-wrap md:flex-nowrap items-center justify-between select-none sticky top-0 z-40 text-xs gap-2.5 shadow-2xs">
       {/* Brand */}
       <div className="flex items-center gap-2.5 shrink-0">
-        <div className="w-7 h-7 bg-emerald-600 flex items-center justify-center rounded-lg text-white shadow-xs shrink-0">
+        <div className="w-7 h-7 bg-slateteal flex items-center justify-center rounded-sm text-white shadow-2xs shrink-0">
           <Activity className="w-4 h-4" />
         </div>
-        <span className="font-bold tracking-tight text-stone-900 text-sm font-sans">
-          GRAMSYNC
-        </span>
+        <div className="flex items-baseline gap-2">
+          <span className="font-bold tracking-tight text-charcoal text-sm font-sans">
+            GRAMSYNC
+          </span>
+          <span className="font-mono text-[10px] text-mutedink tracking-wider hidden lg:inline">
+            // FIELD-SYNC ENGINE v2.4
+          </span>
+        </div>
 
         {/* Mobile-only compact quick actions */}
         <div className="flex md:hidden items-center gap-1.5 ml-auto">
           <button
             onClick={() => setLanguage(lang === 'en' ? 'hi' : 'en')}
-            className="px-2.5 py-1 text-xs font-semibold bg-stone-100 hover:bg-stone-200 border border-stone-200 rounded-lg text-emerald-800 transition-colors"
+            className="px-2 py-1 text-xs font-mono font-semibold bg-canvas hover:bg-stone-200 border border-stonehairline rounded-sm text-charcoal transition-colors"
             title="Switch Language"
           >
             {lang === 'en' ? 'हिंदी' : 'EN'}
           </button>
           <button
             onClick={() => onOpenPinModal(currentRole === 'ASHA_WORKER' ? 'MEDICAL_OFFICER' : 'ASHA_WORKER')}
-            className="px-2 py-1 text-[11px] font-semibold rounded-lg border border-stone-200 bg-stone-50 text-stone-700 flex items-center gap-1"
+            className="px-2 py-1 text-[11px] font-mono font-semibold rounded-sm border border-stonehairline bg-paper text-charcoal flex items-center gap-1"
           >
-            {currentRole === 'MEDICAL_OFFICER' ? <Unlock className="w-3 h-3 text-emerald-600" /> : <Lock className="w-3 h-3 text-emerald-700" />}
+            {currentRole === 'MEDICAL_OFFICER' ? <Unlock className="w-3 h-3 text-slateteal" /> : <Lock className="w-3 h-3 text-mutedink" />}
             <span>{currentRole === 'MEDICAL_OFFICER' ? 'MO' : 'ASHA'}</span>
           </button>
         </div>
@@ -92,52 +97,52 @@ export const TopTelemetryBar: React.FC<Props> = ({
 
       {/* Center Tabs: Horizontally Scrollable Mode Tabs */}
       <div className="flex items-center overflow-x-auto no-scrollbar py-0.5">
-        <nav className="flex items-center bg-stone-100 p-1 border border-stone-200/70 rounded-xl gap-1 shrink-0">
+        <nav className="flex items-center bg-canvas p-0.5 border border-stonehairline rounded-sm gap-0.5 shrink-0 font-mono text-xs">
           <button
             onClick={() => setActiveTab('SINGLE_FIELD')}
-            className={`flex items-center justify-center gap-1.5 px-3.5 py-1.5 text-xs font-medium rounded-lg transition-all duration-150 whitespace-nowrap cursor-pointer min-w-[125px] ${
+            className={`flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-xs transition-colors whitespace-nowrap cursor-pointer min-w-[125px] ${
               activeTab === 'SINGLE_FIELD'
-                ? 'bg-emerald-600 text-white font-semibold shadow-xs'
-                : 'text-stone-600 hover:text-stone-900 hover:bg-white/70'
+                ? 'bg-slateteal text-white font-semibold shadow-2xs'
+                : 'text-stone-600 hover:text-charcoal hover:bg-paper/80 font-medium'
             }`}
           >
-            <UserCheck className={`w-3.5 h-3.5 shrink-0 ${activeTab === 'SINGLE_FIELD' ? 'text-white' : 'text-emerald-700'}`} />
+            <UserCheck className={`w-3.5 h-3.5 shrink-0 ${activeTab === 'SINGLE_FIELD' ? 'text-white' : 'text-stone-500'}`} />
             <span>{t('tabField')}</span>
           </button>
 
           <button
             onClick={() => setActiveTab('LAB')}
-            className={`flex items-center justify-center gap-1.5 px-3.5 py-1.5 text-xs font-medium rounded-lg transition-all duration-150 whitespace-nowrap cursor-pointer min-w-[120px] ${
+            className={`flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-xs transition-colors whitespace-nowrap cursor-pointer min-w-[120px] ${
               activeTab === 'LAB'
-                ? 'bg-white text-stone-900 font-semibold shadow-xs border border-stone-200/80'
-                : 'text-stone-600 hover:text-stone-900 hover:bg-white/70'
+                ? 'bg-slateteal text-white font-semibold shadow-2xs'
+                : 'text-stone-600 hover:text-charcoal hover:bg-paper/80 font-medium'
             }`}
           >
-            <Split className="w-3.5 h-3.5 text-emerald-700 shrink-0" />
+            <Split className={`w-3.5 h-3.5 shrink-0 ${activeTab === 'LAB' ? 'text-white' : 'text-stone-500'}`} />
             <span>{t('tabLab')}</span>
           </button>
 
           <button
             onClick={() => setActiveTab('SECURITY')}
-            className={`flex items-center justify-center gap-1.5 px-3.5 py-1.5 text-xs font-medium rounded-lg transition-all duration-150 whitespace-nowrap cursor-pointer min-w-[115px] ${
+            className={`flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-xs transition-colors whitespace-nowrap cursor-pointer min-w-[115px] ${
               activeTab === 'SECURITY'
-                ? 'bg-white text-stone-900 font-semibold shadow-xs border border-stone-200/80'
-                : 'text-stone-600 hover:text-stone-900 hover:bg-white/70'
+                ? 'bg-slateteal text-white font-semibold shadow-2xs'
+                : 'text-stone-600 hover:text-charcoal hover:bg-paper/80 font-medium'
             }`}
           >
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-700 shrink-0" />
+            <ShieldCheck className={`w-3.5 h-3.5 shrink-0 ${activeTab === 'SECURITY' ? 'text-white' : 'text-stone-500'}`} />
             <span>{t('tabSecurity')}</span>
           </button>
 
           <button
             onClick={() => setActiveTab('FLOW')}
-            className={`flex items-center justify-center gap-1.5 px-3.5 py-1.5 text-xs font-medium rounded-lg transition-all duration-150 whitespace-nowrap cursor-pointer min-w-[115px] ${
+            className={`flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-xs transition-colors whitespace-nowrap cursor-pointer min-w-[115px] ${
               activeTab === 'FLOW'
-                ? 'bg-white text-stone-900 font-semibold shadow-xs border border-stone-200/80'
-                : 'text-stone-600 hover:text-stone-900 hover:bg-white/70'
+                ? 'bg-slateteal text-white font-semibold shadow-2xs'
+                : 'text-stone-600 hover:text-charcoal hover:bg-paper/80 font-medium'
             }`}
           >
-            <GitBranch className="w-3.5 h-3.5 text-emerald-700 shrink-0" />
+            <GitBranch className={`w-3.5 h-3.5 shrink-0 ${activeTab === 'FLOW' ? 'text-white' : 'text-stone-500'}`} />
             <span>{t('tabFlow')}</span>
           </button>
         </nav>
@@ -148,11 +153,11 @@ export const TopTelemetryBar: React.FC<Props> = ({
         {/* Language Switcher (EN | हिंदी) */}
         <button
           onClick={() => setLanguage(lang === 'en' ? 'hi' : 'en')}
-          className="flex items-center justify-center gap-1.5 px-3 py-1.5 text-xs font-semibold bg-stone-100 hover:bg-emerald-50 hover:text-emerald-800 hover:border-emerald-200 border border-stone-200 rounded-lg text-stone-700 transition-all cursor-pointer shadow-2xs min-w-[75px]"
+          className="flex items-center justify-center gap-1.5 px-2.5 py-1.5 text-xs font-mono font-medium bg-paper hover:bg-canvas text-charcoal border border-stonehairline rounded-sm transition-colors cursor-pointer shadow-2xs min-w-[70px]"
           title="Switch Language: English / हिंदी"
         >
-          <Languages className="w-3.5 h-3.5 text-emerald-700" />
-          <span>{lang === 'en' ? 'हिंदी' : 'English'}</span>
+          <Languages className="w-3.5 h-3.5 text-stone-500" />
+          <span>{lang === 'en' ? 'हिंदी' : 'EN'}</span>
         </button>
 
         {/* 1-Click Judge Macro */}
@@ -160,10 +165,10 @@ export const TopTelemetryBar: React.FC<Props> = ({
           onClick={handleStageConflict}
           disabled={isStaging}
           title="Macro: Disconnects Node A, makes concurrent clinical edits on both nodes, reconnects Node A to trigger HTTP 409 Conflict"
-          className="flex items-center justify-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300/80 rounded-lg transition-all disabled:opacity-50 cursor-pointer shadow-2xs whitespace-nowrap min-w-[130px]"
+          className="flex items-center justify-center gap-1.5 px-3 py-1.5 text-xs font-mono font-medium bg-paper hover:bg-amber-50/60 text-charcoal border border-stonehairline hover:border-amber-400 rounded-sm transition-colors disabled:opacity-50 cursor-pointer shadow-2xs whitespace-nowrap min-w-[125px]"
         >
           <Zap className={`w-3.5 h-3.5 text-amber-600 ${isStaging ? 'animate-spin' : ''}`} />
-          <span>{isStaging ? '...' : t('stageConflict')}</span>
+          <span>{isStaging ? 'STAGING...' : t('stageConflict')}</span>
         </button>
 
         {/* Reset Store */}
@@ -171,28 +176,28 @@ export const TopTelemetryBar: React.FC<Props> = ({
           onClick={handleReset}
           disabled={isResetting}
           title="Reset all IndexedDB/Local stores back to clean baseline"
-          className="flex items-center justify-center gap-1.5 px-3 py-1.5 text-xs font-medium text-stone-600 hover:text-stone-900 bg-stone-50 hover:bg-stone-100 border border-stone-200 rounded-lg transition-all cursor-pointer shadow-2xs whitespace-nowrap min-w-[75px]"
+          className="flex items-center justify-center gap-1.5 px-2.5 py-1.5 text-xs font-mono font-medium text-stone-600 hover:text-charcoal bg-paper hover:bg-canvas border border-stonehairline rounded-sm transition-colors cursor-pointer shadow-2xs whitespace-nowrap min-w-[70px]"
         >
           <RotateCcw className={`w-3.5 h-3.5 ${isResetting ? 'animate-spin' : ''}`} />
           <span>{t('reset')}</span>
         </button>
 
         {/* Role Switcher with PIN Lock */}
-        <div className="pl-2 border-l border-stone-200 flex items-center">
+        <div className="pl-1.5 border-l border-stonehairline flex items-center">
           <button
             onClick={() => onOpenPinModal(currentRole === 'ASHA_WORKER' ? 'MEDICAL_OFFICER' : 'ASHA_WORKER')}
-            className="flex items-center justify-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg border border-stone-200 bg-stone-50 hover:bg-white text-stone-800 transition-all cursor-pointer shadow-2xs whitespace-nowrap min-w-[165px]"
+            className="flex items-center justify-center gap-1.5 px-3 py-1.5 text-xs font-mono font-semibold rounded-sm border border-stonehairline bg-paper hover:bg-canvas text-charcoal transition-colors cursor-pointer shadow-2xs whitespace-nowrap min-w-[155px]"
             title="Click to switch role via PIN authentication"
           >
             {currentRole === 'MEDICAL_OFFICER' ? (
               <>
-                <Unlock className="w-3.5 h-3.5 text-emerald-600" />
-                <span className="text-emerald-800">{t('roleMo')}</span>
+                <Unlock className="w-3.5 h-3.5 text-slateteal" />
+                <span className="text-slateteal">{t('roleMo')}</span>
               </>
             ) : (
               <>
-                <Lock className="w-3.5 h-3.5 text-emerald-700" />
-                <span className="text-stone-800">{t('roleAsha')}</span>
+                <Lock className="w-3.5 h-3.5 text-mutedink" />
+                <span className="text-charcoal">{t('roleAsha')}</span>
               </>
             )}
           </button>
